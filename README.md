@@ -1,0 +1,40 @@
+# Godocx
+
+Godocx is a Golang library for creating and modifying DOCX (Microsoft Word) documents.
+
+## Usage
+Here's a simple example of how you can use Godocx to create and modify DOCX documents:
+
+```go
+package main
+
+import (
+	"log"
+
+	"github.com/gomutex/godocx"
+)
+
+func main() {
+	// Open an existing DOCX document
+	docx, err := godocx.OpenDocument("./testdata/test.docx")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Add a new paragraph to the document
+	p := docx.AddParagraph()
+	p.AddText("Hello, world!")
+
+	// Save the modified document to a new file
+	err = docx.SaveTo("./test_modified.docx")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+```
+
+## Contributing
+Contributions are welcome! If you find any issues or have suggestions, feel free to open an issue or create a pull request.
+
+
