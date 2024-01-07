@@ -1,21 +1,20 @@
-package oxml
+package elements
 
 import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/constants"
-	"github.com/gomutex/godocx/oxml/elements"
 )
 
 // A Run is part of a paragraph that has its own style. It could be
 type Run struct {
-	RunProperties *RunProperties
-	Children      []*RunChild
+	RunProperty *RunProperty
+	Children    []*RunChild
 }
 
 type RunChild struct {
 	InstrText *string
-	Text      *elements.Text
+	Text      *Text
 }
 
 type Hyperlink struct {
@@ -25,33 +24,33 @@ type Hyperlink struct {
 	Children []*ParagraphChild
 }
 
-type RunProperties struct {
-	XMLName  xml.Name  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rPr,omitempty"`
-	CTColor  *CTColor  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main color,omitempty"`
-	Size     *CTSize   `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main sz,omitempty"`
-	RunStyle *RunStyle `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rStyle,omitempty"`
-	Style    *CTStyle  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main pStyle,omitempty"`
-}
+// type RunProperty struct {
+// 	XMLName  xml.Name  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rPr,omitempty"`
+// 	CTColor  *CTColor  `xml:"w:val,attr"`
+// 	Size     *CTSize   `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main sz,omitempty"`
+// 	RunStyle *RunStyle `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rStyle,omitempty"`
+// 	Style    *CTStyle  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main pStyle,omitempty"`
+// }
 
-type RunStyle struct {
-	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rStyle,omitempty"`
-	Val     string   `xml:"w:val,attr"`
-}
+// type RunStyle struct {
+// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rStyle,omitempty"`
+// 	Val     string   `xml:"w:val,attr"`
+// }
 
-type CTStyle struct {
-	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main pStyle,omitempty"`
-	Val     string   `xml:"w:val,attr"`
-}
+// type CTStyle struct {
+// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main pStyle,omitempty"`
+// 	Val     string   `xml:"w:val,attr"`
+// }
 
-type CTColor struct {
-	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main color"`
-	Val     string   `xml:"w:val,attr"`
-}
+// type CTColor struct {
+// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main color"`
+// 	Val     string   `xml:"w:val,attr"`
+// }
 
-type CTSize struct {
-	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main sz"`
-	Val     int      `xml:"w:val,attr"`
-}
+// type CTSize struct {
+// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main sz"`
+// 	Val     int      `xml:"w:val,attr"`
+// }
 
 func NewRun() *Run {
 	return &Run{}
@@ -71,9 +70,7 @@ func NewRun() *Run {
 //   - *Run: The modified Run instance with the updated color.
 func (r *Run) Color(colorCode string) *Run {
 
-	r.RunProperties.CTColor = &CTColor{
-		Val: colorCode,
-	}
+	r.RunProperty.Color = NewColor(colorCode)
 
 	return r
 }
@@ -92,12 +89,12 @@ func (r *Run) Color(colorCode string) *Run {
 //
 // Returns:
 //   - *Run: The modified Run instance with the updated size.
-func (r *Run) Size(size int) *Run {
-	r.RunProperties.Size = &CTSize{
-		Val: size * 2,
-	}
-	return r
-}
+// func (r *Run) Size(size int) *Run {
+// 	r.RunProperty.Size = &CTSize{
+// 		Val: size * 2,
+// 	}
+// 	return r
+// }
 
 func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:r"
@@ -107,9 +104,9 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 		return err
 	}
 
-	if r.RunProperties != nil {
+	if r.RunProperty != nil {
 		propsElement := xml.StartElement{Name: xml.Name{Local: "w:rPr"}}
-		if err = e.EncodeElement(r.RunProperties, propsElement); err != nil {
+		if err = e.EncodeElement(r.RunProperty, propsElement); err != nil {
 			return err
 		}
 	}
@@ -146,15 +143,15 @@ loop:
 		case xml.StartElement:
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "t"}, xml.Name{Space: constants.AltWMLNamespace, Local: "t"}:
-				txt := elements.NewText()
+				txt := NewText()
 				if err := d.DecodeElement(txt, &elem); err != nil {
 					return err
 				}
 
 				r.Children = append(r.Children, &RunChild{Text: txt})
 			case xml.Name{Space: constants.WMLNamespace, Local: "rPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "rPr"}:
-				r.RunProperties = &RunProperties{}
-				if err := d.DecodeElement(r.RunProperties, &elem); err != nil {
+				r.RunProperty = &RunProperty{}
+				if err := d.DecodeElement(r.RunProperty, &elem); err != nil {
 					return err
 				}
 

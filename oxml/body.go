@@ -5,10 +5,11 @@ import (
 	"strconv"
 
 	"github.com/gomutex/godocx/constants"
+	"github.com/gomutex/godocx/oxml/elements"
 )
 
 type DocumentChild struct {
-	Para  *Paragraph
+	Para  *elements.Paragraph
 	Table *Table
 }
 
@@ -178,7 +179,7 @@ loop:
 		case xml.StartElement:
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "p"}, xml.Name{Space: constants.AltWMLNamespace, Local: "p"}:
-				para := NewParagraph()
+				para := elements.NewParagraph()
 				if err := d.DecodeElement(para, &elem); err != nil {
 					return err
 				}

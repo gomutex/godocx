@@ -10,13 +10,13 @@ type ParagraphStyle struct {
 }
 
 // NewParagraphStyle creates a new ParagraphStyle.
-func NewParagraphStyle(val string) ParagraphStyle {
-	return ParagraphStyle{Val: val}
+func NewParagraphStyle(val string) *ParagraphStyle {
+	return &ParagraphStyle{Val: val}
 }
 
 // DefaultParagraphStyle creates the default ParagraphStyle with the value "Normal".
-func DefaultParagraphStyle() ParagraphStyle {
-	return ParagraphStyle{Val: "Normal"}
+func DefaultParagraphStyle() *ParagraphStyle {
+	return &ParagraphStyle{Val: "Normal"}
 }
 
 func (p *ParagraphStyle) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
