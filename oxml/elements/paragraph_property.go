@@ -13,6 +13,7 @@ type ParagraphProperty struct {
 	PageBreakBefore *bool
 	WidowControl    *bool
 	Style           *ParagraphStyle
+	Justification   *Justification
 }
 
 func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
@@ -25,6 +26,11 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 
 	// Encoding <w:pStyle> element
 	if err = e.EncodeElement(pp.Style, xml.StartElement{Name: xml.Name{Local: "w:pStyle"}}); err != nil {
+		return err
+	}
+
+	// Encoding <w:jc> element
+	if err = e.EncodeElement(pp.Justification, xml.StartElement{Name: xml.Name{Local: "w:jc"}}); err != nil {
 		return err
 	}
 
@@ -49,6 +55,10 @@ func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 			switch t.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "pStyle"}, xml.Name{Space: constants.AltWMLNamespace, Local: "pStyle"}:
 				if err = d.DecodeElement(&pp.Style, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "jc"}, xml.Name{Space: constants.AltWMLNamespace, Local: "jc"}:
+				if err = d.DecodeElement(&pp.Justification, &t); err != nil {
 					return err
 				}
 			default:

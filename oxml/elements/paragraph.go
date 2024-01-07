@@ -1,10 +1,9 @@
-package oxml
+package elements
 
 import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/constants"
-	"github.com/gomutex/godocx/oxml/elements"
 )
 
 type ParagraphChild struct {
@@ -14,11 +13,9 @@ type ParagraphChild struct {
 
 type Paragraph struct {
 	id       string
-	property *elements.ParagraphProperty
+	property *ParagraphProperty
 
 	Children []*ParagraphChild
-
-	rootRef *RootDoc //ignored on marshaling/unmarshaling
 }
 
 func NewParagraph() *Paragraph {
@@ -33,19 +30,6 @@ func (p *Paragraph) GetType() string {
 	return "p"
 }
 
-func (rd *RootDoc) AddParagraph() *Paragraph {
-	p := &Paragraph{
-		Children: make([]*ParagraphChild, 0),
-		rootRef:  rd,
-	}
-
-	bodyElem := DocumentChild{
-		Para: p,
-	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
-	return p
-}
-
 // Appends a new text to the Paragraph.
 // Example:
 //
@@ -58,15 +42,15 @@ func (rd *RootDoc) AddParagraph() *Paragraph {
 // Returns:
 //   - *Run: The newly created Run instance added to the Paragraph.
 func (p *Paragraph) AddText(text string) *Run {
-	t := elements.TextFromString(text)
+	t := TextFromString(text)
 
 	runChildren := []*RunChild{}
 	runChildren = append(runChildren, &RunChild{
 		Text: t,
 	})
 	run := &Run{
-		Children:      runChildren,
-		RunProperties: &RunProperties{},
+		Children:    runChildren,
+		RunProperty: &RunProperty{},
 	}
 
 	p.Children = append(p.Children, &ParagraphChild{Run: run})
@@ -74,35 +58,35 @@ func (p *Paragraph) AddText(text string) *Run {
 	return run
 }
 
-func (para *Paragraph) AddLink(text string, link string) *Hyperlink {
-	rId := para.rootRef.addLinkRelation(link)
+// func (para *Paragraph) AddLink(text string, link string) *Hyperlink {
+// 	rId := para.rootRef.addLinkRelation(link)
 
-	runChildren := []*RunChild{}
-	runChildren = append(runChildren, &RunChild{
-		InstrText: &text,
-	})
-	run := &Run{
-		Children: runChildren,
-		RunProperties: &RunProperties{
-			RunStyle: &RunStyle{
-				Val: constants.HyperLinkStyle,
-			},
-		},
-	}
+// 	runChildren := []*RunChild{}
+// 	runChildren = append(runChildren, &RunChild{
+// 		InstrText: &text,
+// 	})
+// 	run := &Run{
+// 		Children: runChildren,
+// 		RunProperty: &RunProperty{
+// 			RunStyle: &RunStyle{
+// 				Val: constants.HyperLinkStyle,
+// 			},
+// 		},
+// 	}
 
-	paraChild := &ParagraphChild{
-		Run: run,
-	}
+// 	paraChild := &ParagraphChild{
+// 		Run: run,
+// 	}
 
-	hyperLink := &Hyperlink{
-		ID: rId,
-	}
-	hyperLink.Children = append(hyperLink.Children, paraChild)
+// 	hyperLink := &Hyperlink{
+// 		ID: rId,
+// 	}
+// 	hyperLink.Children = append(hyperLink.Children, paraChild)
 
-	para.Children = append(para.Children, &ParagraphChild{Link: hyperLink})
+// 	para.Children = append(para.Children, &ParagraphChild{Link: hyperLink})
 
-	return hyperLink
-}
+// 	return hyperLink
+// }
 
 func (para *Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:p"
@@ -160,7 +144,7 @@ loop:
 				p.Children = append(p.Children, &ParagraphChild{Run: r})
 			case xml.Name{Space: constants.WMLNamespace, Local: "pPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "pPr"}:
 
-				p.property = &elements.ParagraphProperty{}
+				p.property = &ParagraphProperty{}
 				if err := d.DecodeElement(p.property, &elem); err != nil {
 					return err
 				}

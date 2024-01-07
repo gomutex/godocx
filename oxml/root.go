@@ -3,6 +3,8 @@ package oxml
 import (
 	"encoding/xml"
 	"sync"
+
+	"github.com/gomutex/godocx/oxml/elements"
 )
 
 type RootDoc struct {
@@ -28,4 +30,16 @@ func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 
 	doc.relativePath = fileName
 	return &doc, nil
+}
+
+func (rd *RootDoc) AddParagraph() *elements.Paragraph {
+	p := &elements.Paragraph{
+		Children: make([]*elements.ParagraphChild, 0),
+	}
+
+	bodyElem := DocumentChild{
+		Para: p,
+	}
+	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
+	return p
 }
