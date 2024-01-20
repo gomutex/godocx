@@ -15,6 +15,7 @@ type Run struct {
 type RunChild struct {
 	InstrText *string
 	Text      *Text
+	Drawing   *Drawing
 }
 
 type Hyperlink struct {
@@ -23,34 +24,6 @@ type Hyperlink struct {
 	// Run     Run
 	Children []*ParagraphChild
 }
-
-// type RunProperty struct {
-// 	XMLName  xml.Name  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rPr,omitempty"`
-// 	CTColor  *CTColor  `xml:"w:val,attr"`
-// 	Size     *CTSize   `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main sz,omitempty"`
-// 	RunStyle *RunStyle `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rStyle,omitempty"`
-// 	Style    *CTStyle  `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main pStyle,omitempty"`
-// }
-
-// type RunStyle struct {
-// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main rStyle,omitempty"`
-// 	Val     string   `xml:"w:val,attr"`
-// }
-
-// type CTStyle struct {
-// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main pStyle,omitempty"`
-// 	Val     string   `xml:"w:val,attr"`
-// }
-
-// type CTColor struct {
-// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main color"`
-// 	Val     string   `xml:"w:val,attr"`
-// }
-
-// type CTSize struct {
-// 	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main sz"`
-// 	Val     int      `xml:"w:val,attr"`
-// }
 
 func NewRun() *Run {
 	return &Run{}
@@ -76,25 +49,23 @@ func (r *Run) Color(colorCode string) *Run {
 }
 
 // Sets the size of the Run.
-//
+
 // This method takes an integer parameter representing the desired font size.
 // It updates the size property of the Run instance with the specified size,
 // Example:
-//
-//	run := NewRun()
-//	modifiedRun := run.Size(12)
-//
+
+// 	run := NewRun()
+// 	modifiedRun := run.Size(12)
+
 // Parameters:
 //   - size: An integer representing the font size.
-//
+
 // Returns:
 //   - *Run: The modified Run instance with the updated size.
-// func (r *Run) Size(size int) *Run {
-// 	r.RunProperty.Size = &CTSize{
-// 		Val: size * 2,
-// 	}
-// 	return r
-// }
+func (r *Run) Size(size int) *Run {
+	r.RunProperty.Size = NewSz(size * 2)
+	return r
+}
 
 func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:r"
@@ -125,6 +96,14 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 				return err
 			}
 		}
+
+		if data.Drawing != nil {
+			err := data.Drawing.MarshalXML(e, start)
+			if err != nil {
+				return err
+			}
+		}
+
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
@@ -154,7 +133,15 @@ loop:
 				if err := d.DecodeElement(r.RunProperty, &elem); err != nil {
 					return err
 				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "drawing"}, xml.Name{Space: constants.AltWMLNamespace, Local: "drawing"}:
+				drawingElem := &Drawing{}
+				if err := d.DecodeElement(drawingElem, &elem); err != nil {
+					return err
+				}
 
+				r.Children = append(r.Children, &RunChild{
+					Drawing: drawingElem,
+				})
 			default:
 				if err = d.Skip(); err != nil {
 					return err

@@ -8,18 +8,18 @@ import (
 
 // RunProperty represents the properties of a run of text within a paragraph.
 type RunProperty struct {
-	Color   *Color
-	Style   *RunStyle
-	Size    *Sz
-	SizeCs  *SzCs
-	Shading *Shading
+	Color     *Color
+	Style     *RunStyle
+	Size      *Sz
+	SizeCs    *SzCs
+	Shading   *Shading
+	Highlight *Highlight
 
 	// Bold             *Bold
 	// BoldCs           *BoldCs
 	// Italic           *Italic
 	// ItalicCs         *ItalicCs
 	// Strike           *Strike
-	// Highlight        *Highlight
 	// Underline        *Underline
 	// Vanish           *Vanish
 	// SpecVanish       *SpecVanish
@@ -59,15 +59,15 @@ func (rp *RunProperty) AddShading(shdType ShadingType, color, fill string) *RunP
 	return rp
 }
 
+// AddHighlight sets the highlight color for the run.
+func (rp *RunProperty) AddHighlight(color string) *RunProperty {
+	rp.Highlight = NewHighlight(color)
+	return rp
+}
+
 // // AddSpacing sets the character spacing for the run.
 // func (rp *RunProperty) AddSpacing(spacing int) *RunProperty {
 // 	rp.CharacterSpacing = &CharacterSpacing{Val: spacing}
-// 	return rp
-// }
-
-// // AddHighlight sets the highlight color for the run.
-// func (rp *RunProperty) AddHighlight(color string) *RunProperty {
-// 	rp.Highlight = &Highlight{Val: color}
 // 	return rp
 // }
 
@@ -195,6 +195,13 @@ func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 		}
 	}
 
+	if rp.Highlight != nil {
+		err := e.EncodeElement(rp.Highlight, xml.StartElement{Name: xml.Name{Local: "w:highlight"}})
+		if err != nil {
+			return err
+		}
+	}
+
 	err = e.EncodeToken(start.End())
 	if err != nil {
 		return err
@@ -232,6 +239,10 @@ func (rp *RunProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 				}
 			case xml.Name{Space: constants.WMLNamespace, Local: "shd"}, xml.Name{Space: constants.AltWMLNamespace, Local: "shd"}:
 				if err = d.DecodeElement(&rp.Shading, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "highlight"}, xml.Name{Space: constants.AltWMLNamespace, Local: "highlight"}:
+				if err = d.DecodeElement(&rp.Highlight, &t); err != nil {
 					return err
 				}
 			default:
