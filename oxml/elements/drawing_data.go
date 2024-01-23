@@ -22,14 +22,15 @@ type Anchor struct {
 	SimplePosXAttr     int
 	SimplePosYAttr     int
 	SimplePos          *types.PositionType `xml:"simplePos"`
+	PositionH          *types.PoistionH
+	PositionV          *types.PoistionV
 }
 
 func NewAnchor() *Anchor {
 	return &Anchor{}
 }
 
-type Inline struct {
-}
+type Inline struct{}
 
 func NewInline() *Inline {
 	return &Inline{}
@@ -57,6 +58,12 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if a.SimplePos != nil {
 		e.EncodeElement(a.SimplePos, xml.StartElement{Name: xml.Name{Local: "wp:simplePos"}})
+	}
+	if a.PositionH != nil {
+		e.EncodeElement(a.PositionH, xml.StartElement{Name: xml.Name{Local: "wp:positionH"}})
+	}
+	if a.PositionV != nil {
+		e.EncodeElement(a.PositionV, xml.StartElement{Name: xml.Name{Local: "wp:positionV"}})
 	}
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
@@ -105,9 +112,17 @@ func (a *Anchor) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 				if err := decoder.DecodeElement(a.SimplePos, &elem); err != nil {
 					return err
 				}
-
+			case xml.Name{Space: constants.WMLDrawingNS, Local: "positionV"}:
+				a.PositionV = &types.PoistionV{}
+				if err := decoder.DecodeElement(a.PositionV, &elem); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLDrawingNS, Local: "positionH"}:
+				a.PositionH = &types.PoistionH{}
+				if err := decoder.DecodeElement(a.PositionH, &elem); err != nil {
+					return err
+				}
 			default:
-				// fmt.Println(elem.Name)
 				if err = decoder.Skip(); err != nil {
 					return err
 				}
@@ -118,7 +133,6 @@ func (a *Anchor) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 			}
 		}
 	}
-
 }
 
 func (i *Inline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
