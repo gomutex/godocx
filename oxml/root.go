@@ -32,7 +32,7 @@ func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 	return &doc, nil
 }
 
-func (rd *RootDoc) AddParagraph() *elements.Paragraph {
+func (rd *RootDoc) AddParagraph(text string) *elements.Paragraph {
 	p := &elements.Paragraph{
 		Children: make([]*elements.ParagraphChild, 0),
 	}
@@ -41,5 +41,21 @@ func (rd *RootDoc) AddParagraph() *elements.Paragraph {
 		Para: p,
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
+
+	p.AddText("Hello, world!")
+
+	return p
+}
+
+func (rd *RootDoc) AddEmptyParagraph() *elements.Paragraph {
+	p := &elements.Paragraph{
+		Children: make([]*elements.ParagraphChild, 0),
+	}
+
+	bodyElem := DocumentChild{
+		Para: p,
+	}
+	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
+
 	return p
 }

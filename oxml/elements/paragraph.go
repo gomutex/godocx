@@ -13,7 +13,7 @@ type ParagraphChild struct {
 
 type Paragraph struct {
 	id       string
-	property *ParagraphProperty
+	Property *ParagraphProperty
 
 	Children []*ParagraphChild
 }
@@ -96,8 +96,8 @@ func (para *Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		return err
 	}
 
-	if para.property != nil {
-		if err = e.EncodeElement(para.property, start); err != nil {
+	if para.Property != nil {
+		if err = e.EncodeElement(para.Property, start); err != nil {
 			return err
 		}
 	}
@@ -144,8 +144,8 @@ loop:
 				p.Children = append(p.Children, &ParagraphChild{Run: r})
 			case xml.Name{Space: constants.WMLNamespace, Local: "pPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "pPr"}:
 
-				p.property = &ParagraphProperty{}
-				if err := d.DecodeElement(p.property, &elem); err != nil {
+				p.Property = &ParagraphProperty{}
+				if err := d.DecodeElement(p.Property, &elem); err != nil {
 					return err
 				}
 

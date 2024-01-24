@@ -31,6 +31,8 @@ const (
 const (
 	WMLNamespace    = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 	AltWMLNamespace = "http://purl.oclc.org/ooxml/wordprocessingml/main"
+
+	WMLDrawingNS = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
 )
 
 const (
