@@ -26,6 +26,9 @@ func main() {
 	p := docx.AddEmptyParagraph()
 	_ = p.AddText("Add Paragraph and get `Run` instance")
 
+	// Add Heading
+	docx.AddHeading("Example Heading", 1) // Heading text and level
+
 	// Save the modified document to a new file
 	err = docx.SaveTo("./test_modified.docx")
 	if err != nil {
