@@ -22,8 +22,9 @@ func main() {
 	}
 
 	// Add a new paragraph to the document
-	p := docx.AddParagraph()
-	p.AddText("Hello, world!")
+	_ = docx.AddParagraph("Hello World")
+	p := docx.AddEmptyParagraph()
+	_ = p.AddText("Add Paragraph and get `Run` instance")
 
 	// Save the modified document to a new file
 	err = docx.SaveTo("./test_modified.docx")
