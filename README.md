@@ -34,7 +34,7 @@ func main() {
 
 ```
 
-## Contributing
-Contributions are welcome! If you find any issues or have suggestions, feel free to open an issue or create a pull request.
+## Inspiration
+This GoDocx Library draws inspiration from two renowned libraries in the programming world - python-docx and docx-rs (Rust). 
 
 

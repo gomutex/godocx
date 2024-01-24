@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	inputFileFlag := flag.String("input", "./testdata/test.docx", "Path to the input file")
 	outputFileFlag := flag.String("output", "/tmp/test.docx", "Path to the output file")
 	flag.Parse()
@@ -27,8 +26,15 @@ func main() {
 
 	// fmt.Println(docx.FileMap)
 
-	// p := docx.AddParagraph()
-	// p.AddText("Hello, world!")
+	_ = docx.AddParagraph("Hello World")
+
+	_ = docx.AddEmptyParagraph().AddText("Para 2")
+
+	docx.AddHeading("Heading1", 1)
+	// _, err = docx.AddHeading("Invalid Heading Level", 10)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
 	// nextPara := docx.AddParagraph()
 	// nextPara.AddLink("google", `http://google.com`)

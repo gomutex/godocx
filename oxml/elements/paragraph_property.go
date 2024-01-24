@@ -16,6 +16,10 @@ type ParagraphProperty struct {
 	Justification   *Justification
 }
 
+func DefaultParaProperty() *ParagraphProperty {
+	return &ParagraphProperty{}
+}
+
 func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	elem := xml.StartElement{Name: xml.Name{Local: "w:pPr"}}
 
@@ -43,7 +47,6 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 }
 
 func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
-
 	for {
 		token, err := d.Token()
 		if err != nil {
