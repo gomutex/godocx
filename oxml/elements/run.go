@@ -62,7 +62,7 @@ func (r *Run) Color(colorCode string) *Run {
 
 // Returns:
 //   - *Run: The modified Run instance with the updated size.
-func (r *Run) Size(size int) *Run {
+func (r *Run) Size(size uint) *Run {
 	r.RunProperty.Size = NewSz(size * 2)
 	return r
 }

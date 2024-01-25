@@ -48,7 +48,7 @@ func (rp *RunProperty) AddRunStyle(style string) *RunProperty {
 }
 
 // AddSize sets the font size for the run.
-func (rp *RunProperty) AddSize(size int) *RunProperty {
+func (rp *RunProperty) AddSize(size uint) *RunProperty {
 	rp.Size = NewSz(size)
 	rp.SizeCs = NewSzCs(size)
 	return rp

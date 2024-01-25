@@ -6,26 +6,37 @@ import (
 
 // RunStyle represents the style of a run within a document.
 type RunStyle struct {
-	Val string
+	Value string
 }
 
 // NewRunStyle creates a new RunStyle.
-func NewRunStyle(val string) *RunStyle {
-	return &RunStyle{Val: val}
+func NewRunStyle(value string) *RunStyle {
+	return &RunStyle{Value: value}
 }
 
 // DefaultRunStyle creates the default RunStyle with the value "Normal".
 func DefaultRunStyle() *RunStyle {
-	return &RunStyle{Val: "Normal"}
+	return &RunStyle{Value: "Normal"}
 }
 
 // MarshalXML marshals RunStyle to XML.
 func (r *RunStyle) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:rStyle"
-	return e.EncodeElement(r.Val, start)
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: r.Value})
+
+	return e.EncodeElement("", start)
 }
 
 // UnmarshalXML unmarshals XML to RunStyle.
 func (r *RunStyle) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	return d.DecodeElement(&r.Val, &start)
+	var attr string
+	for _, a := range start.Attr {
+		if a.Name.Local == "val" {
+			attr = a.Value
+			break
+		}
+	}
+
+	r.Value = attr
+	return d.Skip() // Skipping the inner content
 }
