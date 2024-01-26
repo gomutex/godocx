@@ -38,6 +38,10 @@ func main() {
 
 ```
 
+## Examples
+Explore additional examples and use cases over at GitHub repository dedicated to showcasing the capabilities of Golang Docx:
+https://github.com/gomutex/godocx-examples
+
 ## Inspiration
 This GoDocx Library draws inspiration from two renowned libraries in the programming world - python-docx and docx-rs (Rust). 
 
