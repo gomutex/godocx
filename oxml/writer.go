@@ -9,18 +9,20 @@ import (
 	"sort"
 )
 
+// Close method is used to close the RootDoc. Currently, it does not perform any specific actions.
 func (rd *RootDoc) Close() error {
 	var err error
 
 	return err
 }
 
+// Write method writes the RootDoc to an io.Writer.
 func (rd *RootDoc) Write(w io.Writer) error {
 	_, err := rd.WriteTo(w)
 	return err
 }
 
-// WriteTo implements io.WriterTo to write the file.
+// WriteTo implements io.WriterTo to write the RootDoc to an io.Writer.
 func (rd *RootDoc) WriteTo(w io.Writer) (int64, error) {
 
 	if err := rd.writeDirectToWriter(w); err != nil {
@@ -29,6 +31,7 @@ func (rd *RootDoc) WriteTo(w io.Writer) (int64, error) {
 	return 0, nil
 }
 
+// writeDirectToWriter writes the RootDoc directly to an io.Writer using a zip.Writer.
 func (rd *RootDoc) writeDirectToWriter(w io.Writer) error {
 	zw := zip.NewWriter(w)
 	if err := rd.writeToZip(zw); err != nil {
@@ -82,10 +85,12 @@ func (rd *RootDoc) writeToZip(zw *zip.Writer) error {
 	return err
 }
 
+// Save method saves the RootDoc to the specified file path.
 func (rd *RootDoc) Save() error {
 	return rd.SaveTo(rd.Path)
 }
 
+// SaveTo method saves the RootDoc to the specified file path.
 func (rd *RootDoc) SaveTo(fileName string) error {
 	if fileName == "" {
 		return errors.New("Destination file path is empty")
