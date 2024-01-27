@@ -14,6 +14,8 @@ type ParagraphProperty struct {
 	WidowControl    *bool
 	Style           *ParagraphStyle
 	Justification   *Justification
+
+	NumberingProperty *NumberingProperty
 }
 
 func DefaultParaProperty() *ParagraphProperty {
@@ -29,13 +31,25 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 	}
 
 	// Encoding <w:pStyle> element
-	if err = e.EncodeElement(pp.Style, xml.StartElement{Name: xml.Name{Local: "w:pStyle"}}); err != nil {
-		return err
+	if pp.Style != nil {
+
+		if err = e.EncodeElement(pp.Style, xml.StartElement{Name: xml.Name{Local: "w:pStyle"}}); err != nil {
+			return err
+		}
 	}
 
 	// Encoding <w:jc> element
-	if err = e.EncodeElement(pp.Justification, xml.StartElement{Name: xml.Name{Local: "w:jc"}}); err != nil {
-		return err
+	if pp.Justification != nil {
+		if err = e.EncodeElement(pp.Justification, xml.StartElement{Name: xml.Name{Local: "w:jc"}}); err != nil {
+			return err
+		}
+	}
+
+	// Encoding <w:numPr> element
+	if pp.NumberingProperty != nil {
+		if err = e.EncodeElement(pp.NumberingProperty, xml.StartElement{Name: xml.Name{Local: "w:numPr"}}); err != nil {
+			return err
+		}
 	}
 
 	// Closing </w:pPr> element
@@ -62,6 +76,10 @@ func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 				}
 			case xml.Name{Space: constants.WMLNamespace, Local: "jc"}, xml.Name{Space: constants.AltWMLNamespace, Local: "jc"}:
 				if err = d.DecodeElement(&pp.Justification, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "numPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "numPr"}:
+				if err = d.DecodeElement(&pp.NumberingProperty, &t); err != nil {
 					return err
 				}
 			default:

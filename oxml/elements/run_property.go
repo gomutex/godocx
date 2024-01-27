@@ -14,13 +14,11 @@ type RunProperty struct {
 	SizeCs    *SzCs
 	Shading   *Shading
 	Highlight *Highlight
+	Bold      *Bold
+	Italic    *Italic
 
-	// Bold             *Bold
-	// BoldCs           *BoldCs
-	// Italic           *Italic
-	// ItalicCs         *ItalicCs
-	// Strike           *Strike
-	// Underline        *Underline
+	Strike    *Strike
+	Underline *Underline
 	// Vanish           *Vanish
 	// SpecVanish       *SpecVanish
 	// VertAlign        *VertAlign
@@ -35,122 +33,6 @@ type RunProperty struct {
 func NewRunProperty() RunProperty {
 	return RunProperty{}
 }
-
-// AddColor sets the font color for the run.
-func (rp *RunProperty) AddColor(color string) *RunProperty {
-	rp.Color = NewColor(color)
-	return rp
-}
-
-func (rp *RunProperty) AddRunStyle(style string) *RunProperty {
-	rp.Style = NewRunStyle(style)
-	return rp
-}
-
-// AddSize sets the font size for the run.
-func (rp *RunProperty) AddSize(size uint) *RunProperty {
-	rp.Size = NewSz(size)
-	rp.SizeCs = NewSzCs(size)
-	return rp
-}
-
-func (rp *RunProperty) AddShading(shdType ShadingType, color, fill string) *RunProperty {
-	rp.Shading = NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
-	return rp
-}
-
-// AddHighlight sets the highlight color for the run.
-func (rp *RunProperty) AddHighlight(color string) *RunProperty {
-	rp.Highlight = NewHighlight(color)
-	return rp
-}
-
-// // AddSpacing sets the character spacing for the run.
-// func (rp *RunProperty) AddSpacing(spacing int) *RunProperty {
-// 	rp.CharacterSpacing = &CharacterSpacing{Val: spacing}
-// 	return rp
-// }
-
-// // AddVertAlign sets the vertical alignment for the run.
-// func (rp *RunProperty) AddVertAlign(alignType VertAlignType) *RunProperty {
-// 	rp.VertAlign = &VertAlign{Val: alignType}
-// 	return rp
-// }
-
-// // AddBold enables bold formatting for the run.
-// func (rp *RunProperty) AddBold() *RunProperty {
-// 	rp.Bold = &Bold{}
-// 	rp.BoldCs = &BoldCs{}
-// 	return rp
-// }
-
-// // AddDisableBold disables bold formatting for the run.
-// func (rp *RunProperty) AddDisableBold() *RunProperty {
-// 	rp.Bold = &Bold{Val: false}
-// 	rp.BoldCs = &BoldCs{Val: false}
-// 	return rp
-// }
-
-// // AddCaps enables capitalization formatting for the run.
-// func (rp *RunProperty) AddCaps() *RunProperty {
-// 	rp.Caps = &Caps{}
-// 	return rp
-// }
-
-// // AddItalic enables italic formatting for the run.
-// func (rp *RunProperty) AddItalic() *RunProperty {
-// 	rp.Italic = &Italic{}
-// 	rp.ItalicCs = &ItalicCs{}
-// 	return rp
-// }
-
-// // AddStrike enables strike-through formatting for the run.
-// func (rp *RunProperty) AddStrike() *RunProperty {
-// 	rp.Strike = &Strike{}
-// 	return rp
-// }
-
-// // AddUnderline sets the underline type for the run.
-// func (rp *RunProperty) AddUnderline(lineType string) *RunProperty {
-// 	rp.Underline = &Underline{Val: lineType}
-// 	return rp
-// }
-
-// // AddVanish enables text visibility to be toggled in the run.
-// func (rp *RunProperty) AddVanish() *RunProperty {
-// 	rp.Vanish = &Vanish{}
-// 	return rp
-// }
-
-// // AddSpecVanish enables text visibility to be toggled in the run.
-// func (rp *RunProperty) AddSpecVanish() *RunProperty {
-// 	rp.SpecVanish = &SpecVanish{}
-// 	return rp
-// }
-
-// // AddFonts sets the run fonts.
-// func (rp *RunProperty) AddFonts(fonts RunFonts) *RunProperty {
-// 	rp.Fonts = &fonts
-// 	return rp
-// }
-
-// // AddTextBorder sets the text border for the run.
-// func (rp *RunProperty) AddTextBorder(border TextBorder) *RunProperty {
-// 	rp.TextBorder = &border
-// 	return rp
-// }
-
-// // AddDelete sets the deletion formatting for the run.
-// func (rp *RunProperty) AddDelete(d Delete) *RunProperty {
-// 	rp.Del = &d
-// 	return rp
-// }
-
-// // AddInsert sets the insertion formatting for the run.
-// func (rp *RunProperty) AddInsert(i Insert) *RunProperty {
-// 	rp.Ins = &i
-// 	return rp
-// }
 
 // MarshalXML marshals RunProperty to XML.
 func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -202,6 +84,34 @@ func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 		}
 	}
 
+	if rp.Bold != nil {
+		err := e.EncodeElement(rp.Bold, xml.StartElement{Name: xml.Name{Local: "w:b"}})
+		if err != nil {
+			return err
+		}
+	}
+
+	if rp.Italic != nil {
+		err := e.EncodeElement(rp.Italic, xml.StartElement{Name: xml.Name{Local: "w:i"}})
+		if err != nil {
+			return err
+		}
+	}
+
+	if rp.Strike != nil {
+		err := e.EncodeElement(rp.Strike, xml.StartElement{Name: xml.Name{Local: "w:strike"}})
+		if err != nil {
+			return err
+		}
+	}
+
+	if rp.Underline != nil {
+		err := e.EncodeElement(rp.Underline, xml.StartElement{Name: xml.Name{Local: "w:u"}})
+		if err != nil {
+			return err
+		}
+	}
+
 	err = e.EncodeToken(start.End())
 	if err != nil {
 		return err
@@ -243,6 +153,22 @@ func (rp *RunProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 				}
 			case xml.Name{Space: constants.WMLNamespace, Local: "highlight"}, xml.Name{Space: constants.AltWMLNamespace, Local: "highlight"}:
 				if err = d.DecodeElement(&rp.Highlight, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "b"}, xml.Name{Space: constants.AltWMLNamespace, Local: "b"}:
+				if err = d.DecodeElement(&rp.Bold, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "i"}, xml.Name{Space: constants.AltWMLNamespace, Local: "i"}:
+				if err = d.DecodeElement(&rp.Italic, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "strike"}, xml.Name{Space: constants.AltWMLNamespace, Local: "strike"}:
+				if err = d.DecodeElement(&rp.Strike, &t); err != nil {
+					return err
+				}
+			case xml.Name{Space: constants.WMLNamespace, Local: "u"}, xml.Name{Space: constants.AltWMLNamespace, Local: "u"}:
+				if err = d.DecodeElement(&rp.Underline, &t); err != nil {
 					return err
 				}
 			default:

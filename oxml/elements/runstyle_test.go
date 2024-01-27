@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRunStyleXMLMarshaling(t *testing.T) {
+func TestRunStyle(t *testing.T) {
 	testRunStyle := NewRunStyle("Heading")
 
 	xmlData, err := xml.Marshal(testRunStyle)
