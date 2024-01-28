@@ -5,7 +5,49 @@ import (
 )
 
 // ShadingType represents the shading type.
+// ShadingType represents different shading types.
 type ShadingType string
+
+const (
+	ShadingTypeNil                   ShadingType = "Nil"
+	ShadingTypeClear                 ShadingType = "Clear"
+	ShadingTypeSolid                 ShadingType = "Solid"
+	ShadingTypeHorzStripe            ShadingType = "HorzStripe"
+	ShadingTypeVertStripe            ShadingType = "VertStripe"
+	ShadingTypeReverseDiagStripe     ShadingType = "ReverseDiagStripe"
+	ShadingTypeDiagStripe            ShadingType = "DiagStripe"
+	ShadingTypeHorzCross             ShadingType = "HorzCross"
+	ShadingTypeDiagCross             ShadingType = "DiagCross"
+	ShadingTypeThinHorzStripe        ShadingType = "ThinHorzStripe"
+	ShadingTypeThinVertStripe        ShadingType = "ThinVertStripe"
+	ShadingTypeThinReverseDiagStripe ShadingType = "ThinReverseDiagStripe"
+	ShadingTypeThinDiagStripe        ShadingType = "ThinDiagStripe"
+	ShadingTypeThinHorzCross         ShadingType = "ThinHorzCross"
+	ShadingTypeThinDiagCross         ShadingType = "ThinDiagCross"
+	ShadingTypePct5                  ShadingType = "Pct5"
+	ShadingTypePct10                 ShadingType = "Pct10"
+	ShadingTypePct12                 ShadingType = "Pct12"
+	ShadingTypePct15                 ShadingType = "Pct15"
+	ShadingTypePct20                 ShadingType = "Pct20"
+	ShadingTypePct25                 ShadingType = "Pct25"
+	ShadingTypePct30                 ShadingType = "Pct30"
+	ShadingTypePct35                 ShadingType = "Pct35"
+	ShadingTypePct37                 ShadingType = "Pct37"
+	ShadingTypePct40                 ShadingType = "Pct40"
+	ShadingTypePct45                 ShadingType = "Pct45"
+	ShadingTypePct50                 ShadingType = "Pct50"
+	ShadingTypePct55                 ShadingType = "Pct55"
+	ShadingTypePct60                 ShadingType = "Pct60"
+	ShadingTypePct62                 ShadingType = "Pct62"
+	ShadingTypePct65                 ShadingType = "Pct65"
+	ShadingTypePct70                 ShadingType = "Pct70"
+	ShadingTypePct75                 ShadingType = "Pct75"
+	ShadingTypePct80                 ShadingType = "Pct80"
+	ShadingTypePct85                 ShadingType = "Pct85"
+	ShadingTypePct87                 ShadingType = "Pct87"
+	ShadingTypePct90                 ShadingType = "Pct90"
+	ShadingTypePct95                 ShadingType = "Pct95"
+)
 
 // Shading represents the shading properties.
 type Shading struct {

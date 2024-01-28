@@ -67,6 +67,38 @@ func (r *Run) Size(size uint) *Run {
 	return r
 }
 
+func (r *Run) Shading(shdType ShadingType, color, fill string) *Run {
+	r.RunProperty.Shading = NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
+	return r
+}
+
+// AddHighlight sets the highlight color for the run.
+func (r *Run) Highlight(color ColorIndex) *Run {
+	r.RunProperty.Highlight = NewHighlight(color)
+	return r
+}
+
+// AddBold enables bold formatting for the run.
+func (r *Run) Bold(value bool) *Run {
+	r.RunProperty.Bold = NewBold(value)
+	return r
+}
+
+func (r *Run) Italic(value bool) *Run {
+	r.RunProperty.Italic = NewItalic(value)
+	return r
+}
+
+func (r *Run) Strike(value bool) *Run {
+	r.RunProperty.Strike = NewStrike(value)
+	return r
+}
+
+func (r *Run) Underline(value UnderlineStyle) *Run {
+	r.RunProperty.Underline = NewUnderline(value)
+	return r
+}
+
 func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:r"
 

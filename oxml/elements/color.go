@@ -39,3 +39,26 @@ func (c *Color) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	c.Value = attr
 	return d.Skip() // Skipping the inner content
 }
+
+// ColorIndex represents different color indexes.
+type ColorIndex string
+
+const (
+	ColorIndexAuto        ColorIndex = "default"
+	ColorIndexBlack       ColorIndex = "black"
+	ColorIndexBlue        ColorIndex = "blue"
+	ColorIndexBrightGreen ColorIndex = "green"
+	ColorIndexDarkBlue    ColorIndex = "darkBlue"
+	ColorIndexDarkRed     ColorIndex = "darkRed"
+	ColorIndexDarkYellow  ColorIndex = "darkYellow"
+	ColorIndexGray25      ColorIndex = "lightGray"
+	ColorIndexGray50      ColorIndex = "darkGray"
+	ColorIndexGreen       ColorIndex = "darkGreen"
+	ColorIndexPink        ColorIndex = "magenta"
+	ColorIndexRed         ColorIndex = "red"
+	ColorIndexTeal        ColorIndex = "darkCyan"
+	ColorIndexTurquoise   ColorIndex = "cyan"
+	ColorIndexVoilet      ColorIndex = "darkMagenta"
+	ColorIndexWhite       ColorIndex = "white"
+	ColorIndexYellow      ColorIndex = "yellow"
+)

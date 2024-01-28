@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestParagraphStyleMarshalingUnmarshaling(t *testing.T) {
+func TestParagraphStyle(t *testing.T) {
 	testParagraphStyle := NewParagraphStyle("Heading1")
 
 	xmlData, err := xml.Marshal(testParagraphStyle)

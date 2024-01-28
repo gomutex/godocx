@@ -19,7 +19,9 @@ type Paragraph struct {
 }
 
 func NewParagraph() *Paragraph {
-	return &Paragraph{}
+	return &Paragraph{
+		Property: DefaultParaProperty(),
+	}
 }
 
 func NewParagraphChild() *ParagraphChild {
@@ -28,6 +30,25 @@ func NewParagraphChild() *ParagraphChild {
 
 func (p *Paragraph) GetType() string {
 	return "p"
+}
+
+func (p *Paragraph) Numbering(id int, level int) {
+	// TODO: Fix Numbering
+	numberingID := NewNumberingId(id)
+	indentLevel := NewIndentLevel(level)
+
+	if p.Property == nil {
+		p.Property = DefaultParaProperty()
+	}
+
+	// if p.Property.Style == nil {
+	// 	p.Property.Style = DefaultParagraphStyle()
+	// }
+
+	if p.Property.NumberingProperty == nil {
+		p.Property.NumberingProperty = NewNumberingProperty()
+	}
+	p.Property.NumberingProperty.AddNumber(numberingID, indentLevel)
 }
 
 // Appends a new text to the Paragraph.

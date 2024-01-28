@@ -8,18 +8,20 @@ import (
 	"github.com/gomutex/godocx/oxml/elements"
 )
 
+// This element specifies the contents of the body of the document – the main document editing surface.
+type Body struct {
+	XMLName  xml.Name         `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main body"`
+	Children []*DocumentChild `xml:",any"`
+	SectPr   *CTSectPr
+}
+
+// DocumentChild represents a child element within a Word document, which can be a Paragraph or a Table.
 type DocumentChild struct {
 	Para  *elements.Paragraph
 	Table *Table
 }
 
-type Body struct {
-	XMLName  xml.Name         `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main body"`
-	Children []*DocumentChild `xml:",any"`
-
-	SectPr *CTSectPr
-}
-
+// CTSectPr represents the section properties of a Word document.
 type CTSectPr struct {
 	Type      *SectionType    `xml:"type,omitempty"`
 	PgSz      *PageSize       `xml:"pgSz,omitempty"`
@@ -31,21 +33,25 @@ type CTSectPr struct {
 
 }
 
+// DocGrid represents the document grid settings.
 type DocGrid struct {
 	Type      string `xml:"type,attr,omitempty"`
 	LinePitch int    `xml:"linePitch,attr,omitempty"`
 	CharSpace int    `xml:"charSpace,attr,omitempty"`
 }
 
+// SectionType represents the type of section in a Word document.
 type SectionType struct {
 	Val string `xml:"val,attr,omitempty"`
 }
 
+// PageSize represents the page size of a Word document.
 type PageSize struct {
 	W int `xml:"w,attr,omitempty"`
 	H int `xml:"h,attr,omitempty"`
 }
 
+// PageMargins represents the page margins of a Word document.
 type PageMargins struct {
 	Left   int `xml:"left,attr,omitempty"`
 	Right  int `xml:"right,attr,omitempty"`
@@ -56,22 +62,28 @@ type PageMargins struct {
 	Bottom int `xml:"bottom,attr,omitempty"` // Add Bottom attribute
 }
 
+// PageNumbering represents the page numbering format in a Word document.
 type PageNumbering struct {
 	Fmt string `xml:"fmt,attr,omitempty"`
 }
 
+// FormProtection represents the form protection settings in a Word document.
 type FormProtection struct {
 	Val string `xml:"val,attr,omitempty"`
 }
 
+// TextDirection represents the text direction settings in a Word document.
 type TextDirection struct {
 	Val string `xml:"val,attr,omitempty"`
 }
 
+// Use this function to initialize a new Body before adding content to it.
 func NewBody() *Body {
 	return &Body{}
 }
 
+// MarshalXML implements the xml.Marshaler interface for the Body type.
+// It encodes the Body to its corresponding XML representation.
 func (b *Body) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:body"
 
@@ -99,6 +111,8 @@ func (b *Body) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
+// MarshalXML implements the xml.Marshaler interface for the CTSectPr type.
+// It encodes the CTSectPr to its corresponding XML representation.
 func (sectPr *CTSectPr) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:sectPr"
 
@@ -152,6 +166,8 @@ func (sectPr *CTSectPr) MarshalXML(e *xml.Encoder, start xml.StartElement) (err 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
+// MarshalXML implements the xml.Marshaler interface for the DocGrid type.
+// It encodes the DocGrid to its corresponding XML representation.
 func (docGrid *DocGrid) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:docGrid"
 	if docGrid.Type != "" {
@@ -166,9 +182,10 @@ func (docGrid *DocGrid) MarshalXML(e *xml.Encoder, start xml.StartElement) error
 	return e.EncodeElement("", start)
 }
 
+// UnmarshalXML implements the xml.Unmarshaler interface for the Body type.
+// It decodes the XML representation of the Body.
 func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
 
-loop:
 	for {
 		currentToken, err := d.Token()
 		if err != nil {
@@ -196,13 +213,14 @@ loop:
 				}
 			}
 		case xml.EndElement:
-			break loop
+			return nil
 		}
 	}
 
-	return nil
 }
 
+// getSectionTypeVal returns an xml.Attr representing the SectionType value.
+// It maps a string value to the corresponding SectionType XML attribute.
 func getSectionTypeVal(value string) xml.Attr {
 	valElem := xml.Attr{}
 	valElem.Name = xml.Name{Local: "w:val"}
@@ -224,6 +242,8 @@ func getSectionTypeVal(value string) xml.Attr {
 	return valElem
 }
 
+// MarshalXML implements the xml.Marshaler interface for the SectionType type.
+// It encodes the SectionType to its corresponding XML representation.
 func (st *SectionType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	valElem := getSectionTypeVal(st.Val)
 	start.Attr = append(start.Attr, valElem)
@@ -232,6 +252,8 @@ func (st *SectionType) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	return nil
 }
 
+// MarshalXML implements the xml.Marshaler interface for the PageSize type.
+// It encodes the PageSize to its corresponding XML representation.
 func (pgSz *PageSize) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:pgSz"
 	if pgSz.W != 0 {
@@ -243,6 +265,8 @@ func (pgSz *PageSize) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeElement("", start)
 }
 
+// MarshalXML implements the xml.Marshaler interface for the PageMargins type.
+// It encodes the PageMargins to its corresponding XML representation.
 func (pgMar *PageMargins) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:pgMar"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:left"}, Value: strconv.Itoa(pgMar.Left)})
@@ -255,6 +279,8 @@ func (pgMar *PageMargins) MarshalXML(e *xml.Encoder, start xml.StartElement) err
 	return e.EncodeElement("", start)
 }
 
+// MarshalXML implements the xml.Marshaler interface for the PageNumbering type.
+// It encodes the PageNumbering to its corresponding XML representation.
 func (pgNumType *PageNumbering) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:pgNumType"
 	if pgNumType.Fmt != "" {
@@ -263,6 +289,8 @@ func (pgNumType *PageNumbering) MarshalXML(e *xml.Encoder, start xml.StartElemen
 	return e.EncodeElement("", start)
 }
 
+// MarshalXML implements the xml.Marshaler interface for the FormProtection type.
+// It encodes the FormProtection to its corresponding XML representation.
 func (formProt *FormProtection) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:formProt"
 	if formProt.Val != "" {
@@ -271,6 +299,8 @@ func (formProt *FormProtection) MarshalXML(e *xml.Encoder, start xml.StartElemen
 	return e.EncodeElement("", start)
 }
 
+// MarshalXML implements the xml.Marshaler interface for the TextDirection type.
+// It encodes the TextDirection to its corresponding XML representation.
 func (textDir *TextDirection) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:textDirection"
 	if textDir.Val != "" {

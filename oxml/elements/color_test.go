@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestColorMarshalingUnmarshaling(t *testing.T) {
+func TestColor(t *testing.T) {
 	testColor := NewColor("FF0000")
 
 	xmlData, err := xml.Marshal(testColor)

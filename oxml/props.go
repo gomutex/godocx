@@ -8,6 +8,8 @@ import (
 	"github.com/gomutex/godocx/constants"
 )
 
+// CoreProperties represents the core properties of a document, such as title, creator, and version.
+// It is used to store metadata information about the document.
 type CoreProperties struct {
 	Category       string
 	ContentStatus  string
@@ -25,6 +27,7 @@ type CoreProperties struct {
 	Version        string
 }
 
+// sourceCoreProps is an intermediate structure used for decoding XML data related to core properties.
 type sourceCoreProps struct {
 	XMLName        xml.Name       `xml:"http://schemas.openxmlformats.org/package/2006/metadata/core-properties coreProperties"`
 	Title          string         `xml:"http://purl.org/dc/elements/1.1/ title,omitempty"`
@@ -43,6 +46,7 @@ type sourceCoreProps struct {
 	Version        string         `xml:"version,omitempty"`
 }
 
+// finalCoreProps is the final structure used for encoding core properties data to XML.
 type finalCoreProps struct {
 	FilePath       string       `xml:"-"`
 	XMLName        xml.Name     `xml:"http://schemas.openxmlformats.org/package/2006/metadata/core-properties coreProperties"`
@@ -66,6 +70,8 @@ type finalCoreProps struct {
 	Version        string       `xml:"version,omitempty"`
 }
 
+// ExtendedProperties represents extended properties of a document, such as application details and statistics.
+// It is used to store additional metadata information about the document.
 type ExtendedProperties struct {
 	Application       string
 	ScaleCrop         bool
@@ -76,6 +82,7 @@ type ExtendedProperties struct {
 	AppVersion        string
 }
 
+// ctExtendedProperties is the structure used for encoding extended properties data to XML.
 type ctExtendedProperties struct {
 	FilePath             string         `xml:"-"`
 	XMLName              xml.Name       `xml:"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties Properties"`
@@ -102,31 +109,46 @@ type ctExtendedProperties struct {
 	AppVersion           *string        `xml:"AppVersion,omitempty"`
 }
 
+// HeadingPairs represents a set of heading pairs used in extended properties.
 type HeadingPairs struct {
 	Vector Vector `xml:"HeadingPairs"`
 }
 
+// TitlesOfParts represents a set of titles of parts used in extended properties.
 type TitlesOfParts struct {
 	Vector Vector `xml:"TitlesOfParts"`
 }
 
+// Vector represents a vector structure used in extended properties.
 type Vector struct {
 	Size     int       `xml:"size,attr"`
 	BaseType string    `xml:"baseType,attr"`
 	Variant  []Variant `xml:"variant,omitempty"`
 }
 
+// Variant represents a variant structure used in extended properties.
 type Variant struct {
 	LPStr string `xml:"http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes lpstr,omitempty"`
 	I4    int    `xml:"http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes i4,omitempty"`
 }
 
+// xmlNewDecoder creates a new XML decoder instance for the given reader.
+// It returns the decoder, and it is used for decoding XML data.
 func xmlNewDecoder(rdr io.Reader) (ret *xml.Decoder) {
 	ret = xml.NewDecoder(rdr)
 	// ret.CharsetReader = f.CharsetReader
 	return
 }
 
+// LoadDocProps decodes the provided XML data and returns a CoreProperties instance.
+// It is used to load core properties from the document file.
+//
+// Parameters:
+//   - fileBytes: The XML data representing the core properties of the document.
+//
+// Returns:
+//   - cp: The CoreProperties instance containing the decoded core properties.
+//   - err: An error, if any occurred during the decoding process.
 func LoadDocProps(fileBytes []byte) (cp *CoreProperties, err error) {
 	core := new(sourceCoreProps)
 

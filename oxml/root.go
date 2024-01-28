@@ -7,20 +7,33 @@ import (
 	"github.com/gomutex/godocx/oxml/elements"
 )
 
+// RootDoc represents the root document of an Office Open XML (OOXML) document.
+// It contains information about the document path, file map, the document structure,
+// and relationships with other parts of the document.
 type RootDoc struct {
-	Path     string
-	FileMap  sync.Map
-	Document *Document
-	RootRels Relationships
-	DocRels  Relationships
-
-	rId int
+	Path     string        // Path represents the path of the document.
+	FileMap  sync.Map      // FileMap is a synchronized map for managing files related to the document.
+	Document *Document     // Document is the main document structure.
+	RootRels Relationships // RootRels represents relationships at the root level.
+	DocRels  Relationships // DocRels represents relationships specific to the document.
+	rId      int           // rId is used to generate unique relationship IDs.
 }
 
+// NewRootDoc creates a new instance of the RootDoc structure.
 func NewRootDoc() *RootDoc {
 	return &RootDoc{}
 }
 
+// LoadDocXml decodes the provided XML data and returns a Document instance.
+// It is used to load the main document structure from the document file.
+//
+// Parameters:
+//   - fileName: The name of the document file.
+//   - fileBytes: The XML data representing the main document structure.
+//
+// Returns:
+//   - doc: The Document instance containing the decoded main document structure.
+//   - err: An error, if any occurred during the decoding process.
 func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 	doc := Document{}
 	err := xml.Unmarshal(fileBytes, &doc)
@@ -32,6 +45,14 @@ func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 	return &doc, nil
 }
 
+// AddParagraph adds a new paragraph with the specified text to the document.
+// It returns the created Paragraph instance.
+//
+// Parameters:
+//   - text: The text to be added to the paragraph.
+//
+// Returns:
+//   - p: The created Paragraph instance.
 func (rd *RootDoc) AddParagraph(text string) *elements.Paragraph {
 	p := &elements.Paragraph{
 		Children: make([]*elements.ParagraphChild, 0),
@@ -47,6 +68,11 @@ func (rd *RootDoc) AddParagraph(text string) *elements.Paragraph {
 	return p
 }
 
+// AddEmptyParagraph adds a new empty paragraph to the document.
+// It returns the created Paragraph instance.
+//
+// Returns:
+//   - p: The created Paragraph instance.
 func (rd *RootDoc) AddEmptyParagraph() *elements.Paragraph {
 	p := &elements.Paragraph{
 		Children: make([]*elements.ParagraphChild, 0),

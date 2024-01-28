@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestJustificationMarshalingUnmarshaling(t *testing.T) {
+func TestJustification(t *testing.T) {
 	testJustification := NewJustification("left")
 
 	xmlData, err := xml.Marshal(testJustification)

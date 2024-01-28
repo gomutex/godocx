@@ -22,11 +22,13 @@ var docAttrs = map[string]string{
 	"mc:Ignorable": "w14 wp14 w15",
 }
 
+// This element specifies the contents of a main document part in a WordprocessingML document.
 type Document struct {
 	relativePath string
 	Body         *Body
 }
 
+// MarshalXML implements the xml.Marshaler interface for the Document type.
 func (doc *Document) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:document"
 
@@ -50,9 +52,9 @@ func (doc *Document) MarshalXML(e *xml.Encoder, start xml.StartElement) (err err
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
+// UnmarshalXML implements the xml.Unmarshaler interface for the Document type.
 func (doc *Document) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
 
-loop:
 	for {
 		currentToken, err := d.Token()
 		if err != nil {
@@ -73,9 +75,8 @@ loop:
 				}
 			}
 		case xml.EndElement:
-			break loop
+			return nil
 		}
 	}
 
-	return nil
 }
