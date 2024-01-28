@@ -18,7 +18,7 @@ type Body struct {
 // DocumentChild represents a child element within a Word document, which can be a Paragraph or a Table.
 type DocumentChild struct {
 	Para  *elements.Paragraph
-	Table *Table
+	Table *elements.Table
 }
 
 // CTSectPr represents the section properties of a Word document.
@@ -93,9 +93,15 @@ func (b *Body) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	}
 
 	if b.Children != nil {
-		for _, cElem := range b.Children {
-			if cElem.Para != nil {
-				if err = cElem.Para.MarshalXML(e, xml.StartElement{}); err != nil {
+		for _, child := range b.Children {
+			if child.Para != nil {
+				if err = child.Para.MarshalXML(e, xml.StartElement{}); err != nil {
+					return err
+				}
+			}
+
+			if child.Table != nil {
+				if err = child.Table.MarshalXML(e, xml.StartElement{}); err != nil {
 					return err
 				}
 			}
@@ -201,7 +207,12 @@ func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 					return err
 				}
 				body.Children = append(body.Children, &DocumentChild{Para: para})
-
+			case xml.Name{Space: constants.WMLNamespace, Local: "tbl"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tbl"}:
+				tbl := elements.DefaultTable()
+				if err := d.DecodeElement(tbl, &elem); err != nil {
+					return err
+				}
+				body.Children = append(body.Children, &DocumentChild{Table: tbl})
 			case xml.Name{Space: constants.WMLNamespace, Local: "sectPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "sectPr"}:
 				body.SectPr = &CTSectPr{}
 				if err := d.DecodeElement(body.SectPr, &elem); err != nil {

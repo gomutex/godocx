@@ -1,4 +1,5 @@
 package oxml
 
-type Table struct {
+func (rd *RootDoc) AddTable(rows int, cols int) {
+
 }
