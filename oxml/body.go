@@ -10,8 +10,8 @@ import (
 
 // This element specifies the contents of the body of the document – the main document editing surface.
 type Body struct {
-	XMLName  xml.Name         `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main body"`
-	Children []*DocumentChild `xml:",any"`
+	XMLName  xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main body"`
+	Children []DocumentChild
 	SectPr   *CTSectPr
 }
 
@@ -202,17 +202,17 @@ func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 		case xml.StartElement:
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "p"}, xml.Name{Space: constants.AltWMLNamespace, Local: "p"}:
-				para := elements.NewParagraph()
+				para := elements.DefaultParagraph()
 				if err := d.DecodeElement(para, &elem); err != nil {
 					return err
 				}
-				body.Children = append(body.Children, &DocumentChild{Para: para})
+				body.Children = append(body.Children, DocumentChild{Para: para})
 			case xml.Name{Space: constants.WMLNamespace, Local: "tbl"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tbl"}:
 				tbl := elements.DefaultTable()
 				if err := d.DecodeElement(tbl, &elem); err != nil {
 					return err
 				}
-				body.Children = append(body.Children, &DocumentChild{Table: tbl})
+				body.Children = append(body.Children, DocumentChild{Table: tbl})
 			case xml.Name{Space: constants.WMLNamespace, Local: "sectPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "sectPr"}:
 				body.SectPr = &CTSectPr{}
 				if err := d.DecodeElement(body.SectPr, &elem); err != nil {

@@ -18,7 +18,7 @@ func (rd *RootDoc) AddHeading(text string, level uint) (*elements.Paragraph, err
 	}
 
 	p := &elements.Paragraph{
-		Children: make([]*elements.ParagraphChild, 0),
+		Children: []*elements.ParagraphChild{},
 	}
 	p.Property = elements.DefaultParaProperty()
 
@@ -32,7 +32,7 @@ func (rd *RootDoc) AddHeading(text string, level uint) (*elements.Paragraph, err
 	bodyElem := DocumentChild{
 		Para: p,
 	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
+	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
 	p.AddText(text)
 	return p, nil

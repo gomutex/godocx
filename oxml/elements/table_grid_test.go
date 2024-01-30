@@ -6,6 +6,18 @@ import (
 	"testing"
 )
 
+func equalGrids(g1, g2 []uint64) bool {
+	if len(g1) != len(g2) {
+		return false
+	}
+	for i, v := range g1 {
+		if v != g2[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func TestTableGridMarshalingUnmarshaling(t *testing.T) {
 	testGrid := NewTableGrid([]uint64{100, 200})
 
@@ -28,16 +40,4 @@ func TestTableGridMarshalingUnmarshaling(t *testing.T) {
 	if !strings.Contains(string(xmlData), expectedXMLString) {
 		t.Errorf("Expected XML string %s, got %s", expectedXMLString, string(xmlData))
 	}
-}
-
-func equalGrids(g1, g2 []uint64) bool {
-	if len(g1) != len(g2) {
-		return false
-	}
-	for i, v := range g1 {
-		if v != g2[i] {
-			return false
-		}
-	}
-	return true
 }
