@@ -24,7 +24,17 @@ func NewParagraph() *Paragraph {
 	}
 }
 
+func DefaultParagraph() *Paragraph {
+	return &Paragraph{
+		Property: DefaultParaProperty(),
+	}
+}
+
 func NewParagraphChild() *ParagraphChild {
+	return &ParagraphChild{}
+}
+
+func DefaultParagraphChild() *ParagraphChild {
 	return &ParagraphChild{}
 }
 
@@ -182,4 +192,13 @@ loop:
 	}
 
 	return nil
+}
+
+func AddParagraph(text string) *Paragraph {
+	p := &Paragraph{
+		Children: []*ParagraphChild{},
+	}
+	p.AddText(text)
+
+	return p
 }

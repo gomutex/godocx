@@ -54,16 +54,11 @@ func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 // Returns:
 //   - p: The created Paragraph instance.
 func (rd *RootDoc) AddParagraph(text string) *elements.Paragraph {
-	p := &elements.Paragraph{
-		Children: make([]*elements.ParagraphChild, 0),
-	}
-
+	p := elements.AddParagraph(text)
 	bodyElem := DocumentChild{
 		Para: p,
 	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
-
-	p.AddText("Hello, world!")
+	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
 	return p
 }
@@ -75,13 +70,13 @@ func (rd *RootDoc) AddParagraph(text string) *elements.Paragraph {
 //   - p: The created Paragraph instance.
 func (rd *RootDoc) AddEmptyParagraph() *elements.Paragraph {
 	p := &elements.Paragraph{
-		Children: make([]*elements.ParagraphChild, 0),
+		Children: []*elements.ParagraphChild{},
 	}
 
 	bodyElem := DocumentChild{
 		Para: p,
 	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, &bodyElem)
+	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
 	return p
 }
