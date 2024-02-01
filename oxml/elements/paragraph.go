@@ -179,7 +179,6 @@ loop:
 				if err := d.DecodeElement(p.Property, &elem); err != nil {
 					return err
 				}
-
 			default:
 
 				if err = d.Skip(); err != nil {
