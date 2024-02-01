@@ -25,6 +25,20 @@ func (t *Table) AddRow() *TableRow {
 	return row
 }
 
+func (t *Table) Indent(indent int) {
+	if t.Property == nil {
+		t.Property = DefaultTableProperty()
+	}
+	t.Property.Indent = NewTableIndent(indent, WidthTypeAuto)
+}
+
+func (t *Table) Style(value string) {
+	if t.Property == nil {
+		t.Property = DefaultTableProperty()
+	}
+	t.Property.Style = NewTableStyle(value)
+}
+
 // TODO  Implement Marshal and Unmarshal properly for all fields
 
 func (t *Table) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
