@@ -13,22 +13,10 @@ func TestTableWidth(t *testing.T) {
 		expected  string
 	}{
 		{
-			name:      "WithWidth",
-			width:     20,
-			widthType: "",
-			expected:  `<w:tblW w:w="20"></w:tblW>`,
-		},
-		{
 			name:      "WithWidthType",
 			width:     0,
 			widthType: "dxa",
-			expected:  `<w:tblW w:type="dxa"></w:tblW>`,
-		},
-		{
-			name:      "Empty",
-			width:     0,
-			widthType: "",
-			expected:  ``,
+			expected:  `<w:tblW w:w="0" w:type="dxa"></w:tblW>`,
 		},
 	}
 

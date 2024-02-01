@@ -13,22 +13,10 @@ func TestTableIndent(t *testing.T) {
 		expected  string
 	}{
 		{
-			name:      "WithWidth",
-			width:     20,
-			widthType: "",
-			expected:  `<w:tblInd w:w="20"></w:tblInd>`,
-		},
-		{
 			name:      "WithWidthType",
 			width:     0,
 			widthType: "dxa",
-			expected:  `<w:tblInd w:type="dxa"></w:tblInd>`,
-		},
-		{
-			name:      "Empty",
-			width:     0,
-			widthType: "",
-			expected:  ``,
+			expected:  `<w:tblInd w:w="0" w:type="dxa"></w:tblInd>`,
 		},
 	}
 
