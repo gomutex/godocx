@@ -1,3 +1,4 @@
+// Package constants provides constant values related to OpenXML namespaces, relationships, and other attributes.
 package constants
 
 import "encoding/xml"

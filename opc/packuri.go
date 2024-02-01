@@ -5,6 +5,7 @@ import (
 	"path"
 )
 
+// GetRelsURI returns the URI of the .rels file for the specified OPC file.
 func GetRelsURI(filePath string) (*string, error) {
 	baseURI := path.Dir(filePath)
 	_, fileName := path.Split(filePath)

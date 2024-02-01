@@ -7,6 +7,7 @@ import (
 	"github.com/gomutex/godocx/oxml"
 )
 
+// LoadRelationShips loads the relationships from the specified file.
 func LoadRelationShips(fileName string, fileBytes []byte) (*oxml.Relationships, error) {
 	rels := oxml.Relationships{Xmlns: constants.XMLNS_R}
 	err := xml.Unmarshal(fileBytes, &rels)

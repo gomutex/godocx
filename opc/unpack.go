@@ -11,6 +11,7 @@ import (
 	"github.com/gomutex/godocx/oxml"
 )
 
+// ReadFromZip reads files from a zip archive.
 func ReadFromZip(content *[]byte) (map[string][]byte, error) {
 	zipReader, err := zip.NewReader(bytes.NewReader(*content), int64(len(*content)))
 	if err != nil {
