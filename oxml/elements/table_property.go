@@ -13,8 +13,7 @@ type TableProperty struct {
 	Style         *TableStyle
 	Indent        *TableIndent
 	Margins       *TableCellMargins
-
-	// Borders TableBorders // TODO: implement borders
+	Borders       *TableBorders
 }
 
 func DefaultTableProperty() *TableProperty {
@@ -61,6 +60,12 @@ func (t *TableProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err 
 
 	if t.Margins != nil {
 		if err = e.EncodeElement(t.Margins, xml.StartElement{Name: xml.Name{Local: "w:tblCellMar"}}); err != nil {
+			return err
+		}
+	}
+
+	if t.Borders != nil {
+		if err = e.EncodeElement(t.Borders, xml.StartElement{Name: xml.Name{Local: "w:tblBorders"}}); err != nil {
 			return err
 		}
 	}
@@ -114,6 +119,12 @@ func (t *TableProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 					return err
 				}
 				t.Margins = &tblCellMargins
+			case xml.Name{Space: constants.WMLNamespace, Local: "tblBorders"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblBorders"}:
+				tblBorders := TableBorders{}
+				if err := d.DecodeElement(tblBorders, &elem); err != nil {
+					return err
+				}
+				t.Borders = &tblBorders
 			default:
 				if err = d.Skip(); err != nil {
 					return err
