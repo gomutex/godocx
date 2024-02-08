@@ -38,8 +38,12 @@ func DefaultParagraphChild() *ParagraphChild {
 	return &ParagraphChild{}
 }
 
-func (p *Paragraph) GetType() string {
-	return "p"
+func (p *Paragraph) Style(value string) *Paragraph {
+	if p.Property == nil {
+		p.Property = DefaultParaProperty()
+	}
+	p.Property.Style = NewParagraphStyle(value)
+	return p
 }
 
 func (p *Paragraph) Numbering(id int, level int) {

@@ -99,6 +99,11 @@ func (r *Run) Underline(value UnderlineStyle) *Run {
 	return r
 }
 
+func (r *Run) Style(value string) *Run {
+	r.RunProperty.Style = NewRunStyle(value)
+	return r
+}
+
 func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:r"
 
