@@ -3,8 +3,8 @@ package types
 type BreakType string
 
 const (
-	Page         BreakType = "page"
-	Column       BreakType = "column"
-	TextWrapping BreakType = "textWrapping"
-	Unsupported  BreakType = "unsupported"
+	BreakTypePage         BreakType = "page"
+	BreakTypeColumn       BreakType = "column"
+	BreakTypeTextWrapping BreakType = "textWrapping"
+	BreakTypeUnsupported  BreakType = "unsupported"
 )
