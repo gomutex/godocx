@@ -25,29 +25,19 @@ func NewFont(name, charset, family string, pitch types.FontPitchType) *Font {
 
 func (f *Font) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:font"
-	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "name"}, Value: f.Name})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:name"}, Value: f.Name})
 
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err
 	}
 
-	err = e.EncodeElement(f.Charset, xml.StartElement{Name: xml.Name{Local: "w:charset"}})
-	if err != nil {
+	if err := e.EncodeElement(f.Family, xml.StartElement{Name: xml.Name{Local: "w:family"}}); err != nil {
 		return err
 	}
 
-	err = e.EncodeElement(f.Family, xml.StartElement{Name: xml.Name{Local: "w:family"}})
-	if err != nil {
-		return err
-	}
+	return e.EncodeToken(start.End())
 
-	err = e.EncodeToken(start.End())
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // UnmarshalXML unmarshals XML to Font.
@@ -56,6 +46,13 @@ func (f *Font) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		token, err := d.Token()
 		if err != nil {
 			return err
+		}
+
+		for _, attr := range start.Attr {
+			switch attr.Name.Local {
+			case "name":
+				f.Name = attr.Value
+			}
 		}
 
 		switch t := token.(type) {
