@@ -1,5 +1,8 @@
 # Godocx
 
+<p align="center"><img width="650" src="./godocx.png" alt="Godocx logo"></p>
+
+
 Godocx is a Golang library for creating and modifying DOCX (Microsoft Word) documents.
 
 ## Usage
