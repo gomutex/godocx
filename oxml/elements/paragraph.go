@@ -2,8 +2,6 @@ package elements
 
 import (
 	"encoding/xml"
-
-	"github.com/gomutex/godocx/constants"
 )
 
 type ParagraphChild struct {
@@ -47,17 +45,12 @@ func (p *Paragraph) Style(value string) *Paragraph {
 }
 
 func (p *Paragraph) Numbering(id int, level int) {
-	// TODO: Fix Numbering
 	numberingID := NewNumberingId(id)
 	indentLevel := NewIndentLevel(level)
 
 	if p.Property == nil {
 		p.Property = DefaultParaProperty()
 	}
-
-	// if p.Property.Style == nil {
-	// 	p.Property.Style = DefaultParagraphStyle()
-	// }
 
 	if p.Property.NumberingProperty == nil {
 		p.Property.NumberingProperty = NewNumberingProperty()
@@ -169,22 +162,20 @@ loop:
 
 		switch elem := currentToken.(type) {
 		case xml.StartElement:
-			switch elem.Name {
-			case xml.Name{Space: constants.WMLNamespace, Local: "r"}, xml.Name{Space: constants.AltWMLNamespace, Local: "r"}:
+			switch elem.Name.Local {
+			case "r":
 				r := NewRun()
 				if err := d.DecodeElement(r, &elem); err != nil {
 					return err
 				}
 
 				p.Children = append(p.Children, &ParagraphChild{Run: r})
-			case xml.Name{Space: constants.WMLNamespace, Local: "pPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "pPr"}:
-
+			case "pPr":
 				p.Property = &ParagraphProperty{}
 				if err := d.DecodeElement(p.Property, &elem); err != nil {
 					return err
 				}
 			default:
-
 				if err = d.Skip(); err != nil {
 					return err
 				}

@@ -85,43 +85,43 @@ func (t *TableProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "tblW"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblW"}:
 				tblWidth := TableWidth{}
-				if err := d.DecodeElement(tblWidth, &elem); err != nil {
+				if err := d.DecodeElement(&tblWidth, &elem); err != nil {
 					return err
 				}
 				t.Width = &tblWidth
 			case xml.Name{Space: constants.WMLNamespace, Local: "tblInd"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblInd"}:
 				tblIndent := TableIndent{}
-				if err := d.DecodeElement(tblIndent, &elem); err != nil {
+				if err := d.DecodeElement(&tblIndent, &elem); err != nil {
 					return err
 				}
 				t.Indent = &tblIndent
 			case xml.Name{Space: constants.WMLNamespace, Local: "jc"}, xml.Name{Space: constants.AltWMLNamespace, Local: "jc"}:
 				jc := Justification{}
-				if err := d.DecodeElement(jc, &elem); err != nil {
+				if err := d.DecodeElement(&jc, &elem); err != nil {
 					return err
 				}
 				t.Justification = &jc
 			case xml.Name{Space: constants.WMLNamespace, Local: "tblLayout"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblLayout"}:
 				tl := TableLayout{}
-				if err := d.DecodeElement(tl, &elem); err != nil {
+				if err := d.DecodeElement(&tl, &elem); err != nil {
 					return err
 				}
 				t.Layout = &tl
 			case xml.Name{Space: constants.WMLNamespace, Local: "tblStyle"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblStyle"}:
 				tblStyle := TableStyle{}
-				if err := d.DecodeElement(tblStyle, &elem); err != nil {
+				if err := d.DecodeElement(&tblStyle, &elem); err != nil {
 					return err
 				}
 				t.Style = &tblStyle
 			case xml.Name{Space: constants.WMLNamespace, Local: "tblCellMar"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblCellMar"}:
 				tblCellMargins := TableCellMargins{}
-				if err := d.DecodeElement(tblCellMargins, &elem); err != nil {
+				if err := d.DecodeElement(&tblCellMargins, &elem); err != nil {
 					return err
 				}
 				t.Margins = &tblCellMargins
 			case xml.Name{Space: constants.WMLNamespace, Local: "tblBorders"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tblBorders"}:
 				tblBorders := TableBorders{}
-				if err := d.DecodeElement(tblBorders, &elem); err != nil {
+				if err := d.DecodeElement(&tblBorders, &elem); err != nil {
 					return err
 				}
 				t.Borders = &tblBorders
