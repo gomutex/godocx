@@ -83,7 +83,6 @@ func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 					return err
 				}
 			default:
-				// fmt.Println(t.Name)
 				if err = d.Skip(); err != nil {
 					return err
 				}

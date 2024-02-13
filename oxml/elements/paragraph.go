@@ -164,6 +164,7 @@ loop:
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "r":
+
 				r := NewRun()
 				if err := d.DecodeElement(r, &elem); err != nil {
 					return err

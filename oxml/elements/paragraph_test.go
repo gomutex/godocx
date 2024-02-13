@@ -3,7 +3,6 @@ package elements
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -13,8 +12,8 @@ import (
 func TestParagraphXML(t *testing.T) {
 	// Create a sample paragraph
 	para := NewParagraph()
-	para.Style("Heading1")
-	para.Numbering(1, 0)
+	// para.Style("Heading1")
+	// para.Numbering(1, 0)
 	para.AddText("This is a sample paragraph.")
 
 	// Marshal the paragraph to XML
@@ -31,8 +30,6 @@ func TestParagraphXML(t *testing.T) {
 		t.Errorf("Error flushing encoder: %v", err)
 	}
 
-	fmt.Println(buf.String())
-
 	// Unmarshal the XML back to a paragraph
 	var paraUnmarshaled Paragraph
 	ns := map[string]string{
@@ -47,9 +44,7 @@ func TestParagraphXML(t *testing.T) {
 		return
 	}
 
-	// Check if the original and unmarshaled paragraphs are equal
 	if !reflect.DeepEqual(*para, paraUnmarshaled) {
-		t.Error("Original and unmarshaled paragraphs are not equal.")
-		return
+		t.Errorf("Original and unmarshaled paragraphs are not equal.")
 	}
 }

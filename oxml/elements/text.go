@@ -21,6 +21,7 @@ func TextFromString(text string) *Text {
 }
 
 func (t *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+
 	elem := xml.StartElement{Name: xml.Name{Local: "w:t"}}
 
 	if t.preserveSpace {

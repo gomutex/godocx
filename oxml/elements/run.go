@@ -2,8 +2,6 @@ package elements
 
 import (
 	"encoding/xml"
-
-	"github.com/gomutex/godocx/constants"
 )
 
 // A Run is part of a paragraph that has its own style. It could be
@@ -157,20 +155,20 @@ loop:
 
 		switch elem := currentToken.(type) {
 		case xml.StartElement:
-			switch elem.Name {
-			case xml.Name{Space: constants.WMLNamespace, Local: "t"}, xml.Name{Space: constants.AltWMLNamespace, Local: "t"}:
+			switch elem.Name.Local {
+			case "t":
 				txt := NewText()
 				if err := d.DecodeElement(txt, &elem); err != nil {
 					return err
 				}
 
 				r.Children = append(r.Children, &RunChild{Text: txt})
-			case xml.Name{Space: constants.WMLNamespace, Local: "rPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "rPr"}:
+			case "rPr":
 				r.RunProperty = &RunProperty{}
 				if err := d.DecodeElement(r.RunProperty, &elem); err != nil {
 					return err
 				}
-			case xml.Name{Space: constants.WMLNamespace, Local: "drawing"}, xml.Name{Space: constants.AltWMLNamespace, Local: "drawing"}:
+			case "drawing":
 				drawingElem := &Drawing{}
 				if err := d.DecodeElement(drawingElem, &elem); err != nil {
 					return err
