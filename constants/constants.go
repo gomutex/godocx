@@ -10,6 +10,9 @@ const (
 )
 
 var (
+	DrawingMLMainNS = "http://schemas.openxmlformats.org/drawingml/2006/main"
+	DrawingMLPicNS  = "http://schemas.openxmlformats.org/drawingml/2006/picture"
+
 	NameSpaceDocumentPropertiesVariantTypes = xml.Attr{Name: xml.Name{Local: "vt", Space: "xmlns"}, Value: "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"}
 	NameSpaceDrawing2016SVG                 = xml.Attr{Name: xml.Name{Local: "asvg", Space: "xmlns"}, Value: "http://schemas.microsoft.com/office/drawing/2016/SVG/main"}
 	NameSpaceDrawingML                      = xml.Attr{Name: xml.Name{Local: "a", Space: "xmlns"}, Value: "http://schemas.openxmlformats.org/drawingml/2006/main"}

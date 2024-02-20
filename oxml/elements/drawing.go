@@ -7,8 +7,8 @@ import (
 )
 
 type Drawing struct {
-	Anchor []*Anchor
 	Inline []*Inline
+	Anchor []*Anchor
 }
 
 func (dr *Drawing) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -51,19 +51,26 @@ loop:
 
 func (dr *Drawing) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:drawing"
+
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err
 	}
 
 	for _, data := range dr.Anchor {
-		if err = data.MarshalXML(e, start); err != nil {
+		// if err = data.MarshalXML(e, start); err != nil {
+		// 	return err
+		// }
+		if err = e.EncodeElement(data, start); err != nil {
 			return err
 		}
 	}
 
 	for _, data := range dr.Inline {
-		if err = data.MarshalXML(e, start); err != nil {
+		// if err = data.MarshalXML(e, start); err != nil {
+		// 	return err
+		// }
+		if err = e.EncodeElement(data, start); err != nil {
 			return err
 		}
 	}

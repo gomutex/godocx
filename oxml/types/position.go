@@ -10,12 +10,12 @@ type PositionType struct {
 }
 
 type PoistionH struct {
-	RelativeFrom string
+	RelativeFrom RelativeFromHType
 	PosOffset    int
 }
 
 type PoistionV struct {
-	RelativeFrom string
+	RelativeFrom RelativeFromVType
 	PosOffset    int
 }
 
@@ -40,7 +40,7 @@ func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 func (p *PoistionH) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
 		if a.Name.Local == "relativeFrom" {
-			p.RelativeFrom = a.Value
+			p.RelativeFrom = RelativeFromHType(a.Value)
 			break
 		}
 	}
@@ -94,7 +94,7 @@ func (p *PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 func (p *PoistionV) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
 		if a.Name.Local == "relativeFrom" {
-			p.RelativeFrom = a.Value
+			p.RelativeFrom = RelativeFromVType(a.Value)
 			break
 		}
 	}
