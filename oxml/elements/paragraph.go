@@ -36,11 +36,44 @@ func DefaultParagraphChild() *ParagraphChild {
 	return &ParagraphChild{}
 }
 
+// Style sets the paragraph style.
+//
+// Parameters:
+//   - value: A string representing the style value. It can be any valid style defined in the WordprocessingML specification.
+//
+// Returns:
+//   - *Paragraph: A pointer to the modified Paragraph instance with the updated style.
+//
+// Example:
+//
+//	p1 := docx.AddParagraph("Example para")
+//	paragraph.Style("List Number")
 func (p *Paragraph) Style(value string) *Paragraph {
 	if p.Property == nil {
 		p.Property = DefaultParaProperty()
 	}
 	p.Property.Style = NewParagraphStyle(value)
+	return p
+}
+
+// Justification sets the paragraph justification type.
+//
+// Parameters:
+//   - value: A string representing the justification value. It can be one of the following:
+//     - "left" for left justification
+//     - "center" for center justification
+//     - "right" for right justification
+//     - "both" for justification with equal spacing on both sides
+//     - "distribute": Paragraph characters are distributed to fill the entire width of paragraph
+//
+// Returns:
+//   - *Paragraph: A pointer to the modified Paragraph instance with the updated justification.
+
+func (p *Paragraph) Justification(value string) *Paragraph {
+	if p.Property == nil {
+		p.Property = DefaultParaProperty()
+	}
+	p.Property.Justification = NewJustification(value)
 	return p
 }
 
