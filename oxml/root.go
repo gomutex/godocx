@@ -80,3 +80,17 @@ func (rd *RootDoc) AddEmptyParagraph() *elements.Paragraph {
 
 	return p
 }
+
+func (rd *RootDoc) AddPicture(path string, width int, height int) *elements.Paragraph {
+	p := &elements.Paragraph{
+		Children: []*elements.ParagraphChild{},
+	}
+
+	bodyElem := DocumentChild{
+		Para: p,
+	}
+	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
+
+	_ = p.AddDrawing(path, width, height)
+	return p
+}

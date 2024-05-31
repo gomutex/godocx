@@ -197,3 +197,19 @@ func AddParagraph(text string) *Paragraph {
 
 	return p
 }
+
+func (p *Paragraph) AddDrawing(path string, width int, height int) *Drawing {
+	runChildren := []*RunChild{}
+	drawing := &Drawing{}
+	runChildren = append(runChildren, &RunChild{
+		Drawing: drawing,
+	})
+	run := &Run{
+		Children:    runChildren,
+		RunProperty: &RunProperty{},
+	}
+
+	p.Children = append(p.Children, &ParagraphChild{Run: run})
+
+	return drawing
+}
