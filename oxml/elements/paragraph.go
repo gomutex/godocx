@@ -2,6 +2,9 @@ package elements
 
 import (
 	"encoding/xml"
+
+	"github.com/gomutex/godocx/dml"
+	"github.com/gomutex/godocx/shared/units"
 )
 
 type ParagraphChild struct {
@@ -198,12 +201,24 @@ func AddParagraph(text string) *Paragraph {
 	return p
 }
 
-func (p *Paragraph) AddDrawing(path string, width int, height int) *Drawing {
+func (p *Paragraph) AddDrawing(rID string, width units.Inch, height units.Inch) *dml.Inline {
+	eWidth := width.ToEmu()
+	eHeight := height.ToEmu()
+
+	inline := dml.Inline{
+		Extent:  dml.NewExtent(eWidth, eHeight),
+		Graphic: dml.NewPicGraphic(dml.NewPic(rID, eWidth, eHeight)),
+	}
+
 	runChildren := []*RunChild{}
-	drawing := &Drawing{}
+	drawing := &dml.Drawing{}
+
+	drawing.Inline = append(drawing.Inline, &inline)
+
 	runChildren = append(runChildren, &RunChild{
 		Drawing: drawing,
 	})
+
 	run := &Run{
 		Children:    runChildren,
 		RunProperty: &RunProperty{},
@@ -211,5 +226,5 @@ func (p *Paragraph) AddDrawing(path string, width int, height int) *Drawing {
 
 	p.Children = append(p.Children, &ParagraphChild{Run: run})
 
-	return drawing
+	return &inline
 }

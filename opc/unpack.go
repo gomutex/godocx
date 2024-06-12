@@ -26,7 +26,7 @@ func ReadFromZip(content *[]byte) (map[string][]byte, error) {
 
 		fileName := strings.ReplaceAll(f.Name, "\\", "/")
 
-		if fileList[fileName], err = internal.ReadFile(f); err != nil {
+		if fileList[fileName], err = internal.ReadFileFromZip(f); err != nil {
 			return nil, err
 		}
 	}
@@ -43,7 +43,11 @@ func Unpack(content *[]byte) (*oxml.RootDoc, error) {
 		return nil, err
 	}
 
+	rd.ImageCount = 0
 	for fileName, fileContent := range fileIndex {
+		if strings.HasPrefix(fileName, constants.MediaPath) {
+			rd.ImageCount += 1
+		}
 		rd.FileMap.Store(fileName, fileContent)
 	}
 
@@ -78,14 +82,6 @@ func Unpack(content *[]byte) (*oxml.RootDoc, error) {
 		return nil, err
 	}
 
-	docRelFile := fileIndex[*docRelURI]
-	docRelations, err := LoadRelationShips(*docRelURI, docRelFile)
-	if err != nil {
-		return nil, err
-	}
-	delete(fileIndex, *rootRelURI)
-	rd.DocRels = *docRelations
-
 	docFile := fileIndex[*docPath]
 	doc, err := oxml.LoadDocXml(*docPath, docFile)
 	if err != nil {
@@ -94,6 +90,19 @@ func Unpack(content *[]byte) (*oxml.RootDoc, error) {
 	delete(fileIndex, *docPath)
 
 	rd.Document = doc
+
+	docRelFile := fileIndex[*docRelURI]
+	docRelations, err := LoadRelationShips(*docRelURI, docRelFile)
+	if err != nil {
+		return nil, err
+	}
+	delete(fileIndex, *rootRelURI)
+	rd.Document.DocRels = *docRelations
+	rID := 0
+	for _ = range docRelations.Relationships {
+		rID += 1
+	}
+	rd.Document.RID = rID
 
 	return rd, nil
 }

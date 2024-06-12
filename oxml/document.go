@@ -26,6 +26,15 @@ var docAttrs = map[string]string{
 type Document struct {
 	relativePath string
 	Body         *Body
+	DocRels      Relationships // DocRels represents relationships specific to the document.
+	RID          int
+}
+
+// IncRelationID increments the relation ID of the document and returns the new ID.
+// This method is used to generate unique IDs for relationships within the document.
+func (doc *Document) IncRelationID() int {
+	doc.RID += 1
+	return doc.RID
 }
 
 // MarshalXML implements the xml.Marshaler interface for the Document type.

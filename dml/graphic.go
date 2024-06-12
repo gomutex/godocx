@@ -1,4 +1,4 @@
-package elements
+package dml
 
 import (
 	"encoding/xml"
@@ -10,6 +10,10 @@ type Graphic struct {
 	Data *GraphicData
 }
 
+func NewGraphic(data *GraphicData) *Graphic {
+	return &Graphic{Data: data}
+}
+
 func DefaultGraphic() *Graphic {
 	return &Graphic{}
 }
@@ -17,6 +21,15 @@ func DefaultGraphic() *Graphic {
 type GraphicData struct {
 	URI string
 	Pic *Pic
+}
+
+func NewPicGraphic(pic *Pic) *Graphic {
+	return &Graphic{
+		Data: &GraphicData{
+			URI: constants.DrawingMLPicNS,
+			Pic: pic,
+		},
+	}
 }
 
 func (g *Graphic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

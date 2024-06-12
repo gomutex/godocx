@@ -2,6 +2,8 @@ package elements
 
 import (
 	"encoding/xml"
+
+	"github.com/gomutex/godocx/dml"
 )
 
 // A Run is part of a paragraph that has its own style. It could be
@@ -13,7 +15,7 @@ type Run struct {
 type RunChild struct {
 	InstrText *string
 	Text      *Text
-	Drawing   *Drawing
+	Drawing   *dml.Drawing
 }
 
 type Hyperlink struct {
@@ -169,7 +171,7 @@ loop:
 					return err
 				}
 			case "drawing":
-				drawingElem := &Drawing{}
+				drawingElem := &dml.Drawing{}
 				if err := d.DecodeElement(drawingElem, &elem); err != nil {
 					return err
 				}

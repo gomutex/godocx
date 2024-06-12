@@ -15,8 +15,9 @@ type RootDoc struct {
 	FileMap  sync.Map      // FileMap is a synchronized map for managing files related to the document.
 	Document *Document     // Document is the main document structure.
 	RootRels Relationships // RootRels represents relationships at the root level.
-	DocRels  Relationships // DocRels represents relationships specific to the document.
-	rId      int           // rId is used to generate unique relationship IDs.
+
+	rID        int // rId is used to generate unique relationship IDs.
+	ImageCount int
 }
 
 // NewRootDoc creates a new instance of the RootDoc structure.
@@ -78,19 +79,5 @@ func (rd *RootDoc) AddEmptyParagraph() *elements.Paragraph {
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
-	return p
-}
-
-func (rd *RootDoc) AddPicture(path string, width int, height int) *elements.Paragraph {
-	p := &elements.Paragraph{
-		Children: []*elements.ParagraphChild{},
-	}
-
-	bodyElem := DocumentChild{
-		Para: p,
-	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
-
-	_ = p.AddDrawing(path, width, height)
 	return p
 }

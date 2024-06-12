@@ -1,8 +1,10 @@
-package elements
+package dml
 
 import (
 	"encoding/xml"
 	"strconv"
+
+	"github.com/gomutex/godocx/shared/units"
 )
 
 type Pic struct {
@@ -11,6 +13,19 @@ type Pic struct {
 	NonVisualPicProp *NonVisualPicProp
 	BlipFill         *BlipFill
 	PicShapeProp     *PicShapeProp
+}
+
+func NewPic(rID string, width units.Emu, height units.Emu) *Pic {
+	shapeProp := NewPicShapeProp(
+		WithTransformGroup(
+			WithTFExtent(width, height),
+		),
+	)
+
+	return &Pic{
+		BlipFill:     NewBlipFill(rID),
+		PicShapeProp: shapeProp,
+	}
 }
 
 type NonVisualPicProp struct {
@@ -222,6 +237,16 @@ type BlipFill struct {
 	Stretch *Stretch
 }
 
+// NewBlipFill creates a new BlipFill with the given relationship ID (rID)
+// The rID is used to reference the image in the presentation.
+func NewBlipFill(rID string) *BlipFill {
+	return &BlipFill{
+		Blip: &Blip{
+			EmbedID: rID,
+		},
+	}
+}
+
 func (b *BlipFill) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:blipFill"
 
@@ -277,6 +302,7 @@ func (b *BlipFill) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 }
 
+// Binary large image or picture
 type Blip struct {
 	EmbedID string
 }
@@ -404,6 +430,24 @@ type PicShapeProp struct {
 	PresetGeometry *PresetGeometry
 }
 
+type PicShapePropOption func(*PicShapeProp)
+
+func WithTransformGroup(options ...TFGroupOption) PicShapePropOption {
+	return func(p *PicShapeProp) {
+		p.TransformGroup = NewTransformGroup(options...)
+	}
+}
+
+func NewPicShapeProp(options ...PicShapePropOption) *PicShapeProp {
+	p := &PicShapeProp{}
+
+	for _, opt := range options {
+		opt(p)
+	}
+
+	return p
+}
+
 func (p *PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:spPr"
 
@@ -461,6 +505,24 @@ func (p *PicShapeProp) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 type TransformGroup struct {
 	Extent *Extent
 	Offset *Offset
+}
+
+type TFGroupOption func(*TransformGroup)
+
+func NewTransformGroup(options ...TFGroupOption) *TransformGroup {
+	tf := &TransformGroup{}
+
+	for _, opt := range options {
+		opt(tf)
+	}
+
+	return tf
+}
+
+func WithTFExtent(width units.Emu, height units.Emu) TFGroupOption {
+	return func(tf *TransformGroup) {
+		tf.Extent = NewExtent(width, height)
+	}
 }
 
 func (t *TransformGroup) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

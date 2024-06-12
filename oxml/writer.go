@@ -49,11 +49,11 @@ func (rd *RootDoc) writeToZip(zw *zip.Writer) error {
 		files []string
 	)
 
-	docRelContent, err := marshal(rd.DocRels)
+	docRelContent, err := marshal(rd.Document.DocRels)
 	if err != nil {
 		return err
 	}
-	rd.FileMap.Store(rd.DocRels.RelativePath, []byte(docRelContent))
+	rd.FileMap.Store(rd.Document.DocRels.RelativePath, []byte(docRelContent))
 
 	rootRelContent, err := marshal(rd.RootRels)
 	if err != nil {

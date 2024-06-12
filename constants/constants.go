@@ -75,3 +75,5 @@ const (
 	XMLNS_W = `http://schemas.openxmlformats.org/wordprocessingml/2006/main`
 	XMLNS_R = `http://schemas.openxmlformats.org/officeDocument/2006/relationships`
 )
+
+const MediaPath = "word/media/"
