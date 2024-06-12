@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gomutex/godocx/constants"
+	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/internal"
-	"github.com/gomutex/godocx/oxml"
+	"github.com/gomutex/godocx/ooxml"
 )
 
 // ReadFromZip reads files from a zip archive.
@@ -34,9 +34,9 @@ func ReadFromZip(content *[]byte) (map[string][]byte, error) {
 	return fileList, nil
 }
 
-func Unpack(content *[]byte) (*oxml.RootDoc, error) {
+func Unpack(content *[]byte) (*ooxml.RootDoc, error) {
 
-	rd := oxml.NewRootDoc()
+	rd := ooxml.NewRootDoc()
 
 	fileIndex, err := ReadFromZip(content)
 	if err != nil {
@@ -83,7 +83,7 @@ func Unpack(content *[]byte) (*oxml.RootDoc, error) {
 	}
 
 	docFile := fileIndex[*docPath]
-	doc, err := oxml.LoadDocXml(*docPath, docFile)
+	doc, err := ooxml.LoadDocXml(*docPath, docFile)
 	if err != nil {
 		return nil, err
 	}
