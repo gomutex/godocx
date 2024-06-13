@@ -37,10 +37,8 @@ type Anchor struct {
 	Extent            *Extent
 	DocProp           *DocProp
 	cNvGraphicFramePr *NonVisualGraphicFrameProp
-	// TODO:
-	// EffectExtent
-	//
-	// implement any other
+	EffectExtent      *EffectExtent
+	WrapNone          *WrapNone `xml:"wrapNone"`
 }
 
 func NewAnchor() *Anchor {
@@ -76,6 +74,12 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		}
 	}
 
+	if a.EffectExtent != nil {
+		if err := e.EncodeElement(a.EffectExtent, xml.StartElement{Name: xml.Name{Local: "wp:effectExtent"}}); err != nil {
+			return err
+		}
+	}
+
 	if a.DocProp != nil {
 		if err := e.EncodeElement(a.DocProp, xml.StartElement{Name: xml.Name{Local: "wp:docPr"}}); err != nil {
 			return err
@@ -101,6 +105,20 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if a.PositionV != nil {
 		if err := e.EncodeElement(a.PositionV, xml.StartElement{Name: xml.Name{Local: "wp:positionV"}}); err != nil {
+			return err
+		}
+	}
+
+	if a.Graphic != nil {
+		if err := e.EncodeElement(a.Graphic, xml.StartElement{Name: xml.Name{Local: "a:graphic"}}); err != nil {
+			return err
+		}
+	}
+
+	// if a.WrapNone.Valid && a.WrapNone.Bool {
+	if a.WrapNone != nil {
+		err := e.EncodeElement(a.WrapNone, xml.StartElement{Name: xml.Name{Local: "wp:wrapNone"}})
+		if err != nil {
 			return err
 		}
 	}
@@ -150,7 +168,13 @@ func (a *Anchor) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 				if err := decoder.DecodeElement(a.Extent, &elem); err != nil {
 					return err
 				}
-
+			case "effectExtent":
+				a.EffectExtent = &EffectExtent{
+					XMLName: "wp:effectExtent",
+				}
+				if err := decoder.DecodeElement(a.EffectExtent, &elem); err != nil {
+					return err
+				}
 			case "cNvGraphicFramePr":
 				a.cNvGraphicFramePr = &NonVisualGraphicFrameProp{}
 				if err := decoder.DecodeElement(a.cNvGraphicFramePr, &elem); err != nil {
@@ -176,6 +200,13 @@ func (a *Anchor) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 				if err := decoder.DecodeElement(a.PositionH, &elem); err != nil {
 					return err
 				}
+			case "graphic":
+				a.Graphic = &Graphic{}
+				if err := decoder.DecodeElement(a.Graphic, &elem); err != nil {
+					return err
+				}
+			case "wrapNone":
+				a.WrapNone = &WrapNone{}
 			default:
 				if err = decoder.Skip(); err != nil {
 					return err

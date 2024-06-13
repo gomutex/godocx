@@ -6,8 +6,9 @@ import (
 )
 
 type DocProp struct {
-	ID   uint64 // cx
-	Name string // cy
+	ID          uint64
+	Name        string
+	Description string
 }
 
 func (d *DocProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -15,6 +16,10 @@ func (d *DocProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "id"}, Value: strconv.FormatUint(d.ID, 10)},
 		{Name: xml.Name{Local: "name"}, Value: d.Name},
+	}
+
+	if d.Description != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "descr"}, Value: d.Description})
 	}
 
 	err := e.EncodeToken(start)
@@ -27,14 +32,17 @@ func (d *DocProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (d *DocProp) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
-		if a.Name.Local == "id" {
+		switch a.Name.Local {
+		case "descr":
+			d.Description = a.Value
+		case "name":
+			d.Name = a.Value
+		case "id":
 			id, err := strconv.ParseUint(a.Value, 10, 32)
 			if err != nil {
 				return nil
 			}
 			d.ID = id
-		} else if a.Name.Local == "name" {
-			d.Name = a.Value
 		}
 	}
 

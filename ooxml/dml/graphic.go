@@ -34,7 +34,9 @@ func NewPicGraphic(pic *Pic) *Graphic {
 
 func (g *Graphic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:graphic"
-	start.Attr = []xml.Attr{}
+	start.Attr = []xml.Attr{
+		{Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
+	}
 
 	err := e.EncodeToken(start)
 	if err != nil {

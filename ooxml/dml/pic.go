@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"strconv"
 
+	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/common/units"
 )
 
@@ -28,13 +29,12 @@ func NewPic(rID string, width units.Emu, height units.Emu) *Pic {
 	}
 }
 
-type NonVisualPicProp struct {
-	CNvPr    *CNvPr
-	CNvPicPr *CNvPicPr
-}
-
 func (p *Pic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:pic"
+
+	start.Attr = []xml.Attr{
+		{Name: xml.Name{Local: "xmlns:pic"}, Value: constants.DrawingMLPicNS},
+	}
 
 	err := e.EncodeToken(start)
 	if err != nil {
@@ -90,139 +90,6 @@ func (p *Pic) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 					return err
 				}
 				p.PicShapeProp = psp
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
-func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "pic:nvPicPr"
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	if n.CNvPr != nil {
-		if err := e.EncodeElement(n.CNvPr, xml.StartElement{Name: xml.Name{Local: "pic:cNvPr"}}); err != nil {
-			return err
-		}
-	}
-
-	if n.CNvPicPr != nil {
-		if err := e.EncodeElement(n.CNvPicPr, xml.StartElement{Name: xml.Name{Local: "pic:nvPicPr"}}); err != nil {
-			return err
-		}
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (n *NonVisualPicProp) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "cNvPr":
-				cnvp := &CNvPr{}
-				if err := d.DecodeElement(cnvp, &elem); err != nil {
-					return err
-				}
-				n.CNvPr = cnvp
-			case "cNvPicPr":
-				cnvpp := &CNvPicPr{}
-				if err := d.DecodeElement(cnvpp, &elem); err != nil {
-					return err
-				}
-				n.CNvPicPr = cnvpp
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
-type CNvPicPr struct{}
-
-type CNvPr struct {
-	ID   string
-	Name string
-}
-
-func (c *CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "pic:cNvPr"
-	start.Attr = []xml.Attr{
-		{Name: xml.Name{Local: "id"}, Value: c.ID},
-		{Name: xml.Name{Local: "name"}, Value: c.Name},
-	}
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (c *CNvPr) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		if a.Name.Local == "id" {
-			c.ID = a.Value
-		} else if a.Name.Local == "name" {
-			c.Name = a.Value
-		}
-	}
-
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
-func (c *CNvPicPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "pic:cNvPicPr"
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (c *CNvPicPr) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
 			}
 		case xml.EndElement:
 			if elem == start.End() {
@@ -425,83 +292,6 @@ func (f *FillRect) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 }
 
-type PicShapeProp struct {
-	TransformGroup *TransformGroup
-	PresetGeometry *PresetGeometry
-}
-
-type PicShapePropOption func(*PicShapeProp)
-
-func WithTransformGroup(options ...TFGroupOption) PicShapePropOption {
-	return func(p *PicShapeProp) {
-		p.TransformGroup = NewTransformGroup(options...)
-	}
-}
-
-func NewPicShapeProp(options ...PicShapePropOption) *PicShapeProp {
-	p := &PicShapeProp{}
-
-	for _, opt := range options {
-		opt(p)
-	}
-
-	return p
-}
-
-func (p *PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "pic:spPr"
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	if p.TransformGroup != nil {
-		if err := e.EncodeElement(p.TransformGroup, xml.StartElement{Name: xml.Name{Local: "a:xfrm"}}); err != nil {
-			return err
-		}
-	}
-
-	if p.PresetGeometry != nil {
-		if err := e.EncodeElement(p.PresetGeometry, xml.StartElement{Name: xml.Name{Local: "a:prstGeom"}}); err != nil {
-			return err
-		}
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (p *PicShapeProp) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "xfrm":
-				tfg := &TransformGroup{}
-				if err := d.DecodeElement(tfg, &elem); err != nil {
-					return err
-				}
-				p.TransformGroup = tfg
-			case "prstGeom":
-				pg := &PresetGeometry{}
-				if err := d.DecodeElement(pg, &elem); err != nil {
-					return err
-				}
-				p.PresetGeometry = pg
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type TransformGroup struct {
 	Extent *Extent
 	Offset *Offset
@@ -640,7 +430,8 @@ func (o *Offset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 }
 
 type PresetGeometry struct {
-	Preset string
+	Preset       string
+	AdjustValues *AdjustValues
 }
 
 func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -652,6 +443,12 @@ func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err
+	}
+
+	if p.AdjustValues != nil {
+		if err := e.EncodeElement(p.AdjustValues, xml.StartElement{Name: xml.Name{Local: "a:avLst"}}); err != nil {
+			return err
+		}
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
@@ -673,6 +470,12 @@ func (p *PresetGeometry) UnmarshalXML(d *xml.Decoder, start xml.StartElement) er
 		switch elem := token.(type) {
 		case xml.StartElement:
 			switch elem.Name.Local {
+			case "avLst":
+				avList := &AdjustValues{}
+				if err := d.DecodeElement(avList, &elem); err != nil {
+					return err
+				}
+				p.AdjustValues = avList
 			default:
 				if err = d.Skip(); err != nil {
 					return err

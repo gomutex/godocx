@@ -11,18 +11,18 @@ type PositionType struct {
 
 type PoistionH struct {
 	RelativeFrom RelativeFromHType
-	PosOffset    int
+	PosOffset    int `xml:"posOffset"`
 }
 
 type PoistionV struct {
 	RelativeFrom RelativeFromVType
-	PosOffset    int
+	PosOffset    int `xml:"posOffset"`
 }
 
 func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:positionH"
 
-	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "relativeFrom"}})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "relativeFrom"}, Value: string(p.RelativeFrom)})
 
 	err := e.EncodeToken(start)
 	if err != nil {
@@ -76,7 +76,7 @@ func (p *PoistionH) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 func (p *PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:positionV"
 
-	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "relativeFrom"}})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "relativeFrom"}, Value: string(p.RelativeFrom)})
 
 	err := e.EncodeToken(start)
 	if err != nil {
