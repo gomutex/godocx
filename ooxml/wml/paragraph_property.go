@@ -2,19 +2,18 @@ package wml
 
 import (
 	"encoding/xml"
-
-	"github.com/gomutex/godocx/common/constants"
 )
 
+// Numbering Level Associated Paragraph Properties
 type ParagraphProperty struct {
-	DivID           *string
-	KeepNext        *bool
-	KeepLines       *bool
-	PageBreakBefore *bool
-	WidowControl    *bool
-	Style           *ParagraphStyle
-	Justification   *Justification
-
+	DivID             *string
+	KeepNext          *bool
+	KeepLines         *bool
+	PageBreakBefore   *bool
+	WidowControl      *bool
+	Style             *ParagraphStyle
+	Justification     *Justification
+	RunProperty       *RunProperty
 	NumberingProperty *NumberingProperty
 }
 
@@ -34,6 +33,13 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 	if pp.Style != nil {
 
 		if err = e.EncodeElement(pp.Style, xml.StartElement{Name: xml.Name{Local: "w:pStyle"}}); err != nil {
+			return err
+		}
+	}
+
+	if pp.RunProperty != nil {
+		propsElement := xml.StartElement{Name: xml.Name{Local: "w:rPr"}}
+		if err = e.EncodeElement(pp.RunProperty, propsElement); err != nil {
 			return err
 		}
 	}
@@ -69,17 +75,22 @@ func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 
 		switch t := token.(type) {
 		case xml.StartElement:
-			switch t.Name {
-			case xml.Name{Space: constants.WMLNamespace, Local: "pStyle"}, xml.Name{Space: constants.AltWMLNamespace, Local: "pStyle"}:
+			switch t.Name.Local {
+			case "pStyle":
 				if err = d.DecodeElement(&pp.Style, &t); err != nil {
 					return err
 				}
-			case xml.Name{Space: constants.WMLNamespace, Local: "jc"}, xml.Name{Space: constants.AltWMLNamespace, Local: "jc"}:
+			case "jc":
 				if err = d.DecodeElement(&pp.Justification, &t); err != nil {
 					return err
 				}
-			case xml.Name{Space: constants.WMLNamespace, Local: "numPr"}, xml.Name{Space: constants.AltWMLNamespace, Local: "numPr"}:
+			case "numPr":
 				if err = d.DecodeElement(&pp.NumberingProperty, &t); err != nil {
+					return err
+				}
+			case "rPr":
+				pp.RunProperty = &RunProperty{}
+				if err := d.DecodeElement(pp.RunProperty, &t); err != nil {
 					return err
 				}
 			default:

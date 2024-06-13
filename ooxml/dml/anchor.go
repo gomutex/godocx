@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/ooxml/types"
 )
 
@@ -48,8 +47,8 @@ func NewAnchor() *Anchor {
 func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:anchor"
 	start.Attr = []xml.Attr{
-		{Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
-		{Name: xml.Name{Local: "xmlns:pic"}, Value: constants.DrawingMLPicNS},
+		// {Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
+		// {Name: xml.Name{Local: "xmlns:pic"}, Value: constants.DrawingMLPicNS},
 	}
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "behindDoc"}, Value: fmt.Sprintf("%d", a.BehindDocAttr)})
@@ -68,28 +67,7 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		return err
 	}
 
-	if a.Extent != nil {
-		if err := e.EncodeElement(a.Extent, xml.StartElement{Name: xml.Name{Local: "wp:extent"}}); err != nil {
-			return err
-		}
-	}
-
-	if a.EffectExtent != nil {
-		if err := e.EncodeElement(a.EffectExtent, xml.StartElement{Name: xml.Name{Local: "wp:effectExtent"}}); err != nil {
-			return err
-		}
-	}
-
-	if a.DocProp != nil {
-		if err := e.EncodeElement(a.DocProp, xml.StartElement{Name: xml.Name{Local: "wp:docPr"}}); err != nil {
-			return err
-		}
-	}
-	if a.cNvGraphicFramePr != nil {
-		if err := e.EncodeElement(a.cNvGraphicFramePr, xml.StartElement{Name: xml.Name{Local: "wp:cNvGraphicFramePr"}}); err != nil {
-			return err
-		}
-	}
+	// Placement(the order) of these elements is important especially the wrapNone
 
 	if a.SimplePos != nil {
 		if err := e.EncodeElement(a.SimplePos, xml.StartElement{Name: xml.Name{Local: "wp:simplePos"}}); err != nil {
@@ -109,8 +87,14 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		}
 	}
 
-	if a.Graphic != nil {
-		if err := e.EncodeElement(a.Graphic, xml.StartElement{Name: xml.Name{Local: "a:graphic"}}); err != nil {
+	if a.Extent != nil {
+		if err := e.EncodeElement(a.Extent, xml.StartElement{Name: xml.Name{Local: "wp:extent"}}); err != nil {
+			return err
+		}
+	}
+
+	if a.EffectExtent != nil {
+		if err := e.EncodeElement(a.EffectExtent, xml.StartElement{Name: xml.Name{Local: "wp:effectExtent"}}); err != nil {
 			return err
 		}
 	}
@@ -119,6 +103,23 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if a.WrapNone != nil {
 		err := e.EncodeElement(a.WrapNone, xml.StartElement{Name: xml.Name{Local: "wp:wrapNone"}})
 		if err != nil {
+			return err
+		}
+	}
+
+	if a.DocProp != nil {
+		if err := e.EncodeElement(a.DocProp, xml.StartElement{Name: xml.Name{Local: "wp:docPr"}}); err != nil {
+			return err
+		}
+	}
+	if a.cNvGraphicFramePr != nil {
+		if err := e.EncodeElement(a.cNvGraphicFramePr, xml.StartElement{Name: xml.Name{Local: "wp:cNvGraphicFramePr"}}); err != nil {
+			return err
+		}
+	}
+
+	if a.Graphic != nil {
+		if err := e.EncodeElement(a.Graphic, xml.StartElement{Name: xml.Name{Local: "a:graphic"}}); err != nil {
 			return err
 		}
 	}
