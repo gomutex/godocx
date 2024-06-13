@@ -81,7 +81,7 @@ func (p *Paragraph) Justification(value string) *Paragraph {
 }
 
 func (p *Paragraph) Numbering(id int, level int) {
-	numberingID := NewNumberingId(id)
+	numberingID := NewNumberingID(id)
 	indentLevel := NewIndentLevel(level)
 
 	if p.Property == nil {
@@ -200,16 +200,15 @@ loop:
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "r":
-
 				r := NewRun()
-				if err := d.DecodeElement(r, &elem); err != nil {
+				if err = d.DecodeElement(r, &elem); err != nil {
 					return err
 				}
 
 				p.Children = append(p.Children, &ParagraphChild{Run: r})
 			case "pPr":
 				p.Property = &ParagraphProperty{}
-				if err := d.DecodeElement(p.Property, &elem); err != nil {
+				if err = d.DecodeElement(p.Property, &elem); err != nil {
 					return err
 				}
 			default:

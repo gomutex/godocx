@@ -16,6 +16,7 @@ type RunChild struct {
 	InstrText *string
 	Text      *Text
 	Drawing   *dml.Drawing
+	Tab       *Tab
 }
 
 type Hyperlink struct {
@@ -42,7 +43,6 @@ func NewRun() *Run {
 // Returns:
 //   - *Run: The modified Run instance with the updated color.
 func (r *Run) Color(colorCode string) *Run {
-
 	r.RunProperty.Color = NewColor(colorCode)
 
 	return r
@@ -121,7 +121,7 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
 	for _, data := range r.Children {
 		if data.Text != nil {
-			err := data.Text.MarshalXML(e, start)
+			err = data.Text.MarshalXML(e, start)
 			if err != nil {
 				return err
 			}
@@ -141,13 +141,18 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 			}
 		}
 
+		if data.Tab != nil {
+			err := data.Tab.MarshalXML(e, start)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
 func (r *Run) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
-
 loop:
 	for {
 		currentToken, err := d.Token()
@@ -160,19 +165,28 @@ loop:
 			switch elem.Name.Local {
 			case "t":
 				txt := NewText()
-				if err := d.DecodeElement(txt, &elem); err != nil {
+				if err = d.DecodeElement(txt, &elem); err != nil {
 					return err
 				}
 
 				r.Children = append(r.Children, &RunChild{Text: txt})
 			case "rPr":
 				r.RunProperty = &RunProperty{}
-				if err := d.DecodeElement(r.RunProperty, &elem); err != nil {
+				if err = d.DecodeElement(r.RunProperty, &elem); err != nil {
 					return err
 				}
+			case "tab":
+				tabElem := &Tab{}
+				if err = d.DecodeElement(tabElem, &elem); err != nil {
+					return err
+				}
+
+				r.Children = append(r.Children, &RunChild{
+					Tab: tabElem,
+				})
 			case "drawing":
 				drawingElem := &dml.Drawing{}
-				if err := d.DecodeElement(drawingElem, &elem); err != nil {
+				if err = d.DecodeElement(drawingElem, &elem); err != nil {
 					return err
 				}
 

@@ -27,7 +27,6 @@ func (n *NonVisualGraphicFrameProp) MarshalXML(e *xml.Encoder, start xml.StartEl
 }
 
 func (n *NonVisualGraphicFrameProp) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-
 	for {
 		token, err := decoder.Token()
 		if err != nil {
@@ -39,7 +38,7 @@ func (n *NonVisualGraphicFrameProp) UnmarshalXML(decoder *xml.Decoder, start xml
 			switch elem.Name.Local {
 			case "graphicFrameLocks":
 				n.GraphicFrameLocks = &GraphicFrameLocks{}
-				if err := decoder.DecodeElement(n.GraphicFrameLocks, &elem); err != nil {
+				if err = decoder.DecodeElement(n.GraphicFrameLocks, &elem); err != nil {
 					return err
 				}
 			default:

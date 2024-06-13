@@ -166,44 +166,44 @@ func (a *Anchor) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) erro
 				a.Extent = &Extent{
 					XMLName: "wp:extent",
 				}
-				if err := decoder.DecodeElement(a.Extent, &elem); err != nil {
+				if err = decoder.DecodeElement(a.Extent, &elem); err != nil {
 					return err
 				}
 			case "effectExtent":
 				a.EffectExtent = &EffectExtent{
 					XMLName: "wp:effectExtent",
 				}
-				if err := decoder.DecodeElement(a.EffectExtent, &elem); err != nil {
+				if err = decoder.DecodeElement(a.EffectExtent, &elem); err != nil {
 					return err
 				}
 			case "cNvGraphicFramePr":
 				a.cNvGraphicFramePr = &NonVisualGraphicFrameProp{}
-				if err := decoder.DecodeElement(a.cNvGraphicFramePr, &elem); err != nil {
+				if err = decoder.DecodeElement(a.cNvGraphicFramePr, &elem); err != nil {
 					return err
 				}
 			case "docPr":
 				a.DocProp = &DocProp{}
-				if err := decoder.DecodeElement(a.DocProp, &elem); err != nil {
+				if err = decoder.DecodeElement(a.DocProp, &elem); err != nil {
 					return err
 				}
 			case "simplePos":
 				a.SimplePos = &types.PositionType{}
-				if err := decoder.DecodeElement(a.SimplePos, &elem); err != nil {
+				if err = decoder.DecodeElement(a.SimplePos, &elem); err != nil {
 					return err
 				}
 			case "positionV":
 				a.PositionV = &types.PoistionV{}
-				if err := decoder.DecodeElement(a.PositionV, &elem); err != nil {
+				if err = decoder.DecodeElement(a.PositionV, &elem); err != nil {
 					return err
 				}
 			case "positionH":
 				a.PositionH = &types.PoistionH{}
-				if err := decoder.DecodeElement(a.PositionH, &elem); err != nil {
+				if err = decoder.DecodeElement(a.PositionH, &elem); err != nil {
 					return err
 				}
 			case "graphic":
 				a.Graphic = &Graphic{}
-				if err := decoder.DecodeElement(a.Graphic, &elem); err != nil {
+				if err = decoder.DecodeElement(a.Graphic, &elem); err != nil {
 					return err
 				}
 			case "wrapNone":

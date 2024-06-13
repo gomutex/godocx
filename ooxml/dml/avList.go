@@ -26,9 +26,10 @@ func (s *ShapeGuide) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (s *ShapeGuide) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
-		if a.Name.Local == "name" {
+		switch a.Name.Local {
+		case "name":
 			s.Name = a.Value
-		} else if a.Name.Local == "fmla" {
+		case "fmla":
 			s.Formula = a.Value
 		}
 	}
@@ -60,7 +61,6 @@ func (a *AdjustValues) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 }
 
 func (a *AdjustValues) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
-
 loop:
 	for {
 		currentToken, err := d.Token()
@@ -73,7 +73,7 @@ loop:
 			switch elem.Name.Local {
 			case "t":
 				gd := ShapeGuide{}
-				if err := d.DecodeElement(&gd, &elem); err != nil {
+				if err = d.DecodeElement(&gd, &elem); err != nil {
 					return err
 				}
 

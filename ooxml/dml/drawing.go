@@ -24,14 +24,14 @@ loop:
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLDrawingNS, Local: "anchor"}:
 				ar := NewAnchor()
-				if err := d.DecodeElement(ar, &elem); err != nil {
+				if err = d.DecodeElement(ar, &elem); err != nil {
 					return err
 				}
 
 				dr.Anchor = append(dr.Anchor, ar)
 			case xml.Name{Space: constants.WMLDrawingNS, Local: "inline"}:
 				il := NewInline()
-				if err := d.DecodeElement(il, &elem); err != nil {
+				if err = d.DecodeElement(il, &elem); err != nil {
 					return err
 				}
 

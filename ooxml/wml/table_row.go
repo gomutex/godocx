@@ -56,7 +56,7 @@ func (tr *TableRow) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "tc"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tc"}:
 				cell := TableCell{}
-				if err := d.DecodeElement(&cell, &elem); err != nil {
+				if err = d.DecodeElement(&cell, &elem); err != nil {
 					return err
 				}
 				tr.Cells = append(tr.Cells, &cell)

@@ -76,14 +76,14 @@ func (tc *TableCell) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error 
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "p"}, xml.Name{Space: constants.AltWMLNamespace, Local: "p"}:
 				p := DefaultParagraph()
-				if err := d.DecodeElement(p, &elem); err != nil {
+				if err = d.DecodeElement(p, &elem); err != nil {
 					return err
 				}
 
 				tc.Children = append(tc.Children, &TableCellContent{Paragraph: p})
 			case xml.Name{Space: constants.WMLNamespace, Local: "tbl"}, xml.Name{Space: constants.AltWMLNamespace, Local: "tbl"}:
 				tbl := DefaultTable()
-				if err := d.DecodeElement(tbl, &elem); err != nil {
+				if err = d.DecodeElement(tbl, &elem); err != nil {
 					return err
 				}
 

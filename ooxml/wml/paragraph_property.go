@@ -31,7 +31,6 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 
 	// Encoding <w:pStyle> element
 	if pp.Style != nil {
-
 		if err = e.EncodeElement(pp.Style, xml.StartElement{Name: xml.Name{Local: "w:pStyle"}}); err != nil {
 			return err
 		}
@@ -90,7 +89,7 @@ func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 				}
 			case "rPr":
 				pp.RunProperty = &RunProperty{}
-				if err := d.DecodeElement(pp.RunProperty, &t); err != nil {
+				if err = d.DecodeElement(pp.RunProperty, &t); err != nil {
 					return err
 				}
 			default:

@@ -38,19 +38,19 @@ func (i *Inline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	if i.Extent != nil {
-		if err := e.EncodeElement(i.Extent, xml.StartElement{Name: xml.Name{Local: "wp:extent"}}); err != nil {
+		if err = e.EncodeElement(i.Extent, xml.StartElement{Name: xml.Name{Local: "wp:extent"}}); err != nil {
 			return err
 		}
 	}
 
 	if i.DocProp != nil {
-		if err := e.EncodeElement(i.DocProp, xml.StartElement{Name: xml.Name{Local: "wp:docPr"}}); err != nil {
+		if err = e.EncodeElement(i.DocProp, xml.StartElement{Name: xml.Name{Local: "wp:docPr"}}); err != nil {
 			return err
 		}
 	}
 
 	if i.cNvGraphicFramePr != nil {
-		if err := e.EncodeElement(i.cNvGraphicFramePr, xml.StartElement{Name: xml.Name{Local: "wp:cNvGraphicFramePr"}}); err != nil {
+		if err = e.EncodeElement(i.cNvGraphicFramePr, xml.StartElement{Name: xml.Name{Local: "wp:cNvGraphicFramePr"}}); err != nil {
 			return err
 		}
 	}

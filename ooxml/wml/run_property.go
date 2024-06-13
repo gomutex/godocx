@@ -43,70 +43,70 @@ func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	}
 
 	if rp.Color != nil {
-		err := e.EncodeElement(rp.Color, xml.StartElement{Name: xml.Name{Local: "w:color"}})
+		err = e.EncodeElement(rp.Color, xml.StartElement{Name: xml.Name{Local: "w:color"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Style != nil {
-		err := e.EncodeElement(rp.Style, xml.StartElement{Name: xml.Name{Local: "w:rStyle"}})
+		err = e.EncodeElement(rp.Style, xml.StartElement{Name: xml.Name{Local: "w:rStyle"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Size != nil {
-		err := e.EncodeElement(rp.Size, xml.StartElement{Name: xml.Name{Local: "w:sz"}})
+		err = e.EncodeElement(rp.Size, xml.StartElement{Name: xml.Name{Local: "w:sz"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.SizeCs != nil {
-		err := e.EncodeElement(rp.SizeCs, xml.StartElement{Name: xml.Name{Local: "w:szCs"}})
+		err = e.EncodeElement(rp.SizeCs, xml.StartElement{Name: xml.Name{Local: "w:szCs"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Shading != nil {
-		err := e.EncodeElement(rp.Shading, xml.StartElement{Name: xml.Name{Local: "w:shd"}})
+		err = e.EncodeElement(rp.Shading, xml.StartElement{Name: xml.Name{Local: "w:shd"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Highlight != nil {
-		err := e.EncodeElement(rp.Highlight, xml.StartElement{Name: xml.Name{Local: "w:highlight"}})
+		err = e.EncodeElement(rp.Highlight, xml.StartElement{Name: xml.Name{Local: "w:highlight"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Bold != nil {
-		err := e.EncodeElement(rp.Bold, xml.StartElement{Name: xml.Name{Local: "w:b"}})
+		err = e.EncodeElement(rp.Bold, xml.StartElement{Name: xml.Name{Local: "w:b"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Italic != nil {
-		err := e.EncodeElement(rp.Italic, xml.StartElement{Name: xml.Name{Local: "w:i"}})
+		err = e.EncodeElement(rp.Italic, xml.StartElement{Name: xml.Name{Local: "w:i"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Strike != nil {
-		err := e.EncodeElement(rp.Strike, xml.StartElement{Name: xml.Name{Local: "w:strike"}})
+		err = e.EncodeElement(rp.Strike, xml.StartElement{Name: xml.Name{Local: "w:strike"}})
 		if err != nil {
 			return err
 		}
 	}
 
 	if rp.Underline != nil {
-		err := e.EncodeElement(rp.Underline, xml.StartElement{Name: xml.Name{Local: "w:u"}})
+		err = e.EncodeElement(rp.Underline, xml.StartElement{Name: xml.Name{Local: "w:u"}})
 		if err != nil {
 			return err
 		}

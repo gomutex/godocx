@@ -37,13 +37,14 @@ func (x *Extent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (x *Extent) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
-		if a.Name.Local == "cx" {
+		switch a.Name.Local {
+		case "cx":
 			cx, err := strconv.ParseUint(a.Value, 10, 32)
 			if err != nil {
 				return nil
 			}
 			x.Width = cx
-		} else if a.Name.Local == "cy" {
+		case "cy":
 			cy, err := strconv.ParseUint(a.Value, 10, 32)
 			if err != nil {
 				return nil
@@ -61,7 +62,6 @@ func (x *Extent) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		switch elem := token.(type) {
 		case xml.StartElement:
 			switch elem.Name.Local {
-
 			default:
 				if err = d.Skip(); err != nil {
 					return err

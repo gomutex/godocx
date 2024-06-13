@@ -36,7 +36,7 @@ func (c *CNvPicPr) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) er
 			switch elem.Name.Local {
 			case "picLocks":
 				c.PicLocks = &PicLocks{}
-				if err := decoder.DecodeElement(c.PicLocks, &elem); err != nil {
+				if err = decoder.DecodeElement(c.PicLocks, &elem); err != nil {
 					return err
 				}
 			default:

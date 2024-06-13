@@ -6,7 +6,7 @@ import (
 
 // NumberingProperty represents the properties of a numbering in a document.
 type NumberingProperty struct {
-	ID    *NumberingId
+	ID    *NumberingID
 	Level *IndentLevel
 }
 
@@ -16,7 +16,7 @@ func NewNumberingProperty() *NumberingProperty {
 }
 
 // AddNumber adds the numbering ID and indent level to the NumberingProperty.
-func (n *NumberingProperty) AddNumber(id *NumberingId, level *IndentLevel) *NumberingProperty {
+func (n *NumberingProperty) AddNumber(id *NumberingID, level *IndentLevel) *NumberingProperty {
 	n.ID = id
 	n.Level = level
 	return n
@@ -56,7 +56,7 @@ func (n *NumberingProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 		case xml.StartElement:
 			switch tok.Name.Local {
 			case "numId":
-				n.ID = &NumberingId{}
+				n.ID = &NumberingID{}
 				if err := d.DecodeElement(n.ID, &tok); err != nil {
 					return err
 				}

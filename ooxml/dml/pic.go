@@ -391,13 +391,14 @@ func (o *Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (o *Offset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
-		if a.Name.Local == "x" {
+		switch a.Name.Local {
+		case "x":
 			x, err := strconv.ParseUint(a.Value, 10, 32)
 			if err != nil {
 				return nil
 			}
 			o.X = x
-		} else if a.Name.Local == "y" {
+		case "y":
 			y, err := strconv.ParseUint(a.Value, 10, 32)
 			if err != nil {
 				return nil
@@ -415,7 +416,6 @@ func (o *Offset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		switch elem := token.(type) {
 		case xml.StartElement:
 			switch elem.Name.Local {
-
 			default:
 				if err = d.Skip(); err != nil {
 					return err
@@ -472,7 +472,7 @@ func (p *PresetGeometry) UnmarshalXML(d *xml.Decoder, start xml.StartElement) er
 			switch elem.Name.Local {
 			case "avLst":
 				avList := &AdjustValues{}
-				if err := d.DecodeElement(avList, &elem); err != nil {
+				if err = d.DecodeElement(avList, &elem); err != nil {
 					return err
 				}
 				p.AdjustValues = avList

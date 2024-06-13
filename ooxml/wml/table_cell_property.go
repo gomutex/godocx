@@ -39,7 +39,7 @@ func (t *TableCellProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "shd"}, xml.Name{Space: constants.AltWMLNamespace, Local: "shd"}:
 				shd := Shading{}
-				if err := d.DecodeElement(shd, &elem); err != nil {
+				if err = d.DecodeElement(&shd, &elem); err != nil {
 					return err
 				}
 				t.Shading = &shd
