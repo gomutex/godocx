@@ -27,7 +27,7 @@ func TestBreakMarshaling(t *testing.T) {
 		t.Fatalf("Error unmarshaling XML to Break: %v", err)
 	}
 
-	if unmarshalledBreak.BreakType != br.BreakType {
-		t.Errorf("Expected BreakType %s, got %s", br.BreakType, unmarshalledBreak.BreakType)
+	if *unmarshalledBreak.BreakType != *br.BreakType {
+		t.Errorf("Expected BreakType %s, got %s", *br.BreakType, *unmarshalledBreak.BreakType)
 	}
 }

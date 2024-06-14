@@ -18,6 +18,7 @@ type RunChild struct {
 	Text      *Text
 	Drawing   *dml.Drawing
 	Tab       *Tab
+	Break     *Break
 }
 
 type Hyperlink struct {
@@ -147,6 +148,13 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 				return err
 			}
 		}
+
+		if data.Break != nil {
+			err := data.Break.MarshalXML(e, start)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
@@ -183,6 +191,15 @@ loop:
 
 				r.Children = append(r.Children, &RunChild{
 					Tab: tabElem,
+				})
+			case "br":
+				br := &Break{}
+				if err = br.UnmarshalXML(d, elem); err != nil {
+					return err
+				}
+
+				r.Children = append(r.Children, &RunChild{
+					Break: br,
 				})
 			case "drawing":
 				drawingElem := &dml.Drawing{}

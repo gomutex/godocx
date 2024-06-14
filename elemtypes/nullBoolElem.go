@@ -25,18 +25,17 @@ func NewNullBoolElem(local string, value bool) *NullBoolElem {
 }
 
 // Disable sets the value to false and valexists true
-func (self *NullBoolElem) Disable() {
-	self.Val = types.NewNullBool(false)
+func (n *NullBoolElem) Disable() {
+	n.Val = types.NewNullBool(false)
 }
 
 // MarshalXML implements the xml.Marshaler interface for the Bold type.
 // It encodes the instance into XML using the "w:XMLName" element with a "w:val" attribute.
-func (self *NullBoolElem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n *NullBoolElem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Name.Local = n.Local
 
-	start.Name.Local = self.Local
-
-	if self.Val.Valid { // Add val attribute only if the val exists
-		if self.Val.Bool {
+	if n.Val.Valid { // Add val attribute only if the val exists
+		if n.Val.Bool {
 			start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: "true"})
 		} else {
 			start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: "false"})
@@ -50,11 +49,11 @@ func (self *NullBoolElem) MarshalXML(e *xml.Encoder, start xml.StartElement) err
 // UnmarshalXML implements the xml.Unmarshaler interface for the type.
 // It decodes the XML representation, extracting the value from the "w:val" attribute.
 // The inner content of the XML element is skipped.
-func (self *NullBoolElem) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+func (n *NullBoolElem) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
 		if a.Name.Local == "val" {
 			// If value is "true", then set it to true
-			self.Val = types.NewNullBool(a.Value == "true")
+			n.Val = types.NewNullBool(a.Value == "true")
 			break
 		}
 	}
