@@ -40,11 +40,11 @@ func (b *Break) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:br"
 
 	if b.BreakType != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "type"}, Value: string(*b.BreakType)})
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:type"}, Value: string(*b.BreakType)})
 	}
 
 	if b.Clear != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "clear"}, Value: string(*b.Clear)})
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:clear"}, Value: string(*b.Clear)})
 	}
 
 	return e.EncodeElement("", start)
