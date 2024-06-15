@@ -10,7 +10,7 @@ func TestBreakMarshaling(t *testing.T) {
 	breakType := BreakType("page")
 	br := NewBreak(breakType)
 
-	expectedXML := `<br type="page"></br>`
+	expectedXML := `<w:br w:type="page"></w:br>`
 
 	xmlData, err := xml.Marshal(br)
 	if err != nil {

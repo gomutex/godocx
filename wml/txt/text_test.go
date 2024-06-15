@@ -12,7 +12,7 @@ func TestTextMarshalXML(t *testing.T) {
 		input    *Text
 		expected string
 	}{
-		{NewText(), `<w:t xml:space="preserve"></w:t>`},
+		{NewText(), `<w:t></w:t>`},
 		{TextFromString("Hello, World!"), `<w:t xml:space="preserve">Hello, World!</w:t>`},
 	}
 
@@ -43,7 +43,7 @@ func TestTextUnmarshalXML(t *testing.T) {
 		input    string
 		expected *Text
 	}{
-		{`<w:t xml:space="preserve"></w:t>`, NewText()},
+		{`<w:t></w:t>`, NewText()},
 		{`<w:t xml:space="preserve">Hello, World!</w:t>`, TextFromString("Hello, World!")},
 		{`<w:t xml:space="preserve">Some text</w:t><w:other>Other element</w:other>`, TextFromString("Some text")},
 	}
