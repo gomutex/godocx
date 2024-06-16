@@ -1,4 +1,4 @@
-package txt
+package runcontent
 
 import (
 	"encoding/xml"

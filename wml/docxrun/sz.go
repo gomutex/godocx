@@ -1,4 +1,4 @@
-package txt
+package docxrun
 
 import (
 	"encoding/xml"

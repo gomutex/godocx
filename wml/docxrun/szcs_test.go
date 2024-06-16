@@ -1,4 +1,4 @@
-package txt
+package docxrun
 
 import (
 	"encoding/xml"
@@ -8,13 +8,13 @@ import (
 	"testing"
 )
 
-func TestSzMarshalXML(t *testing.T) {
+func TestSzCsMarshalXML(t *testing.T) {
 	testCases := []struct {
-		input    *Sz
+		input    *SzCs
 		expected string
 	}{
-		{NewSz(12), `<w:sz w:val="12"></w:sz>`},
-		{NewSz(0), ``}, // Empty because value is 0
+		{NewSzCs(12), `<w:szCs w:val="12"></w:szCs>`},
+		{NewSzCs(0), ``}, // Empty because value is 0
 	}
 
 	for _, tc := range testCases {
@@ -39,18 +39,18 @@ func TestSzMarshalXML(t *testing.T) {
 	}
 }
 
-func TestSzUnmarshalXML(t *testing.T) {
+func TestSzCsUnmarshalXML(t *testing.T) {
 	testCases := []struct {
 		input    string
-		expected *Sz
+		expected *SzCs
 	}{
-		{`<w:sz w:val="14"></w:sz>`, NewSz(14)},
-		{`<w:sz></w:sz>`, NewSz(0)}, // Default value when not specified
+		{`<w:szCs w:val="14"></w:szCs>`, NewSzCs(14)},
+		{`<w:szCs></w:szCs>`, NewSzCs(0)}, // Default value when not specified
 	}
 
 	for _, tc := range testCases {
 		decoder := xml.NewDecoder(strings.NewReader(tc.input))
-		var result Sz
+		var result SzCs
 
 		startToken, err := decoder.Token()
 		if err != nil {
@@ -67,9 +67,9 @@ func TestSzUnmarshalXML(t *testing.T) {
 		}
 	}
 
-	invalidXML := `<w:sz w:val="-1"></w:sz>`
+	invalidXML := `<w:szCs w:val="-1"></w:szCs>`
 	decoder := xml.NewDecoder(strings.NewReader(invalidXML))
-	var result Sz
+	var result SzCs
 
 	startToken, err := decoder.Token()
 	if err != nil {
@@ -91,5 +91,4 @@ func TestSzUnmarshalXML(t *testing.T) {
 	} else {
 		t.Errorf("Expected error for InvalidXML: %v", invalidXML)
 	}
-
 }

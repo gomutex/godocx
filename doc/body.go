@@ -3,9 +3,9 @@ package doc
 import (
 	"encoding/xml"
 
+	"github.com/gomutex/godocx/wml/docxpara"
 	"github.com/gomutex/godocx/wml/sections"
 	"github.com/gomutex/godocx/wml/table"
-	"github.com/gomutex/godocx/wml/txt"
 )
 
 // This element specifies the contents of the body of the document – the main document editing surface.
@@ -17,7 +17,7 @@ type Body struct {
 
 // DocumentChild represents a child element within a Word document, which can be a Paragraph or a Table.
 type DocumentChild struct {
-	Para  *txt.Paragraph
+	Para  *docxpara.Paragraph
 	Table *table.Table
 }
 
@@ -75,7 +75,7 @@ func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "p":
-				para := txt.DefaultParagraph()
+				para := docxpara.DefaultParagraph()
 				if err := d.DecodeElement(para, &elem); err != nil {
 					return err
 				}

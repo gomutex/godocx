@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"sync"
 
-	"github.com/gomutex/godocx/wml/txt"
+	"github.com/gomutex/godocx/wml/docxpara"
 )
 
 // RootDoc represents the root document of an Office Open XML (OOXML) document.
@@ -54,8 +54,8 @@ func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 //
 // Returns:
 //   - p: The created Paragraph instance.
-func (rd *RootDoc) AddParagraph(text string) *txt.Paragraph {
-	p := txt.AddParagraph(text)
+func (rd *RootDoc) AddParagraph(text string) *docxpara.Paragraph {
+	p := docxpara.AddParagraph(text)
 	bodyElem := DocumentChild{
 		Para: p,
 	}
@@ -69,9 +69,9 @@ func (rd *RootDoc) AddParagraph(text string) *txt.Paragraph {
 //
 // Returns:
 //   - p: The created Paragraph instance.
-func (rd *RootDoc) AddEmptyParagraph() *txt.Paragraph {
-	p := &txt.Paragraph{
-		Children: []*txt.ParagraphChild{},
+func (rd *RootDoc) AddEmptyParagraph() *docxpara.Paragraph {
+	p := &docxpara.Paragraph{
+		Children: []*docxpara.ParagraphChild{},
 	}
 
 	bodyElem := DocumentChild{

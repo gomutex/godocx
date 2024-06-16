@@ -7,20 +7,12 @@ import (
 )
 
 type NullBoolElem struct {
-	Local string
-	Val   types.NullBool
+	Val types.NullBool
 }
 
-func DefaultNullBoolElem(local string) *NullBoolElem {
+func NewNullBoolElem(value bool) *NullBoolElem {
 	return &NullBoolElem{
-		Local: local,
-	}
-}
-
-func NewNullBoolElem(local string, value bool) *NullBoolElem {
-	return &NullBoolElem{
-		Local: local,
-		Val:   types.NewNullBool(value),
+		Val: types.NewNullBool(value),
 	}
 }
 
@@ -32,7 +24,6 @@ func (n *NullBoolElem) Disable() {
 // MarshalXML implements the xml.Marshaler interface for the Bold type.
 // It encodes the instance into XML using the "w:XMLName" element with a "w:val" attribute.
 func (n *NullBoolElem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = n.Local
 
 	if n.Val.Valid { // Add val attribute only if the val exists
 		if n.Val.Bool {

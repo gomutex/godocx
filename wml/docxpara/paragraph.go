@@ -1,17 +1,19 @@
-package txt
+package docxpara
 
 import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml"
+	"github.com/gomutex/godocx/wml/docxrun"
 	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/liststyle"
+	"github.com/gomutex/godocx/wml/runcontent"
 )
 
 type ParagraphChild struct {
-	Link *Hyperlink // w:hyperlink
-	Run  *Run       // i.e w:r
+	Link *Hyperlink   // w:hyperlink
+	Run  *docxrun.Run // i.e w:r
 }
 
 type Paragraph struct {
@@ -107,16 +109,16 @@ func (p *Paragraph) Numbering(id int, level int) {
 //
 // Returns:
 //   - *Run: The newly created Run instance added to the Paragraph.
-func (p *Paragraph) AddText(text string) *Run {
-	t := TextFromString(text)
+func (p *Paragraph) AddText(text string) *docxrun.Run {
+	t := runcontent.TextFromString(text)
 
-	runChildren := []*RunChild{}
-	runChildren = append(runChildren, &RunChild{
+	runChildren := []*docxrun.RunChild{}
+	runChildren = append(runChildren, &docxrun.RunChild{
 		Text: t,
 	})
-	run := &Run{
+	run := &docxrun.Run{
 		Children:    runChildren,
-		RunProperty: &RunProperty{},
+		RunProperty: &docxrun.RunProperty{},
 	}
 
 	p.Children = append(p.Children, &ParagraphChild{Run: run})
@@ -124,8 +126,8 @@ func (p *Paragraph) AddText(text string) *Run {
 	return run
 }
 
-// func (para *Paragraph) AddLink(text string, link string) *Hyperlink {
-// 	rId := para.rootRef.addLinkRelation(link)
+// func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
+// 	rId := p.rootRef.addLinkRelation(link)
 
 // 	runChildren := []*RunChild{}
 // 	runChildren = append(runChildren, &RunChild{
@@ -149,12 +151,12 @@ func (p *Paragraph) AddText(text string) *Run {
 // 	}
 // 	hyperLink.Children = append(hyperLink.Children, paraChild)
 
-// 	para.Children = append(para.Children, &ParagraphChild{Link: hyperLink})
+// 	p.Children = append(p.Children, &ParagraphChild{Link: hyperLink})
 
 // 	return hyperLink
 // }
 
-func (para *Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+func (p *Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:p"
 
 	// Opening <w:p> element
@@ -162,13 +164,13 @@ func (para *Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		return err
 	}
 
-	if para.Property != nil {
-		if err = e.EncodeElement(para.Property, start); err != nil {
+	if p.Property != nil {
+		if err = e.EncodeElement(p.Property, start); err != nil {
 			return err
 		}
 	}
 
-	for _, cElem := range para.Children {
+	for _, cElem := range p.Children {
 		if cElem.Run != nil {
 			if err = e.EncodeElement(cElem.Run, start); err != nil {
 				return err
@@ -202,7 +204,7 @@ loop:
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "r":
-				r := NewRun()
+				r := docxrun.NewRun()
 				if err = d.DecodeElement(r, &elem); err != nil {
 					return err
 				}
@@ -244,21 +246,28 @@ func (p *Paragraph) AddDrawing(rID string, width units.Inch, height units.Inch) 
 		Graphic: dml.NewPicGraphic(dml.NewPic(rID, eWidth, eHeight)),
 	}
 
-	runChildren := []*RunChild{}
+	runChildren := []*docxrun.RunChild{}
 	drawing := &dml.Drawing{}
 
 	drawing.Inline = append(drawing.Inline, &inline)
 
-	runChildren = append(runChildren, &RunChild{
+	runChildren = append(runChildren, &docxrun.RunChild{
 		Drawing: drawing,
 	})
 
-	run := &Run{
+	run := &docxrun.Run{
 		Children:    runChildren,
-		RunProperty: &RunProperty{},
+		RunProperty: &docxrun.RunProperty{},
 	}
 
 	p.Children = append(p.Children, &ParagraphChild{Run: run})
 
 	return &inline
+}
+
+type Hyperlink struct {
+	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main hyperlink,omitempty"`
+	ID      string   `xml:"http://schemas.openxmlformats.org/officeDocument/2006/relationships id,attr"`
+	// Run     Run
+	Children []*ParagraphChild
 }

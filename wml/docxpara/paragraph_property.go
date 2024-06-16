@@ -1,8 +1,9 @@
-package txt
+package docxpara
 
 import (
 	"encoding/xml"
 
+	"github.com/gomutex/godocx/wml/docxrun"
 	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/liststyle"
 )
@@ -16,7 +17,7 @@ type ParagraphProperty struct {
 	WidowControl      *bool
 	Style             *ParagraphStyle
 	Justification     *formatting.Justification
-	RunProperty       *RunProperty
+	RunProperty       *docxrun.RunProperty
 	NumberingProperty *liststyle.NumberingProperty
 }
 
@@ -91,7 +92,7 @@ func (pp *ParagraphProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 					return err
 				}
 			case "rPr":
-				pp.RunProperty = &RunProperty{}
+				pp.RunProperty = &docxrun.RunProperty{}
 				if err = d.DecodeElement(pp.RunProperty, &t); err != nil {
 					return err
 				}

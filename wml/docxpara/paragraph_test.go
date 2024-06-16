@@ -1,4 +1,4 @@
-package txt
+package docxpara
 
 import (
 	"bytes"
@@ -11,17 +11,17 @@ import (
 
 func TestParagraphXML(t *testing.T) {
 	// Create a sample paragraph
-	para := NewParagraph()
-	// para.Style("Heading1")
-	// para.Numbering(1, 0)
-	para.AddText("This is a sample paragraph.")
+	p := NewParagraph()
+	// p.Style("Heading1")
+	// p.Numbering(1, 0)
+	p.AddText("This is a sample paragraph.")
 
 	// Marshal the paragraph to XML
 	var buf bytes.Buffer
 
 	encoder := xml.NewEncoder(&buf)
 	start := xml.StartElement{Name: xml.Name{Local: "fake"}}
-	if err := para.MarshalXML(encoder, start); err != nil {
+	if err := p.MarshalXML(encoder, start); err != nil {
 		t.Errorf("Error during MarshalXML: %v", err)
 	}
 
@@ -44,7 +44,7 @@ func TestParagraphXML(t *testing.T) {
 		return
 	}
 
-	if !reflect.DeepEqual(*para, paraUnmarshaled) {
+	if !reflect.DeepEqual(*p, paraUnmarshaled) {
 		t.Errorf("Original and unmarshaled paragraphs are not equal.")
 	}
 }

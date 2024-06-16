@@ -1,10 +1,11 @@
-package txt
+package docxrun
 
 import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/wml/formatting"
+	"github.com/gomutex/godocx/wml/runcontent"
 )
 
 // A Run is part of a paragraph that has its own style. It could be
@@ -15,17 +16,10 @@ type Run struct {
 
 type RunChild struct {
 	InstrText *string
-	Text      *Text
+	Text      *runcontent.Text
 	Drawing   *dml.Drawing
-	Tab       *Tab
-	Break     *Break
-}
-
-type Hyperlink struct {
-	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main hyperlink,omitempty"`
-	ID      string   `xml:"http://schemas.openxmlformats.org/officeDocument/2006/relationships id,attr"`
-	// Run     Run
-	Children []*ParagraphChild
+	Tab       *runcontent.Tab
+	Break     *runcontent.Break
 }
 
 func NewRun() *Run {
@@ -172,7 +166,7 @@ loop:
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "t":
-				txt := NewText()
+				txt := runcontent.NewText()
 				if err = d.DecodeElement(txt, &elem); err != nil {
 					return err
 				}
@@ -184,7 +178,7 @@ loop:
 					return err
 				}
 			case "tab":
-				tabElem := &Tab{}
+				tabElem := &runcontent.Tab{}
 				if err = d.DecodeElement(tabElem, &elem); err != nil {
 					return err
 				}
@@ -193,7 +187,7 @@ loop:
 					Tab: tabElem,
 				})
 			case "br":
-				br := &Break{}
+				br := &runcontent.Break{}
 				if err = br.UnmarshalXML(d, elem); err != nil {
 					return err
 				}

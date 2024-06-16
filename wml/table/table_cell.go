@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/common/constants"
-	"github.com/gomutex/godocx/wml/txt"
+	"github.com/gomutex/godocx/wml/docxpara"
 )
 
 type TableCell struct {
@@ -14,7 +14,7 @@ type TableCell struct {
 }
 
 type TableCellContent struct {
-	Paragraph *txt.Paragraph
+	Paragraph *docxpara.Paragraph
 	Table     *Table
 	// StructuredDataTag *StructuredDataTag
 	// TableOfContents   *TableOfContents
@@ -26,8 +26,8 @@ func DefaultCell() *TableCell {
 	}
 }
 
-func (c *TableCell) AddParagraph(text string) *txt.Paragraph {
-	p := txt.AddParagraph(text)
+func (c *TableCell) AddParagraph(text string) *docxpara.Paragraph {
+	p := docxpara.AddParagraph(text)
 	tblContent := TableCellContent{
 		Paragraph: p,
 	}
@@ -76,7 +76,7 @@ func (tc *TableCell) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error 
 		case xml.StartElement:
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "p"}, xml.Name{Space: constants.AltWMLNamespace, Local: "p"}:
-				p := txt.DefaultParagraph()
+				p := docxpara.DefaultParagraph()
 				if err = d.DecodeElement(p, &elem); err != nil {
 					return err
 				}

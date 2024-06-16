@@ -1,4 +1,4 @@
-package txt
+package docxpara
 
 import "encoding/xml"
 
