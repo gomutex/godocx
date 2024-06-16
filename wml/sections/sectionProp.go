@@ -3,17 +3,21 @@ package sections
 import (
 	"encoding/xml"
 	"strconv"
+
+	"github.com/gomutex/godocx/wml/hdrftr"
 )
 
 // Section Properties : w:sectPr
 type SectionProp struct {
-	PageSize   *PageSize       `xml:"pgSz,omitempty"`
-	Type       *SectionType    `xml:"type,omitempty"`
-	PageMargin *PageMargin     `xml:"pgMar,omitempty"`
-	PageNum    *PageNumbering  `xml:"pgNumType,omitempty"`
-	FormProt   *FormProtection `xml:"formProt,omitempty"`
-	TextDir    *TextDirection  `xml:"textDirection,omitempty"`
-	DocGrid    *DocGrid        `xml:"docGrid,omitempty"`
+	HeaderReference *hdrftr.HeaderReference `xml:"headerReference,omitempty"`
+	PageSize        *PageSize               `xml:"pgSz,omitempty"`
+	Type            *SectionType            `xml:"type,omitempty"`
+	PageMargin      *PageMargin             `xml:"pgMar,omitempty"`
+	PageNum         *PageNumbering          `xml:"pgNumType,omitempty"`
+	FormProt        *FormProtection         `xml:"formProt,omitempty"`
+	TitlePg         *hdrftr.TitlePg         `xml:"titlePg,omitempty"`
+	TextDir         *TextDirection          `xml:"textDirection,omitempty"`
+	DocGrid         *DocGrid                `xml:"docGrid,omitempty"`
 }
 
 func NewSectionProper() *SectionProp {
@@ -26,6 +30,12 @@ func (s *SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err
+	}
+
+	if s.HeaderReference != nil {
+		if err := s.HeaderReference.MarshalXML(e, xml.StartElement{}); err != nil {
+			return err
+		}
 	}
 
 	if s.Type != nil {
@@ -58,6 +68,12 @@ func (s *SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		}
 	}
 
+	if s.TitlePg != nil {
+		if err = s.TitlePg.MarshalXML(e, xml.StartElement{}); err != nil {
+			return err
+		}
+	}
+
 	if s.TextDir != nil {
 		if s.TextDir.MarshalXML(e, xml.StartElement{}); err != nil {
 			return err
@@ -71,13 +87,6 @@ func (s *SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-// DocGrid represents the document grid settings.
-type DocGrid struct {
-	Type      string `xml:"type,attr,omitempty"`
-	LinePitch int    `xml:"linePitch,attr,omitempty"`
-	CharSpace int    `xml:"charSpace,attr,omitempty"`
 }
 
 // SectionType represents the type of section in a Word document.
@@ -104,22 +113,6 @@ type FormProtection struct {
 // TextDirection represents the text direction settings in a Word document.
 type TextDirection struct {
 	Val string `xml:"val,attr,omitempty"`
-}
-
-// MarshalXML implements the xml.Marshaler interface for the DocGrid type.
-// It encodes the DocGrid to its corresponding XML representation.
-func (docGrid *DocGrid) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "w:docGrid"
-	if docGrid.Type != "" {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:type"}, Value: docGrid.Type})
-	}
-	if docGrid.LinePitch != 0 {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:linePitch"}, Value: strconv.Itoa(docGrid.LinePitch)})
-	}
-	if docGrid.CharSpace != 0 {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:charSpace"}, Value: strconv.Itoa(docGrid.CharSpace)})
-	}
-	return e.EncodeElement("", start)
 }
 
 // MarshalXML implements the xml.Marshaler interface for the SectionType type.
