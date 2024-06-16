@@ -1,6 +1,9 @@
 package simpletypes
 
-import "errors"
+import (
+	"encoding/xml"
+	"errors"
+)
 
 type NumFmt string
 
@@ -193,4 +196,16 @@ func NumFmtFromStr(value string) (NumFmt, error) {
 	default:
 		return "", errors.New("Invalid Numbering Format")
 	}
+}
+
+func (d *NumFmt) UnmarshalXMLAttr(attr xml.Attr) error {
+	val, err := NumFmtFromStr(attr.Value)
+	if err != nil {
+		return err
+	}
+
+	*d = val
+
+	return nil
+
 }

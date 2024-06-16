@@ -3,13 +3,12 @@ package sections
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/internal/helpers"
 	"github.com/gomutex/godocx/wml/simpletypes"
 )
 
 // PageNumbering represents the page numbering format in a Word document.
 type PageNumbering struct {
-	Format simpletypes.NumFmt
+	Format simpletypes.NumFmt `xml:"fmt,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the PageNumbering type.
@@ -20,20 +19,4 @@ func (p *PageNumbering) MarshalXML(e *xml.Encoder, start xml.StartElement) error
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:fmt"}, Value: string(p.Format)})
 	}
 	return e.EncodeElement("", start)
-}
-
-func (p *PageNumbering) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		switch a.Name.Local {
-		case "fmt":
-			format, err := simpletypes.NumFmtFromStr(a.Value)
-			if err != nil {
-				return nil
-			}
-			p.Format = format
-		}
-
-	}
-
-	return helpers.SkipUntilEnd(d, start.End())
 }
