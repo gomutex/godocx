@@ -50,21 +50,21 @@ func (t *Table) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	}
 
 	if t.Property != nil {
-		err := t.Property.MarshalXML(e, start)
+		err := t.Property.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}
 	}
 
 	for _, row := range t.Rows {
-		err := row.TableRow.MarshalXML(e, start)
+		err := row.TableRow.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}
 	}
 
 	if t.Grid != nil {
-		err := t.Grid.MarshalXML(e, start)
+		err := t.Grid.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}

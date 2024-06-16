@@ -54,8 +54,8 @@ func (c *CNvPicPr) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) er
 
 // Non-Visual Picture Properties
 type NonVisualPicProp struct {
-	CNvPr    *CNvPr
-	CNvPicPr *CNvPicPr
+	CNvPr    *CNvPr    `xml:"cNvPr,omitempty"`
+	CNvPicPr *CNvPicPr `xml:"cNvPicPr,omitempty"`
 }
 
 func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -79,35 +79,4 @@ func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) er
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (n *NonVisualPicProp) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "cNvPr":
-				cnvp := &CNvPr{}
-				if err := d.DecodeElement(cnvp, &elem); err != nil {
-					return err
-				}
-				n.CNvPr = cnvp
-			case "cNvPicPr":
-				cnvpp := &CNvPicPr{}
-				if err := d.DecodeElement(cnvpp, &elem); err != nil {
-					return err
-				}
-				n.CNvPicPr = cnvpp
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }

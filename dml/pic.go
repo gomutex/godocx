@@ -10,10 +10,9 @@ import (
 
 type Pic struct {
 	// ID string
-
-	NonVisualPicProp *NonVisualPicProp
-	BlipFill         *BlipFill
-	PicShapeProp     *PicShapeProp
+	NonVisualPicProp *NonVisualPicProp `xml:"nvPicPr,omitempty"`
+	BlipFill         *BlipFill         `xml:"blipFill,omitempty"`
+	PicShapeProp     *PicShapeProp     `xml:"spPr,omitempty"`
 }
 
 func NewPic(rID string, width units.Emu, height units.Emu) *Pic {
@@ -62,46 +61,9 @@ func (p *Pic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (p *Pic) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "nvPicPr":
-				nvp := &NonVisualPicProp{}
-				if err := d.DecodeElement(nvp, &elem); err != nil {
-					return err
-				}
-				p.NonVisualPicProp = nvp
-			case "blipFill":
-				blipFill := &BlipFill{}
-				if err := d.DecodeElement(blipFill, &elem); err != nil {
-					return err
-				}
-				p.BlipFill = blipFill
-			case "spPr":
-				psp := &PicShapeProp{}
-				if err := d.DecodeElement(psp, &elem); err != nil {
-					return err
-				}
-				p.PicShapeProp = psp
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type BlipFill struct {
-	Blip    *Blip
-	Stretch *Stretch
+	Blip    *Blip    `xml:"blip,omitempty"`
+	Stretch *Stretch `xml:"stretch,omitempty"`
 }
 
 // NewBlipFill creates a new BlipFill with the given relationship ID (rID)
@@ -137,41 +99,9 @@ func (b *BlipFill) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (b *BlipFill) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "blip":
-				blip := &Blip{}
-				if err := d.DecodeElement(blip, &elem); err != nil {
-					return err
-				}
-				b.Blip = blip
-			case "stretch":
-				stretch := &Stretch{}
-				if err := d.DecodeElement(stretch, &elem); err != nil {
-					return err
-				}
-				b.Stretch = stretch
-			}
-
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 // Binary large image or picture
 type Blip struct {
-	EmbedID string
+	EmbedID string `xml:"embed,attr,omitempty"`
 }
 
 func (b *Blip) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -189,33 +119,8 @@ func (b *Blip) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (b *Blip) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		if a.Name.Local == "embed" {
-			b.EmbedID = a.Value
-		}
-	}
-
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type Stretch struct {
-	FillRect *FillRect
+	FillRect *FillRect `xml:"fillRect,omitempty"`
 }
 
 func (s *Stretch) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -235,31 +140,6 @@ func (s *Stretch) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (s *Stretch) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "fillRect":
-				fr := &FillRect{}
-				if err := d.DecodeElement(fr, &elem); err != nil {
-					return err
-				}
-				s.FillRect = fr
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type FillRect struct{}
 
 func (f *FillRect) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -273,28 +153,9 @@ func (f *FillRect) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (f *FillRect) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type TransformGroup struct {
-	Extent *Extent
-	Offset *Offset
+	Extent *Extent `xml:"ext,omitempty"`
+	Offset *Offset `xml:"off,omitempty"`
 }
 
 type TFGroupOption func(*TransformGroup)
@@ -338,40 +199,9 @@ func (t *TransformGroup) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (t *TransformGroup) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "off":
-				off := &Offset{}
-				if err := d.DecodeElement(off, &elem); err != nil {
-					return err
-				}
-				t.Offset = off
-			case "ext":
-				ex := &Extent{}
-				if err := d.DecodeElement(ex, &elem); err != nil {
-					return err
-				}
-				t.Extent = ex
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type Offset struct {
-	X uint64
-	Y uint64
+	X uint64 `xml:"x,attr,omitempty"`
+	Y uint64 `xml:"y,attr,omitempty"`
 }
 
 func (o *Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -389,55 +219,17 @@ func (o *Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (o *Offset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		switch a.Name.Local {
-		case "x":
-			x, err := strconv.ParseUint(a.Value, 10, 32)
-			if err != nil {
-				return nil
-			}
-			o.X = x
-		case "y":
-			y, err := strconv.ParseUint(a.Value, 10, 32)
-			if err != nil {
-				return nil
-			}
-			o.Y = y
-		}
-	}
-
-	for {
-		token, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := token.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			default:
-				if err = d.Skip(); err != nil {
-					return err
-				}
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 type PresetGeometry struct {
-	Preset       string
-	AdjustValues *AdjustValues
+	Preset       *string       `xml:"prst,attr,omitempty"`
+	AdjustValues *AdjustValues `xml:"avLst,omitempty"`
 }
 
 func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:prstGeom"
-	start.Attr = []xml.Attr{
-		{Name: xml.Name{Local: "prst"}, Value: p.Preset},
+	start.Attr = []xml.Attr{}
+
+	if p.Preset != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "prst"}, Value: *p.Preset})
 	}
 
 	err := e.EncodeToken(start)
@@ -452,39 +244,4 @@ func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) erro
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (p *PresetGeometry) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		if a.Name.Local == "prst" {
-			p.Preset = a.Value
-		}
-	}
-
-	for {
-		token, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := token.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "avLst":
-				avList := &AdjustValues{}
-				if err = d.DecodeElement(avList, &elem); err != nil {
-					return err
-				}
-				p.AdjustValues = avList
-			default:
-				if err = d.Skip(); err != nil {
-					return err
-				}
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }

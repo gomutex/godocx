@@ -7,7 +7,7 @@ import (
 )
 
 type Graphic struct {
-	Data *GraphicData
+	Data *GraphicData `xml:"graphicData,omitempty"`
 }
 
 func NewGraphic(data *GraphicData) *Graphic {
@@ -19,8 +19,8 @@ func DefaultGraphic() *Graphic {
 }
 
 type GraphicData struct {
-	URI string
-	Pic *Pic
+	URI string `xml:"uri,attr,omitempty"`
+	Pic *Pic   `xml:"pic,omitempty"`
 }
 
 func NewPicGraphic(pic *Pic) *Graphic {
@@ -44,37 +44,12 @@ func (g *Graphic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	if g.Data != nil {
-		if err = g.Data.MarshalXML(e, start); err != nil {
+		if err = g.Data.MarshalXML(e, xml.StartElement{}); err != nil {
 			return err
 		}
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (g *Graphic) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-	for {
-		token, err := decoder.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := token.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "graphicData":
-				gd := &GraphicData{}
-				if err := decoder.DecodeElement(gd, &elem); err != nil {
-					return err
-				}
-				g.Data = gd
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }
 
 func (gd *GraphicData) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -95,36 +70,4 @@ func (gd *GraphicData) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (gd *GraphicData) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		if a.Name.Local == "uri" {
-			gd.URI = a.Value
-			break
-		}
-	}
-
-	for {
-		token, err := decoder.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := token.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "pic":
-				pic := &Pic{}
-				if err := decoder.DecodeElement(pic, &elem); err != nil {
-					return err
-				}
-				gd.Pic = pic
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }

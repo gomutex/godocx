@@ -14,9 +14,11 @@ const (
 )
 
 type Drawing struct {
-	Inline []*Inline
-	Anchor []*Anchor
+	Inline []*Inline `xml:"inline,omitempty"`
+	Anchor []*Anchor `xml:"anchor,omitempty"`
 }
+
+type WrapNone struct{} // Just empty tag
 
 func (dr *Drawing) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 loop:
@@ -65,19 +67,13 @@ func (dr *Drawing) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	for _, data := range dr.Anchor {
-		// if err = data.MarshalXML(e, start); err != nil {
-		// 	return err
-		// }
-		if err = e.EncodeElement(data, start); err != nil {
+		if err = data.MarshalXML(e, xml.StartElement{}); err != nil {
 			return err
 		}
 	}
 
 	for _, data := range dr.Inline {
-		// if err = data.MarshalXML(e, start); err != nil {
-		// 	return err
-		// }
-		if err = e.EncodeElement(data, start); err != nil {
+		if err = data.MarshalXML(e, xml.StartElement{}); err != nil {
 			return err
 		}
 	}

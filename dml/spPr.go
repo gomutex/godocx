@@ -17,9 +17,9 @@ const (
 )
 
 type PicShapeProp struct {
-	bwMode         *string
-	TransformGroup *TransformGroup
-	PresetGeometry *PresetGeometry
+	BwMode         *string         `xml:"bwMode,attr,omitempty"`
+	TransformGroup *TransformGroup `xml:"xfrm,omitempty"`
+	PresetGeometry *PresetGeometry `xml:"prstGeom,omitempty"`
 }
 
 type PicShapePropOption func(*PicShapeProp)
@@ -43,8 +43,8 @@ func NewPicShapeProp(options ...PicShapePropOption) *PicShapeProp {
 func (p *PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:spPr"
 
-	if p.bwMode != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "bwMode"}, Value: *p.bwMode})
+	if p.BwMode != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "bwMode"}, Value: *p.BwMode})
 	}
 
 	err := e.EncodeToken(start)
@@ -65,43 +65,4 @@ func (p *PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (p *PicShapeProp) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-
-	for _, a := range start.Attr {
-		switch a.Name.Local {
-		case "bwMode":
-			p.bwMode = &a.Value
-		}
-	}
-
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "xfrm":
-				tfg := &TransformGroup{}
-				if err := d.DecodeElement(tfg, &elem); err != nil {
-					return err
-				}
-				p.TransformGroup = tfg
-			case "prstGeom":
-				pg := &PresetGeometry{}
-				if err := d.DecodeElement(pg, &elem); err != nil {
-					return err
-				}
-				p.PresetGeometry = pg
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }
