@@ -5,8 +5,8 @@ import (
 )
 
 type ShapeGuide struct {
-	Name    string
-	Formula string
+	Name    string `xml:"name,attr,omitempty"`
+	Formula string `xml:"fmla,attr,omitempty"`
 }
 
 func (s *ShapeGuide) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -24,22 +24,9 @@ func (s *ShapeGuide) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (s *ShapeGuide) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		switch a.Name.Local {
-		case "name":
-			s.Name = a.Value
-		case "fmla":
-			s.Formula = a.Value
-		}
-	}
-
-	return nil
-}
-
 // List of Shape Adjust Values
 type AdjustValues struct {
-	ShapeGuides []ShapeGuide
+	ShapeGuides []ShapeGuide `xml:"gd,omitempty"`
 }
 
 func (a *AdjustValues) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
@@ -51,7 +38,7 @@ func (a *AdjustValues) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 	}
 
 	for _, data := range a.ShapeGuides {
-		err := data.MarshalXML(e, start)
+		err := data.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}
@@ -60,34 +47,34 @@ func (a *AdjustValues) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (a *AdjustValues) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
-loop:
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
+// func (a *AdjustValues) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+// loop:
+// 	for {
+// 		currentToken, err := d.Token()
+// 		if err != nil {
+// 			return err
+// 		}
 
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "t":
-				gd := ShapeGuide{}
-				if err = d.DecodeElement(&gd, &elem); err != nil {
-					return err
-				}
+// 		switch elem := currentToken.(type) {
+// 		case xml.StartElement:
+// 			switch elem.Name.Local {
+// 			case "gd":
+// 				gd := ShapeGuide{}
+// 				if err = d.DecodeElement(&gd, &elem); err != nil {
+// 					return err
+// 				}
 
-				a.ShapeGuides = append(a.ShapeGuides, gd)
+// 				a.ShapeGuides = append(a.ShapeGuides, gd)
 
-			default:
-				if err = d.Skip(); err != nil {
-					return err
-				}
-			}
-		case xml.EndElement:
-			break loop
-		}
-	}
+// 			default:
+// 				if err = d.Skip(); err != nil {
+// 					return err
+// 				}
+// 			}
+// 		case xml.EndElement:
+// 			break loop
+// 		}
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

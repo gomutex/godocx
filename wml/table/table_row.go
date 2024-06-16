@@ -36,7 +36,7 @@ func (tr *TableRow) MarshalXML(e *xml.Encoder, start xml.StartElement) (err erro
 	}
 
 	for _, cell := range tr.Cells {
-		if err = cell.MarshalXML(e, start); err != nil {
+		if err = cell.MarshalXML(e, xml.StartElement{}); err != nil {
 			return err
 		}
 	}

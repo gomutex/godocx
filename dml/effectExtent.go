@@ -6,11 +6,10 @@ import (
 )
 
 type EffectExtent struct {
-	XMLName    string
-	LeftEdge   int64 `xml:"l"`
-	TopEdge    int64 `xml:"t"`
-	RightEdge  int64 `xml:"r"`
-	BottomEdge int64 `xml:"b"`
+	LeftEdge   int64 `xml:"l,attr,omitempty"`
+	TopEdge    int64 `xml:"t,attr,omitempty"`
+	RightEdge  int64 `xml:"r,attr,omitempty"`
+	BottomEdge int64 `xml:"b,attr,omitempty"`
 }
 
 func NewEffectExtent(left, top, right, bottom int64) *EffectExtent {
@@ -23,6 +22,7 @@ func NewEffectExtent(left, top, right, bottom int64) *EffectExtent {
 }
 
 func (x *EffectExtent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Name.Local = "wp:effectExtent"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "l"}, Value: strconv.FormatInt(x.LeftEdge, 10)},
 		{Name: xml.Name{Local: "t"}, Value: strconv.FormatInt(x.TopEdge, 10)},

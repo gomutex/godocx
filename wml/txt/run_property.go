@@ -88,7 +88,7 @@ func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 
 	if rp.Bold != nil {
 		// err = e.EncodeElement(rp.Bold, xml.StartElement{Name: xml.Name{Local: "w:b"}})
-		err = rp.Bold.MarshalXML(e, start)
+		err = rp.Bold.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}

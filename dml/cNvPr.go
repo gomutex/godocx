@@ -1,12 +1,14 @@
 package dml
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 // Non-Visual Drawing Properties
 type CNvPr struct {
-	ID          string
-	Name        string
-	Description string
+	ID          string `xml:"id,attr,omitempty"`
+	Name        string `xml:"name,attr,omitempty"`
+	Description string `xml:"descr,attr,omitempty"`
 }
 
 func (c *CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -26,34 +28,4 @@ func (c *CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (c *CNvPr) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		switch a.Name.Local {
-		case "descr":
-			c.Description = a.Value
-		case "name":
-			c.Name = a.Value
-		case "id":
-			c.ID = a.Value
-		}
-	}
-
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }

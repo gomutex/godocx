@@ -1,5 +1,10 @@
 package types
 
+import (
+	"encoding/xml"
+	"strconv"
+)
+
 //
 // Based on https://pkg.go.dev/database/sql#NullBool
 
@@ -62,4 +67,16 @@ func (n NullBool) ToStringFlag() string {
 		return "1"
 	}
 	return "0"
+}
+
+func (n *NullBool) UnmarshalXMLAttr(attr xml.Attr) error {
+	val, err := strconv.ParseBool(attr.Value)
+	if err != nil {
+		return err
+	}
+
+	n.Bool = val
+	n.Valid = true
+	return nil
+
 }

@@ -10,13 +10,13 @@ type PositionType struct {
 }
 
 type PoistionH struct {
-	RelativeFrom RelativeFromHType
-	PosOffset    int `xml:"posOffset"`
+	RelativeFrom RelativeFromHType `xml:"relativeFrom,attr"`
+	PosOffset    int               `xml:"posOffset"`
 }
 
 type PoistionV struct {
-	RelativeFrom RelativeFromVType
-	PosOffset    int `xml:"posOffset"`
+	RelativeFrom RelativeFromVType `xml:"relativeFrom,attr"`
+	PosOffset    int               `xml:"posOffset"`
 }
 
 func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -37,42 +37,6 @@ func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (p *PoistionH) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		if a.Name.Local == "relativeFrom" {
-			p.RelativeFrom = RelativeFromHType(a.Value)
-			break
-		}
-	}
-
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			{
-				switch elem.Name.Local {
-				case "posOffset":
-					if err = d.DecodeElement(&p.PosOffset, &elem); err != nil {
-						return err
-					}
-				default:
-					if err = d.Skip(); err != nil {
-						return err
-					}
-				}
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
-}
-
 func (p *PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:positionV"
 
@@ -89,40 +53,4 @@ func (p *PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (p *PoistionV) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		if a.Name.Local == "relativeFrom" {
-			p.RelativeFrom = RelativeFromVType(a.Value)
-			break
-		}
-	}
-
-	for {
-		currentToken, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := currentToken.(type) {
-		case xml.StartElement:
-			{
-				switch elem.Name.Local {
-				case "posOffset":
-					if err = d.DecodeElement(&p.PosOffset, &elem); err != nil {
-						return err
-					}
-				default:
-					if err = d.Skip(); err != nil {
-						return err
-					}
-				}
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }

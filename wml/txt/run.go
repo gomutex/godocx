@@ -122,7 +122,7 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
 	for _, data := range r.Children {
 		if data.Text != nil {
-			err = data.Text.MarshalXML(e, start)
+			err = data.Text.MarshalXML(e, xml.StartElement{})
 			if err != nil {
 				return err
 			}
@@ -136,21 +136,21 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 		}
 
 		if data.Drawing != nil {
-			err := data.Drawing.MarshalXML(e, start)
+			err := data.Drawing.MarshalXML(e, xml.StartElement{})
 			if err != nil {
 				return err
 			}
 		}
 
 		if data.Tab != nil {
-			err := data.Tab.MarshalXML(e, start)
+			err := data.Tab.MarshalXML(e, xml.StartElement{})
 			if err != nil {
 				return err
 			}
 		}
 
 		if data.Break != nil {
-			err := data.Break.MarshalXML(e, start)
+			err := data.Break.MarshalXML(e, xml.StartElement{})
 			if err != nil {
 				return err
 			}
