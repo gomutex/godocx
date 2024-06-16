@@ -2,34 +2,17 @@ package sections
 
 import (
 	"encoding/xml"
-	"errors"
 	"strconv"
+
+	"github.com/gomutex/godocx/wml/simpletypes"
 )
 
 // Page Size : w:pgSz
 type PageSize struct {
-	Width  *uint64      // w:w
-	Height *uint64      // w:h
-	Orient *Orientation //Page Orientation
-	Code   *int         //Printer Paper Code : w:code
-}
-
-type Orientation string
-
-const (
-	OrientPortrait  Orientation = "portrait"
-	OrientLandscape Orientation = "landscape"
-)
-
-func OrientFromStr(value string) (Orientation, error) {
-	switch value {
-	case "portrait":
-		return OrientPortrait, nil
-	case "landscape":
-		return OrientLandscape, nil
-	default:
-		return "", errors.New("Invalid Orient Input")
-	}
+	Width  *uint64                `xml:"w,attr,omitempty"`
+	Height *uint64                `xml:"h,attr,omitempty"`
+	Orient simpletypes.PageOrient `xml:"orient,attr,omitempty"`
+	Code   *int                   `xml:"code,attr,omitempty"`
 }
 
 func (p *PageSize) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -43,8 +26,8 @@ func (p *PageSize) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:h"}, Value: strconv.FormatUint(*p.Height, 10)})
 	}
 
-	if p.Orient != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:orient"}, Value: string(*p.Orient)})
+	if p.Orient != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:orient"}, Value: string(p.Orient)})
 	}
 
 	if p.Code != nil {
@@ -57,58 +40,4 @@ func (p *PageSize) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-func (p *PageSize) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	for _, a := range start.Attr {
-		switch a.Name.Local {
-		case "w":
-			width, err := strconv.ParseUint(a.Value, 10, 64)
-			if err != nil {
-				return nil
-			}
-			p.Width = &width
-		case "h":
-			height, err := strconv.ParseUint(a.Value, 10, 64)
-			if err != nil {
-				return nil
-			}
-			p.Height = &height
-		case "orient":
-			orient, err := OrientFromStr(a.Value)
-			if err != nil {
-				return nil
-			}
-			p.Orient = &orient
-		case "code":
-			c, err := strconv.Atoi(a.Value)
-			if err != nil {
-				return nil
-			}
-			code := int(c)
-			p.Code = &code
-		}
-
-	}
-
-	for {
-		token, err := d.Token()
-		if err != nil {
-			return err
-		}
-
-		switch elem := token.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			default:
-				if err = d.Skip(); err != nil {
-					return err
-				}
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
-	}
 }

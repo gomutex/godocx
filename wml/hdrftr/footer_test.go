@@ -8,43 +8,44 @@ import (
 	"github.com/gomutex/godocx/wml/simpletypes"
 )
 
-func TestHeaderReference_MarshalXML(t *testing.T) {
+func TestFooterReference_MarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    HeaderReference
+		input    FooterReference
 		expected string
 	}{
 		{
 			name: "Marshal with ID and Type",
-			input: HeaderReference{
+			input: FooterReference{
 				ID:   "rId1",
 				Type: simpletypes.HdrFtrFirst,
 			},
-			expected: `<w:headerReference w:type="first" r:id="rId1"></w:headerReference>`,
+			expected: `<w:footerReference w:type="first" r:id="rId1"></w:footerReference>`,
 		},
 		{
 			name: "Marshal with Type only",
-			input: HeaderReference{
+			input: FooterReference{
 				Type: simpletypes.HdrFtrEven,
 			},
-			expected: `<w:headerReference w:type="even"></w:headerReference>`,
+			expected: `<w:footerReference w:type="even"></w:footerReference>`,
 		},
 		{
 			name: "Marshal with ID only",
-			input: HeaderReference{
+			input: FooterReference{
 				ID: "rId2",
 			},
-			expected: `<w:headerReference r:id="rId2"></w:headerReference>`,
+			expected: `<w:footerReference r:id="rId2"></w:footerReference>`,
 		},
 		{
 			name:     "Marshal with neither ID nor Type",
-			input:    HeaderReference{},
-			expected: `<w:headerReference></w:headerReference>`,
+			input:    FooterReference{},
+			expected: `<w:footerReference></w:footerReference>`,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+
 			var result strings.Builder
 			encoder := xml.NewEncoder(&result)
 			start := xml.StartElement{Name: xml.Name{Local: "w:titlePg"}}
@@ -61,44 +62,44 @@ func TestHeaderReference_MarshalXML(t *testing.T) {
 	}
 }
 
-func TestHeaderReference_UnmarshalXML(t *testing.T) {
+func TestFooterReference_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
 		inputXML string
-		expected HeaderReference
+		expected FooterReference
 	}{
 		{
 			name:     "Unmarshal with ID and Type",
-			inputXML: `<w:headerReference w:type="first" r:id="rId1"></w:headerReference>`,
-			expected: HeaderReference{
+			inputXML: `<w:footerReference w:type="first" r:id="rId1"></w:footerReference>`,
+			expected: FooterReference{
 				ID:   "rId1",
 				Type: simpletypes.HdrFtrFirst,
 			},
 		},
 		{
 			name:     "Unmarshal with Type only",
-			inputXML: `<w:headerReference w:type="even"></w:headerReference>`,
-			expected: HeaderReference{
+			inputXML: `<w:footerReference w:type="even"></w:footerReference>`,
+			expected: FooterReference{
 				Type: simpletypes.HdrFtrEven,
 			},
 		},
 		{
 			name:     "Unmarshal with ID only",
-			inputXML: `<w:headerReference r:id="rId2"></w:headerReference>`,
-			expected: HeaderReference{
+			inputXML: `<w:footerReference r:id="rId2"></w:footerReference>`,
+			expected: FooterReference{
 				ID: "rId2",
 			},
 		},
 		{
 			name:     "Unmarshal with neither ID nor Type",
-			inputXML: `<w:headerReference></w:headerReference>`,
-			expected: HeaderReference{},
+			inputXML: `<w:footerReference></w:footerReference>`,
+			expected: FooterReference{},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var result HeaderReference
+			var result FooterReference
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &result)
 			if err != nil {
