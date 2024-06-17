@@ -4,11 +4,11 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/common/constants"
-	"github.com/gomutex/godocx/wml/formatting"
+	"github.com/gomutex/godocx/wml/docxrun"
 )
 
 type TableCellProperty struct {
-	Shading *formatting.Shading
+	Shading *docxrun.Shading
 }
 
 func (t *TableCellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
@@ -39,7 +39,7 @@ func (t *TableCellProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement)
 		case xml.StartElement:
 			switch elem.Name {
 			case xml.Name{Space: constants.WMLNamespace, Local: "shd"}, xml.Name{Space: constants.AltWMLNamespace, Local: "shd"}:
-				shd := formatting.Shading{}
+				shd := docxrun.Shading{}
 				if err = d.DecodeElement(&shd, &elem); err != nil {
 					return err
 				}

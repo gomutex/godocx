@@ -36,7 +36,7 @@ func TestMarshalInline(t *testing.T) {
 				},
 				CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 					GraphicFrameLocks: &GraphicFrameLocks{
-						NoChangeAspect: types.NewNullBool(true),
+						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
 				Graphic: DefaultGraphic(),
@@ -88,7 +88,7 @@ func TestUnmarshalInline(t *testing.T) {
 				},
 				CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 					GraphicFrameLocks: &GraphicFrameLocks{
-						NoChangeAspect: types.NewNullBool(true),
+						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
 				Graphic: DefaultGraphic(),

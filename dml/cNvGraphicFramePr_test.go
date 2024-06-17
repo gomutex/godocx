@@ -16,7 +16,7 @@ func TestMarshalNonVisualGraphicFrameProp(t *testing.T) {
 		{
 			prop: &NonVisualGraphicFrameProp{
 				GraphicFrameLocks: &GraphicFrameLocks{
-					NoChangeAspect: types.NewNullBool(true),
+					NoChangeAspect: types.NewOptBool(true),
 				},
 			},
 			expectedXML: `<wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr>`,
@@ -50,7 +50,7 @@ func TestUnmarshalNonVisualGraphicFrameProp(t *testing.T) {
 			inputXML: `<wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr>`,
 			expected: NonVisualGraphicFrameProp{
 				GraphicFrameLocks: &GraphicFrameLocks{
-					NoChangeAspect: types.NewNullBool(true),
+					NoChangeAspect: types.NewOptBool(true),
 				},
 			},
 		},

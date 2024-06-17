@@ -8,11 +8,11 @@ import (
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/internal"
-	"github.com/gomutex/godocx/wml/txt"
+	"github.com/gomutex/godocx/wml/docxpara"
 )
 
 type PicMeta struct {
-	Para   *txt.Paragraph
+	Para   *docxpara.Paragraph
 	Inline *dml.Inline
 }
 
@@ -44,7 +44,7 @@ func (rd *RootDoc) AddPicture(path string, width units.Inch, height units.Inch) 
 
 	rID := rd.Document.addRelation(constants.SourceRelationshipImage, relName)
 
-	p := txt.NewParagraph()
+	p := docxpara.NewParagraph()
 
 	bodyElem := DocumentChild{
 		Para: p,
