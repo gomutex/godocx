@@ -4,13 +4,12 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/common/constants"
-	"github.com/gomutex/godocx/internal/helpers"
 	"github.com/gomutex/godocx/types"
 )
 
 type GraphicFrameLocks struct {
 	//Disallow Aspect Ratio Change
-	NoChangeAspect types.NullBool
+	NoChangeAspect types.OptBool
 }
 
 func (g *GraphicFrameLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -35,9 +34,9 @@ func (g *GraphicFrameLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) e
 func (g *GraphicFrameLocks) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
 	for _, a := range start.Attr {
 		if a.Name.Local == "noChangeAspect" {
-			g.NoChangeAspect = types.NullBoolFromStr(a.Value)
+			g.NoChangeAspect = types.OptBoolFromStr(a.Value)
 		}
 	}
 
-	return helpers.SkipUntilEnd(decoder, start.End())
+	return decoder.Skip()
 }

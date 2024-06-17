@@ -4,8 +4,10 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/dml"
+	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/runcontent"
+	"github.com/gomutex/godocx/wml/simpletypes"
 )
 
 // A Run is part of a paragraph that has its own style. It could be
@@ -57,13 +59,13 @@ func (r *Run) Color(colorCode string) *Run {
 
 // Returns:
 //   - *Run: The modified Run instance with the updated size.
-func (r *Run) Size(size uint) *Run {
-	r.RunProperty.Size = NewSz(size * 2)
+func (r *Run) Size(size uint64) *Run {
+	r.RunProperty.Size = NewFontSize(size * 2)
 	return r
 }
 
-func (r *Run) Shading(shdType formatting.ShadingType, color, fill string) *Run {
-	r.RunProperty.Shading = formatting.NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
+func (r *Run) Shading(shdType simpletypes.Shading, color, fill string) *Run {
+	r.RunProperty.Shading = NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
 	return r
 }
 
@@ -75,17 +77,81 @@ func (r *Run) Highlight(color string) *Run {
 
 // AddBold enables bold formatting for the run.
 func (r *Run) Bold(value bool) *Run {
-	r.RunProperty.Bold = formatting.NewBold(value)
+	r.RunProperty.Bold = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Italic(value bool) *Run {
-	r.RunProperty.Italic = formatting.NewItalic(value)
+	r.RunProperty.Italic = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
+// Specifies that the contents of this run shall be displayed with a single horizontal line through the center of the line.
 func (r *Run) Strike(value bool) *Run {
-	r.RunProperty.Strike = formatting.NewStrike(value)
+	r.RunProperty.Strike = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+// Specifies that the contents of this run shall be displayed with two horizontal lines through each character displayed on the line
+func (r *Run) DoubleStrike(value bool) *Run {
+	r.RunProperty.DoubleStrike = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+// Display All Characters As Capital Letters
+//
+// Any lowercase characters in this text run shall be formatted for display only as their capital letter character equivalents
+func (r *Run) Caps(value bool) *Run {
+	r.RunProperty.Caps = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+// Specifies that all small letter characters in this text run shall be formatted for display only as their capital letter character equivalents
+func (r *Run) SmallCaps(value bool) *Run {
+	r.RunProperty.Caps = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+func (r *Run) Outline(value bool) *Run {
+	r.RunProperty.Outline = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+func (r *Run) Shadow(value bool) *Run {
+	r.RunProperty.Shadow = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+func (r *Run) Emboss(value bool) *Run {
+	r.RunProperty.Emboss = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+func (r *Run) Imprint(value bool) *Run {
+	r.RunProperty.Imprint = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+// Do Not Check Spelling or Grammar
+func (r *Run) NoGrammer(value bool) *Run {
+	r.RunProperty.NoGrammar = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+// Use Document Grid Settings For Inter-Character Spacing
+func (r *Run) SnapToGrid(value bool) *Run {
+	r.RunProperty.SnapToGrid = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+// Hidden Text
+func (r *Run) HideText(value bool) *Run {
+	r.RunProperty.Vanish = elemtypes.NewOptBoolElem(value)
+	return r
+}
+
+func (r *Run) Spacing(value int) *Run {
+	r.RunProperty.Spacing = elemtypes.NewSingleIntVal(value)
 	return r
 }
 
@@ -118,13 +184,6 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 		if data.Text != nil {
 			err = data.Text.MarshalXML(e, xml.StartElement{})
 			if err != nil {
-				return err
-			}
-		}
-
-		if data.InstrText != nil {
-			cElem := xml.StartElement{Name: xml.Name{Local: "w:instrText"}}
-			if err = e.EncodeElement(data.InstrText, cElem); err != nil {
 				return err
 			}
 		}

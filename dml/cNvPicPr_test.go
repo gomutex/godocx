@@ -22,7 +22,7 @@ func TestMarshalNonVisualPicProp(t *testing.T) {
 				},
 				CNvPicPr: &CNvPicPr{
 					PicLocks: &PicLocks{
-						NoChangeAspect: types.NewNullBool(true),
+						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
 			},
@@ -70,7 +70,7 @@ func TestUnmarshalNonVisualPicProp(t *testing.T) {
 				},
 				CNvPicPr: &CNvPicPr{
 					PicLocks: &PicLocks{
-						NoChangeAspect: types.NewNullBool(true),
+						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
 			},

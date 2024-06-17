@@ -19,8 +19,8 @@ func TestPicMarshalXML(t *testing.T) {
 			},
 			CNvPicPr: &CNvPicPr{
 				PicLocks: &PicLocks{
-					NoChangeAspect:     types.NewNullBool(true),
-					NoChangeArrowheads: types.NewNullBool(true),
+					NoChangeAspect:     types.NewOptBool(true),
+					NoChangeArrowheads: types.NewOptBool(true),
 				},
 			},
 		},

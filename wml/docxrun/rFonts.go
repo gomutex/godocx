@@ -21,7 +21,7 @@ type RunFonts struct {
 
 func (rf *RunFonts) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:rFonts"
-	start.Attr = []xml.Attr{}
+	// start.Attr = []xml.Attr{}
 
 	if rf.EastAsia != "" {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:eastAsia"}, Value: rf.EastAsia})

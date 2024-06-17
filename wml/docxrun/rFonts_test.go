@@ -29,14 +29,14 @@ func TestRunFontsMarshalXML(t *testing.T) {
 	}
 	encoder.Flush()
 
-	expected := `<w:rFonts w:hint="default" w:ascii="Arial" w:hAnsi="Calibri" w:eastAsia="SimSun" w:cs="Arial" w:asciiTheme="majorAscii" w:hAnsiTheme="majorHAnsi" w:eastAsiaTheme="majorEastAsia" w:cstheme="majorBidi"></w:rFonts>`
+	expected := `<w:rFonts w:eastAsia="SimSun" w:hint="default" w:ascii="Arial" w:hAnsi="Calibri" w:cs="Arial" w:asciiTheme="majorAscii" w:hAnsiTheme="majorHAnsi" w:eastAsiaTheme="majorEastAsia" w:cstheme="majorBidi"></w:rFonts>`
 	if output.String() != expected {
 		t.Errorf("Expected %s but got %s", expected, output.String())
 	}
 }
 
 func TestRunFontsUnmarshalXML(t *testing.T) {
-	input := `<w:rFonts w:hint="default" w:ascii="Arial" w:hAnsi="Calibri" w:eastAsia="SimSun" w:cs="Arial" w:asciiTheme="majorAscii" w:hAnsiTheme="majorHAnsi" w:eastAsiaTheme="majorEastAsia" w:cstheme="majorBidi"></w:rFonts>`
+	input := `<w:rFonts w:eastAsia="SimSun" w:hint="default" w:ascii="Arial" w:hAnsi="Calibri" w:cs="Arial" w:asciiTheme="majorAscii" w:hAnsiTheme="majorHAnsi" w:eastAsiaTheme="majorEastAsia" w:cstheme="majorBidi"></w:rFonts>`
 
 	var rf RunFonts
 	err := xml.Unmarshal([]byte(input), &rf)

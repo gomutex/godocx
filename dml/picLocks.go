@@ -7,17 +7,17 @@ import (
 )
 
 type PicLocks struct {
-	DisallowShadowGrouping types.NullBool `xml:"noGrp,attr,omitempty"`
-	NoSelect               types.NullBool `xml:"noSelect,attr,omitempty"`
-	NoRot                  types.NullBool `xml:"noRot,attr,omitempty"`
-	NoChangeAspect         types.NullBool `xml:"noChangeAspect,attr,omitempty"`
-	NoMove                 types.NullBool `xml:"noMove,attr,omitempty"`
-	NoResize               types.NullBool `xml:"noResize,attr,omitempty"`
-	NoEditPoints           types.NullBool `xml:"noEditPoints,attr,omitempty"`
-	NoAdjustHandles        types.NullBool `xml:"noAdjustHandles,attr,omitempty"`
-	NoChangeArrowheads     types.NullBool `xml:"noChangeArrowheads,attr,omitempty"`
-	NoChangeShapeType      types.NullBool `xml:"noChangeShapeType,attr,omitempty"`
-	NoCrop                 types.NullBool `xml:"noCrop,attr,omitempty"`
+	DisallowShadowGrouping types.OptBool `xml:"noGrp,attr,omitempty"`
+	NoSelect               types.OptBool `xml:"noSelect,attr,omitempty"`
+	NoRot                  types.OptBool `xml:"noRot,attr,omitempty"`
+	NoChangeAspect         types.OptBool `xml:"noChangeAspect,attr,omitempty"`
+	NoMove                 types.OptBool `xml:"noMove,attr,omitempty"`
+	NoResize               types.OptBool `xml:"noResize,attr,omitempty"`
+	NoEditPoints           types.OptBool `xml:"noEditPoints,attr,omitempty"`
+	NoAdjustHandles        types.OptBool `xml:"noAdjustHandles,attr,omitempty"`
+	NoChangeArrowheads     types.OptBool `xml:"noChangeArrowheads,attr,omitempty"`
+	NoChangeShapeType      types.OptBool `xml:"noChangeShapeType,attr,omitempty"`
+	NoCrop                 types.OptBool `xml:"noCrop,attr,omitempty"`
 }
 
 func (p *PicLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

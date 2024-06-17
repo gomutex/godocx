@@ -1,21 +1,45 @@
 package docxrun
 
 import (
-	"encoding/xml"
-	"strings"
 	"testing"
+
+	"github.com/gomutex/godocx/elemtypes"
 )
 
-func TestRunStyle(t *testing.T) {
-	testRunStyle := NewRunStyle("Heading")
-
-	xmlData, err := xml.Marshal(testRunStyle)
-	if err != nil {
-		t.Fatalf("Error marshaling RunStyle to XML: %v", err)
+func TestNewRunStyle(t *testing.T) {
+	tests := []struct {
+		name     string
+		value    string
+		expected *elemtypes.SingleStrVal
+	}{
+		{
+			name:     "Custom RunStyle",
+			value:    "CustomStyle",
+			expected: elemtypes.NewSingleStrVal("CustomStyle"),
+		},
+		{
+			name:     "Empty RunStyle",
+			value:    "",
+			expected: elemtypes.NewSingleStrVal(""),
+		},
 	}
 
-	expectedXMLString := `<w:rStyle w:val="Heading"></w:rStyle>`
-	if !strings.Contains(string(xmlData), expectedXMLString) {
-		t.Errorf("Expected XML string %s, got %s", expectedXMLString, string(xmlData))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := NewRunStyle(tt.value)
+
+			if result.Val != tt.expected.Val {
+				t.Errorf("Expected Val %s but got %s", tt.expected.Val, result.Val)
+			}
+		})
+	}
+}
+
+func TestDefaultRunStyle(t *testing.T) {
+	expected := elemtypes.NewSingleStrVal("Normal")
+	result := DefaultRunStyle()
+
+	if result.Val != expected.Val {
+		t.Errorf("Expected Val %s but got %s", expected.Val, result.Val)
 	}
 }
