@@ -89,7 +89,7 @@ type ParagraphProperty struct {
 	//Indent Indent
 }
 
-type OnOffElems struct {
+type onOffElems struct {
 	elem    *elemtypes.OptOnOffElem
 	XMLName string
 }
@@ -102,151 +102,44 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 		return err
 	}
 
-	// onOffElems := []OnOffElems{
-	// 	{pp.KeepNext, "w:keepNext"},
-	// }
+	ooElems := []onOffElems{
+		{pp.KeepNext, "w:keepNext"},
+		{pp.KeepLines, "w:keepLines"},
+		{pp.KeepLines, "w:keepLines"},
+		{pp.PageBreakBefore, "w:pageBreakBefore"},
+		{pp.WindowControl, "w:widowControl"},
+		{pp.SuppressLineNmbrs, "w:suppressLineNumbers"},
+		{pp.SuppressAutoHyphens, "w:suppressAutoHyphens"},
+		{pp.Kinsoku, "w:kinsoku"},
+		{pp.OverflowPunct, "w:overflowPunct"},
+		{pp.TopLinePunct, "w:topLinePunct"},
+		{pp.AutoSpaceDE, "w:autoSpaceDE"},
+		{pp.AutoSpaceDE, "w:autoSpaceDE"},
+		{pp.AutoSpaceDN, "w:autoSpaceDN"},
+		{pp.Bidi, "w:bidi"},
+		{pp.AdjustRightInd, "w:adjustRightInd"},
+		{pp.SnapToGrid, "w:snapToGrid"},
+		{pp.CtxlSpacing, "w:contextualSpacing"},
+		{pp.MirrorIndents, "w:mirrorIndents"},
+		{pp.WordWrap, "w:wordWrap"},
+	}
+
+	for _, entry := range ooElems {
+		if entry.elem == nil {
+			continue
+		}
+		if err = entry.elem.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: entry.XMLName},
+		}); err != nil {
+			return fmt.Errorf("error in marshaling paragraph property `%s`: %w", entry.XMLName, err)
+		}
+	}
 
 	if pp.Style != nil {
 		if err = pp.Style.MarshalXML(e, xml.StartElement{
 			Name: xml.Name{Local: "w:pStyle"},
 		}); err != nil {
 			return fmt.Errorf("style: %w", err)
-		}
-	}
-
-	if pp.KeepLines != nil {
-		if err = pp.KeepLines.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:keepLines"},
-		}); err != nil {
-			return fmt.Errorf("keepLines: %w", err)
-		}
-	}
-
-	if pp.KeepNext != nil {
-		if err = pp.KeepNext.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:keepNext"},
-		}); err != nil {
-			return fmt.Errorf("keep next: %w", err)
-		}
-	}
-
-	if pp.PageBreakBefore != nil {
-		if err = pp.PageBreakBefore.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:pageBreakBefore"},
-		}); err != nil {
-			return fmt.Errorf("pageBreakBefore: %w", err)
-		}
-	}
-
-	if pp.WindowControl != nil {
-		if err = pp.WindowControl.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:widowControl"},
-		}); err != nil {
-			return fmt.Errorf("widowControl: %w", err)
-		}
-	}
-
-	if pp.SuppressLineNmbrs != nil {
-		if err = pp.SuppressLineNmbrs.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:suppressLineNumbers"},
-		}); err != nil {
-			return fmt.Errorf("suppressLineNumbers: %w", err)
-		}
-	}
-
-	if pp.SuppressAutoHyphens != nil {
-		if err = pp.SuppressAutoHyphens.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:suppressAutoHyphens"},
-		}); err != nil {
-			return fmt.Errorf("suppressAutoHyphens: %w", err)
-		}
-	}
-
-	if pp.Kinsoku != nil {
-		if err = pp.Kinsoku.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:kinsoku"},
-		}); err != nil {
-			return fmt.Errorf("kinsoku: %w", err)
-		}
-	}
-
-	if pp.OverflowPunct != nil {
-		if err = pp.OverflowPunct.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:overflowPunct"},
-		}); err != nil {
-			return fmt.Errorf("overflowPunct: %w", err)
-		}
-	}
-
-	if pp.TopLinePunct != nil {
-		if err = pp.TopLinePunct.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:topLinePunct"},
-		}); err != nil {
-			return fmt.Errorf("topLinePunct: %w", err)
-		}
-	}
-
-	if pp.AutoSpaceDE != nil {
-		if err = pp.AutoSpaceDE.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:autoSpaceDE"},
-		}); err != nil {
-			return fmt.Errorf("autoSpaceDE: %w", err)
-		}
-	}
-
-	if pp.AutoSpaceDN != nil {
-		if err = pp.AutoSpaceDN.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:autoSpaceDN"},
-		}); err != nil {
-			return fmt.Errorf("autoSpaceDN: %w", err)
-		}
-	}
-
-	if pp.Bidi != nil {
-		if err = pp.Bidi.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:bidi"},
-		}); err != nil {
-			return fmt.Errorf("bidi: %w", err)
-		}
-	}
-
-	if pp.AdjustRightInd != nil {
-		if err = pp.AdjustRightInd.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:adjustRightInd"},
-		}); err != nil {
-			return fmt.Errorf("adjustRightInd: %w", err)
-		}
-	}
-
-	if pp.SnapToGrid != nil {
-		if err = pp.SnapToGrid.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:snapToGrid"},
-		}); err != nil {
-			return fmt.Errorf("snapToGrid: %w", err)
-		}
-	}
-
-	if pp.CtxlSpacing != nil {
-		if err = pp.CtxlSpacing.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:contextualSpacing"},
-		}); err != nil {
-			return fmt.Errorf("contextualSpacing: %w", err)
-		}
-	}
-
-	if pp.MirrorIndents != nil {
-		if err = pp.MirrorIndents.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:mirrorIndents"},
-		}); err != nil {
-			return fmt.Errorf("mirrorIndents: %w", err)
-		}
-	}
-
-	if pp.WordWrap != nil {
-		if err = pp.WordWrap.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:wordWrap"},
-		}); err != nil {
-			return fmt.Errorf("wordWrap: %w", err)
 		}
 	}
 

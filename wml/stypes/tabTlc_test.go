@@ -12,7 +12,7 @@ func TestCustLeadCharFromStr(t *testing.T) {
 	}{
 		{"none", CustLeadCharNone},
 		{"dot", CustLeadCharDot},
-		{"hyphen", CustLeadCharHypen},
+		{"hyphen", CustLeadCharHyphen},
 		{"underscore", CustLeadCharUnderScore},
 		{"heavy", CustLeadCharHeavy},
 		{"middleDot", CustLeadCharMiddleDot},
@@ -52,7 +52,7 @@ func TestCustLeadChar_UnmarshalXMLAttr(t *testing.T) {
 		{
 			name:     "Valid attribute hyphen",
 			inputXML: `<element leader="hyphen"></element>`,
-			expected: CustLeadCharHypen,
+			expected: CustLeadCharHyphen,
 		},
 		{
 			name:     "Invalid attribute",

@@ -58,12 +58,51 @@ func NewRunProperty() RunProperty {
 	return RunProperty{}
 }
 
+type optBoolElems struct {
+	elem    *elemtypes.OptBoolElem
+	XMLName string
+}
+
 // MarshalXML marshals RunProperty to XML.
 func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:rPr"
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err
+	}
+
+	obElems := []optBoolElems{
+		{rp.Bold, "w:b"},
+		{rp.BoldCS, "w:bCs"},
+		{rp.RightToLeft, "w:rtl"},
+		{rp.SpecVanish, "w:specVanish"},
+		{rp.OMath, "w:oMath"},
+		{rp.CSFormat, "w:cs"},
+		{rp.Italic, "w:i"},
+		{rp.ItalicCS, "w:iCs"},
+		{rp.Strike, "w:strike"},
+		{rp.DoubleStrike, "w:dstrike"},
+		{rp.Outline, "w:outline"},
+		{rp.Shadow, "w:shadow"},
+		{rp.Caps, "w:caps"},
+		{rp.SmallCaps, "w:smallCaps"},
+		{rp.SnapToGrid, "w:snapToGrid"},
+		{rp.Emboss, "w:emboss"},
+		{rp.Imprint, "w:imprint"},
+		{rp.Vanish, "w:vanish"},
+		{rp.WebHidden, "w:webHidden"},
+		{rp.NoGrammar, "w:noProof"},
+	}
+
+	for _, entry := range obElems {
+		if entry.elem == nil {
+			continue
+		}
+		if err = entry.elem.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: entry.XMLName},
+		}); err != nil {
+			return fmt.Errorf("error in marshaling run property `%s`: %w", entry.XMLName, err)
+		}
 	}
 
 	if rp.Fonts != nil {
@@ -75,54 +114,6 @@ func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	if rp.EALayout != nil {
 		if err = rp.EALayout.MarshalXML(e, xml.StartElement{}); err != nil {
 			return fmt.Errorf("East Asian Typography Settings: %w", err)
-		}
-	}
-
-	if rp.Bold != nil {
-		if err = rp.Bold.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:b"},
-		}); err != nil {
-			return fmt.Errorf("bold: %w", err)
-		}
-	}
-
-	if rp.BoldCS != nil {
-		if err = rp.Bold.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:bCs"},
-		}); err != nil {
-			return fmt.Errorf("bold complex script: %w", err)
-		}
-	}
-
-	if rp.RightToLeft != nil {
-		if err = rp.RightToLeft.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:rtl"},
-		}); err != nil {
-			return fmt.Errorf("right to left: %w", err)
-		}
-	}
-
-	if rp.SpecVanish != nil {
-		if err = rp.SpecVanish.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:specVanish"},
-		}); err != nil {
-			return fmt.Errorf("specVanish: %w", err)
-		}
-	}
-
-	if rp.OMath != nil {
-		if err = rp.OMath.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:oMath"},
-		}); err != nil {
-			return fmt.Errorf("Office Open XML Math: %w", err)
-		}
-	}
-
-	if rp.CSFormat != nil {
-		if err = rp.CSFormat.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:cs"},
-		}); err != nil {
-			return fmt.Errorf("complex script formatting: %w", err)
 		}
 	}
 
@@ -182,123 +173,11 @@ func (rp *RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 		}
 	}
 
-	if rp.Italic != nil {
-		if err = rp.Italic.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:i"},
-		}); err != nil {
-			return fmt.Errorf("italic: %w", err)
-		}
-	}
-
-	if rp.ItalicCS != nil {
-		if err = rp.ItalicCS.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:iCs"},
-		}); err != nil {
-			return fmt.Errorf("Italic complex script: %w", err)
-		}
-	}
-
-	if rp.Strike != nil {
-		if err = rp.Strike.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:strike"},
-		}); err != nil {
-			return fmt.Errorf("strike: %w", err)
-		}
-	}
-
 	if rp.Border != nil {
 		if err = rp.Border.MarshalXML(e, xml.StartElement{
 			Name: xml.Name{Local: "w:bdr"},
 		}); err != nil {
 			return fmt.Errorf("border: %w", err)
-		}
-	}
-
-	if rp.DoubleStrike != nil {
-		if err = rp.DoubleStrike.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:dstrike"},
-		}); err != nil {
-			return fmt.Errorf("double strike: %w", err)
-		}
-	}
-
-	if rp.Outline != nil {
-		if err = rp.Outline.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:outline"},
-		}); err != nil {
-			return fmt.Errorf("outline: %w", err)
-		}
-	}
-
-	if rp.Shadow != nil {
-		if err = rp.Shadow.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:shadow"},
-		}); err != nil {
-			return fmt.Errorf("shadow: %w", err)
-		}
-	}
-
-	if rp.Caps != nil {
-		if err = rp.Caps.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:caps"},
-		}); err != nil {
-			return fmt.Errorf("caps: %w", err)
-		}
-	}
-
-	if rp.SmallCaps != nil {
-		if err = rp.SmallCaps.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:smallCaps"},
-		}); err != nil {
-			return fmt.Errorf("small caps: %w", err)
-		}
-	}
-
-	if rp.Emboss != nil {
-		if err = rp.Emboss.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:emboss"},
-		}); err != nil {
-			return fmt.Errorf("emboss: %w", err)
-		}
-	}
-
-	if rp.SnapToGrid != nil {
-		if err = rp.SnapToGrid.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:snapToGrid"},
-		}); err != nil {
-			return fmt.Errorf("snap to grid: %w", err)
-		}
-	}
-
-	if rp.Imprint != nil {
-		if err = rp.Imprint.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:imprint"},
-		}); err != nil {
-			return fmt.Errorf("imprint: %w", err)
-		}
-	}
-
-	if rp.Vanish != nil {
-		if err = rp.Vanish.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:vanish"},
-		}); err != nil {
-			return fmt.Errorf("vanish: %w", err)
-		}
-	}
-
-	if rp.WebHidden != nil {
-		if err = rp.WebHidden.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:webHidden"},
-		}); err != nil {
-			return fmt.Errorf("web hidden text: %w", err)
-		}
-	}
-
-	if rp.NoGrammar != nil {
-		if err = rp.NoGrammar.MarshalXML(e, xml.StartElement{
-			Name: xml.Name{Local: "w:noProof"},
-		}); err != nil {
-			return fmt.Errorf("no Grammar: %w", err)
 		}
 	}
 
