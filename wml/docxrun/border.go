@@ -9,7 +9,7 @@ import (
 type TextBorder struct {
 	Val        simpletypes.BorderStyle `xml:"val,attr"`
 	Color      *string                 `xml:"color,attr,omitempty"`
-	ThemeColor *string                 `xml:"themeColor,attr,omitempty"`
+	ThemeColor *simpletypes.ThemeColor `xml:"themeColor,attr,omitempty"`
 	ThemeTint  *string                 `xml:"themeTint,attr,omitempty"`
 	ThemeShade *string                 `xml:"themeShade,attr,omitempty"`
 	Space      *string                 `xml:"space,attr,omitempty"`
@@ -24,7 +24,7 @@ func (t *TextBorder) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:color"}, Value: *t.Color})
 	}
 	if t.ThemeColor != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:themeColor"}, Value: *t.ThemeColor})
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:themeColor"}, Value: string(*t.ThemeColor)})
 	}
 	if t.ThemeTint != nil {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:themeTint"}, Value: *t.ThemeTint})

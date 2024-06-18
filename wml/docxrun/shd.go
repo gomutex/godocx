@@ -20,6 +20,7 @@ type Shading struct {
 }
 
 func (s *Shading) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Name.Local = "w:shd"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(s.Val)})
 
 	if s.Color != nil {
