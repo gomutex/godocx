@@ -3,11 +3,11 @@ package docxrun
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 type Effect struct {
-	Val *simpletypes.TextEffect `xml:"val,attr,omitempty"`
+	Val *stypes.TextEffect `xml:"val,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the Effect type.

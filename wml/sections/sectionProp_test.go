@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/gomutex/godocx/wml/hdrftr"
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestSectionProp_MarshalXML(t *testing.T) {
@@ -27,7 +27,7 @@ func TestSectionProp_MarshalXML(t *testing.T) {
 				},
 				Type:       &SectionType{Val: "nextPage"},
 				PageMargin: &PageMargin{Top: intPtr(1440), Bottom: intPtr(1440), Left: intPtr(1440), Right: intPtr(1440)},
-				PageNum:    &PageNumbering{Format: simpletypes.NumFmtDecimal},
+				PageNum:    &PageNumbering{Format: stypes.NumFmtDecimal},
 				FormProt:   &FormProt{Val: "true"},
 				TitlePg:    &hdrftr.TitlePg{Val: "true"},
 				TextDir:    &TextDirection{Val: "lrTb"},
@@ -118,7 +118,7 @@ func TestSectionProp_UnmarshalXML(t *testing.T) {
 				},
 				Type:       &SectionType{Val: "nextPage"},
 				PageMargin: &PageMargin{Top: intPtr(1440), Bottom: intPtr(1440), Left: intPtr(1440), Right: intPtr(1440)},
-				PageNum:    &PageNumbering{Format: simpletypes.NumFmtDecimal},
+				PageNum:    &PageNumbering{Format: stypes.NumFmtDecimal},
 				FormProt:   &FormProt{Val: "true"},
 				TitlePg:    &hdrftr.TitlePg{Val: "true"},
 				TextDir:    &TextDirection{Val: "lrTb"},

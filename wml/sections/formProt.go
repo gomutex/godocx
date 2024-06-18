@@ -3,12 +3,12 @@ package sections
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // FormProt represents the text direction settings in a Word document.
 type FormProt struct {
-	Val simpletypes.OnOff `xml:"val,attr,omitempty"`
+	Val stypes.OnOff `xml:"val,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the FormProt type.

@@ -4,16 +4,16 @@ import (
 	"encoding/xml"
 	"strconv"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // East Asian Typography Settings
 type EALayout struct {
-	ID           *int                         `xml:"id,attr,omitempty"`
-	Combine      *simpletypes.OnOff           `xml:"combine,attr,omitempty"`
-	CombineBrkts *simpletypes.CombineBrackets `xml:"combineBrackets,attr,omitempty"`
-	Vert         *simpletypes.OnOff           `xml:"vert,attr,omitempty"`
-	VertCompress *simpletypes.OnOff           `xml:"vertCompress,attr,omitempty"`
+	ID           *int                    `xml:"id,attr,omitempty"`
+	Combine      *stypes.OnOff           `xml:"combine,attr,omitempty"`
+	CombineBrkts *stypes.CombineBrackets `xml:"combineBrackets,attr,omitempty"`
+	Vert         *stypes.OnOff           `xml:"vert,attr,omitempty"`
+	VertCompress *stypes.OnOff           `xml:"vertCompress,attr,omitempty"`
 }
 
 func (ea *EALayout) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

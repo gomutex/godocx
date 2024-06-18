@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestExpaComp_MarshalXML(t *testing.T) {
@@ -89,7 +89,7 @@ func TestExpaComp_UnmarshalXML(t *testing.T) {
 	}
 }
 
-func TextScalePtr(value uint16) *simpletypes.TextScale {
-	ts := simpletypes.TextScale(value)
+func TextScalePtr(value uint16) *stypes.TextScale {
+	ts := stypes.TextScale(value)
 	return &ts
 }

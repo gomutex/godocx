@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestDocGrid_MarshalXML_AllAttributes(t *testing.T) {
@@ -13,7 +13,7 @@ func TestDocGrid_MarshalXML_AllAttributes(t *testing.T) {
 	charSpace := 120
 
 	docGrid := DocGrid{
-		Type:      simpletypes.DocGridLinesAndChars,
+		Type:      stypes.DocGridLinesAndChars,
 		LinePitch: &linePitch,
 		CharSpace: &charSpace,
 	}
@@ -25,7 +25,7 @@ func TestDocGrid_MarshalXML_AllAttributes(t *testing.T) {
 
 func TestDocGrid_MarshalXML_OmitEmptyAttributes(t *testing.T) {
 	docGrid := DocGrid{
-		Type: simpletypes.DocGridLines,
+		Type: stypes.DocGridLines,
 	}
 
 	expectedXML := `<w:docGrid w:type="lines"></w:docGrid>`
@@ -63,7 +63,7 @@ func TestDocGrid_UnmarshalXML_AllAttributes(t *testing.T) {
 	linePitch := 240
 	charSpace := 120
 	expectedDocGrid := DocGrid{
-		Type:      simpletypes.DocGridLinesAndChars,
+		Type:      stypes.DocGridLinesAndChars,
 		LinePitch: &linePitch,
 		CharSpace: &charSpace,
 	}
@@ -75,7 +75,7 @@ func TestDocGrid_UnmarshalXML_MinimalAttributes(t *testing.T) {
 	xmlInput := `<w:docGrid xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" w:type="lines"></w:docGrid>`
 
 	expectedDocGrid := DocGrid{
-		Type: simpletypes.DocGridLines,
+		Type: stypes.DocGridLines,
 	}
 
 	checkUnmarshalXML(t, xmlInput, expectedDocGrid)

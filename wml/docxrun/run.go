@@ -5,9 +5,10 @@ import (
 
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/elemtypes"
+	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/runcontent"
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // A Run is part of a paragraph that has its own style. It could be
@@ -20,7 +21,7 @@ type RunChild struct {
 	InstrText *string
 	Text      *runcontent.Text
 	Drawing   *dml.Drawing
-	Tab       *runcontent.Tab
+	Tab       *ctypes.Empty `xml:"tab,omitempty"`
 	Break     *runcontent.Break
 }
 
@@ -64,8 +65,8 @@ func (r *Run) Size(size uint64) *Run {
 	return r
 }
 
-func (r *Run) Shading(shdType simpletypes.Shading, color, fill string) *Run {
-	r.RunProperty.Shading = NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
+func (r *Run) Shading(shdType stypes.Shading, color, fill string) *Run {
+	r.RunProperty.Shading = ctypes.NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
 	return r
 }
 
@@ -196,7 +197,7 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 		}
 
 		if data.Tab != nil {
-			err := data.Tab.MarshalXML(e, xml.StartElement{})
+			err := data.Tab.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tab"}})
 			if err != nil {
 				return err
 			}
@@ -237,7 +238,7 @@ loop:
 					return err
 				}
 			case "tab":
-				tabElem := &runcontent.Tab{}
+				tabElem := &ctypes.Empty{}
 				if err = d.DecodeElement(tabElem, &elem); err != nil {
 					return err
 				}

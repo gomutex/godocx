@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestPageNumbering_MarshalXML(t *testing.T) {
@@ -16,7 +16,7 @@ func TestPageNumbering_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "With format",
-			input:    PageNumbering{Format: simpletypes.NumFmtDecimal},
+			input:    PageNumbering{Format: stypes.NumFmtDecimal},
 			expected: `<w:pgNumType w:fmt="decimal"></w:pgNumType>`,
 		},
 		{
@@ -55,7 +55,7 @@ func TestPageNumbering_UnmarshalXML(t *testing.T) {
 		{
 			name:     "With format",
 			inputXML: `<w:pgNumType w:fmt="decimal"></w:pgNumType>`,
-			expected: PageNumbering{Format: simpletypes.NumFmtDecimal},
+			expected: PageNumbering{Format: stypes.NumFmtDecimal},
 		},
 		{
 			name:     "Without format",

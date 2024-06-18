@@ -3,12 +3,12 @@ package docxrun
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Emphasis Mark
 type Em struct {
-	Val simpletypes.Em `xml:"val,attr"`
+	Val stypes.Em `xml:"val,attr"`
 }
 
 func (f *Em) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

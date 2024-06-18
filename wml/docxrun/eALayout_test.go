@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Helper functions to create pointers
@@ -13,11 +13,11 @@ func intPtr(i int) *int {
 	return &i
 }
 
-func onOffPtr(value simpletypes.OnOff) *simpletypes.OnOff {
+func onOffPtr(value stypes.OnOff) *stypes.OnOff {
 	return &value
 }
 
-func combineBracketsPtr(value simpletypes.CombineBrackets) *simpletypes.CombineBrackets {
+func combineBracketsPtr(value stypes.CombineBrackets) *stypes.CombineBrackets {
 	return &value
 }
 
@@ -31,10 +31,10 @@ func TestEALayout_MarshalXML(t *testing.T) {
 			name: "All attributes set",
 			layout: EALayout{
 				ID:           intPtr(1),
-				Combine:      onOffPtr(simpletypes.OnOffOn),
-				CombineBrkts: combineBracketsPtr(simpletypes.CombineBracketsRound),
-				Vert:         onOffPtr(simpletypes.OnOffOff),
-				VertCompress: onOffPtr(simpletypes.OnOffOn),
+				Combine:      onOffPtr(stypes.OnOffOn),
+				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsRound),
+				Vert:         onOffPtr(stypes.OnOffOff),
+				VertCompress: onOffPtr(stypes.OnOffOn),
 			},
 			expected: `<w:eastAsianLayout w:id="1" w:combine="on" w:combineBrackets="round" w:vert="off" w:vertCompress="on"></w:eastAsianLayout>`,
 		},
@@ -48,28 +48,28 @@ func TestEALayout_MarshalXML(t *testing.T) {
 		{
 			name: "Only Combine set",
 			layout: EALayout{
-				Combine: onOffPtr(simpletypes.OnOffOn),
+				Combine: onOffPtr(stypes.OnOffOn),
 			},
 			expected: `<w:eastAsianLayout w:combine="on"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only CombineBrkts set",
 			layout: EALayout{
-				CombineBrkts: combineBracketsPtr(simpletypes.CombineBracketsSquare),
+				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsSquare),
 			},
 			expected: `<w:eastAsianLayout w:combineBrackets="square"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only Vert set",
 			layout: EALayout{
-				Vert: onOffPtr(simpletypes.OnOffOff),
+				Vert: onOffPtr(stypes.OnOffOff),
 			},
 			expected: `<w:eastAsianLayout w:vert="off"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only VertCompress set",
 			layout: EALayout{
-				VertCompress: onOffPtr(simpletypes.OnOffOn),
+				VertCompress: onOffPtr(stypes.OnOffOn),
 			},
 			expected: `<w:eastAsianLayout w:vertCompress="on"></w:eastAsianLayout>`,
 		},
@@ -109,10 +109,10 @@ func TestEALayout_UnmarshalXML(t *testing.T) {
 			inputXML: `<w:eastAsianLayout w:id="1" w:combine="on" w:combineBrackets="round" w:vert="off" w:vertCompress="on"></w:eastAsianLayout>`,
 			expected: EALayout{
 				ID:           intPtr(1),
-				Combine:      onOffPtr(simpletypes.OnOffOn),
-				CombineBrkts: combineBracketsPtr(simpletypes.CombineBracketsRound),
-				Vert:         onOffPtr(simpletypes.OnOffOff),
-				VertCompress: onOffPtr(simpletypes.OnOffOn),
+				Combine:      onOffPtr(stypes.OnOffOn),
+				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsRound),
+				Vert:         onOffPtr(stypes.OnOffOff),
+				VertCompress: onOffPtr(stypes.OnOffOn),
 			},
 		},
 		{
@@ -126,28 +126,28 @@ func TestEALayout_UnmarshalXML(t *testing.T) {
 			name:     "Only Combine set",
 			inputXML: `<w:eastAsianLayout w:combine="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				Combine: onOffPtr(simpletypes.OnOffOn),
+				Combine: onOffPtr(stypes.OnOffOn),
 			},
 		},
 		{
 			name:     "Only CombineBrkts set",
 			inputXML: `<w:eastAsianLayout w:combineBrackets="square"></w:eastAsianLayout>`,
 			expected: EALayout{
-				CombineBrkts: combineBracketsPtr(simpletypes.CombineBracketsSquare),
+				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsSquare),
 			},
 		},
 		{
 			name:     "Only Vert set",
 			inputXML: `<w:eastAsianLayout w:vert="off"></w:eastAsianLayout>`,
 			expected: EALayout{
-				Vert: onOffPtr(simpletypes.OnOffOff),
+				Vert: onOffPtr(stypes.OnOffOff),
 			},
 		},
 		{
 			name:     "Only VertCompress set",
 			inputXML: `<w:eastAsianLayout w:vertCompress="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				VertCompress: onOffPtr(simpletypes.OnOffOn),
+				VertCompress: onOffPtr(stypes.OnOffOn),
 			},
 		},
 		{

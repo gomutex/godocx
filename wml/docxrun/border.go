@@ -3,18 +3,18 @@ package docxrun
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 type TextBorder struct {
-	Val        simpletypes.BorderStyle `xml:"val,attr"`
-	Color      *string                 `xml:"color,attr,omitempty"`
-	ThemeColor *simpletypes.ThemeColor `xml:"themeColor,attr,omitempty"`
-	ThemeTint  *string                 `xml:"themeTint,attr,omitempty"`
-	ThemeShade *string                 `xml:"themeShade,attr,omitempty"`
-	Space      *string                 `xml:"space,attr,omitempty"`
-	Shadow     *simpletypes.OnOff      `xml:"shadow,attr,omitempty"`
-	Frame      *simpletypes.OnOff      `xml:"frame,attr,omitempty"`
+	Val        stypes.BorderStyle `xml:"val,attr"`
+	Color      *string            `xml:"color,attr,omitempty"`
+	ThemeColor *stypes.ThemeColor `xml:"themeColor,attr,omitempty"`
+	ThemeTint  *string            `xml:"themeTint,attr,omitempty"`
+	ThemeShade *string            `xml:"themeShade,attr,omitempty"`
+	Space      *string            `xml:"space,attr,omitempty"`
+	Shadow     *stypes.OnOff      `xml:"shadow,attr,omitempty"`
+	Frame      *stypes.OnOff      `xml:"frame,attr,omitempty"`
 }
 
 func (t *TextBorder) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

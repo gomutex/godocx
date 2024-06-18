@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestFooterReference_MarshalXML(t *testing.T) {
@@ -18,14 +18,14 @@ func TestFooterReference_MarshalXML(t *testing.T) {
 			name: "Marshal with ID and Type",
 			input: FooterReference{
 				ID:   "rId1",
-				Type: simpletypes.HdrFtrFirst,
+				Type: stypes.HdrFtrFirst,
 			},
 			expected: `<w:footerReference w:type="first" r:id="rId1"></w:footerReference>`,
 		},
 		{
 			name: "Marshal with Type only",
 			input: FooterReference{
-				Type: simpletypes.HdrFtrEven,
+				Type: stypes.HdrFtrEven,
 			},
 			expected: `<w:footerReference w:type="even"></w:footerReference>`,
 		},
@@ -73,14 +73,14 @@ func TestFooterReference_UnmarshalXML(t *testing.T) {
 			inputXML: `<w:footerReference w:type="first" r:id="rId1"></w:footerReference>`,
 			expected: FooterReference{
 				ID:   "rId1",
-				Type: simpletypes.HdrFtrFirst,
+				Type: stypes.HdrFtrFirst,
 			},
 		},
 		{
 			name:     "Unmarshal with Type only",
 			inputXML: `<w:footerReference w:type="even"></w:footerReference>`,
 			expected: FooterReference{
-				Type: simpletypes.HdrFtrEven,
+				Type: stypes.HdrFtrEven,
 			},
 		},
 		{

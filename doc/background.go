@@ -3,17 +3,17 @@ package doc
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Specifies the background information for this document
 //
 // This background shall be displayed on all pages of the document, behind all other document content.
 type Background struct {
-	Color      *string                 `xml:"color,attr,omitempty"`
-	ThemeColor *simpletypes.ThemeColor `xml:"themeColor,attr,omitempty"`
-	ThemeTint  *string                 `xml:"themeTint,attr,omitempty"`
-	ThemeShade *string                 `xml:"themeShade,attr,omitempty"`
+	Color      *string            `xml:"color,attr,omitempty"`
+	ThemeColor *stypes.ThemeColor `xml:"themeColor,attr,omitempty"`
+	ThemeTint  *string            `xml:"themeTint,attr,omitempty"`
+	ThemeShade *string            `xml:"themeShade,attr,omitempty"`
 }
 
 func (b *Background) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

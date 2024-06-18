@@ -3,20 +3,20 @@ package docxrun
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Run Fonts
 type RunFonts struct {
-	Hint          simpletypes.FontTypeHint `xml:"hint,attr,omitempty"`
-	Ascii         string                   `xml:"ascii,attr,omitempty"`
-	HAnsi         string                   `xml:"hAnsi,attr,omitempty"`
-	EastAsia      string                   `xml:"eastAsia,attr,omitempty"`
-	CS            string                   `xml:"cs,attr,omitempty"`
-	AsciiTheme    simpletypes.ThemeFont    `xml:"asciiTheme,attr,omitempty"`
-	HAnsiTheme    simpletypes.ThemeFont    `xml:"hAnsiTheme,attr,omitempty"`
-	EastAsiaTheme simpletypes.ThemeFont    `xml:"eastAsiaTheme,attr,omitempty"`
-	CSTheme       simpletypes.ThemeFont    `xml:"cstheme,attr,omitempty"`
+	Hint          stypes.FontTypeHint `xml:"hint,attr,omitempty"`
+	Ascii         string              `xml:"ascii,attr,omitempty"`
+	HAnsi         string              `xml:"hAnsi,attr,omitempty"`
+	EastAsia      string              `xml:"eastAsia,attr,omitempty"`
+	CS            string              `xml:"cs,attr,omitempty"`
+	AsciiTheme    stypes.ThemeFont    `xml:"asciiTheme,attr,omitempty"`
+	HAnsiTheme    stypes.ThemeFont    `xml:"hAnsiTheme,attr,omitempty"`
+	EastAsiaTheme stypes.ThemeFont    `xml:"eastAsiaTheme,attr,omitempty"`
+	CSTheme       stypes.ThemeFont    `xml:"cstheme,attr,omitempty"`
 }
 
 func (rf *RunFonts) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

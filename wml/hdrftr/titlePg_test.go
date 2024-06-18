@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestTitlePg_MarshalXML(t *testing.T) {
@@ -16,19 +16,19 @@ func TestTitlePg_MarshalXML(t *testing.T) {
 	}{
 		{
 			titlePg: TitlePg{
-				Val: simpletypes.OnOff("on"),
+				Val: stypes.OnOff("on"),
 			},
 			expectedXML: `<w:titlePg w:val="on"></w:titlePg>`,
 		},
 		{
 			titlePg: TitlePg{
-				Val: simpletypes.OnOff("1"),
+				Val: stypes.OnOff("1"),
 			},
 			expectedXML: `<w:titlePg w:val="1"></w:titlePg>`,
 		},
 		{
 			titlePg: TitlePg{
-				Val: simpletypes.OnOff(""),
+				Val: stypes.OnOff(""),
 			},
 			expectedXML: `<w:titlePg></w:titlePg>`,
 		},
@@ -67,26 +67,26 @@ func TestTitlePg_UnmarshalXML(t *testing.T) {
 		{
 			xmlInput: `<w:titlePg w:val="on"></w:titlePg>`,
 			expectedTitlePg: TitlePg{
-				Val: simpletypes.OnOff("on"),
+				Val: stypes.OnOff("on"),
 			},
 		},
 		{
 			xmlInput: `<w:titlePg w:val="off"></w:titlePg>`,
 			expectedTitlePg: TitlePg{
-				Val: simpletypes.OnOff("off"),
+				Val: stypes.OnOff("off"),
 			},
 		},
 		{
 			xmlInput: `<w:titlePg w:val=""></w:titlePg>`,
 			expectedTitlePg: TitlePg{
-				Val: simpletypes.OnOff(""),
+				Val: stypes.OnOff(""),
 			},
 			err: errors.New("invalid OnOff string"),
 		},
 		{
 			xmlInput: `<w:titlePg></w:titlePg>`,
 			expectedTitlePg: TitlePg{
-				Val: simpletypes.OnOff(""),
+				Val: stypes.OnOff(""),
 			},
 		},
 	}

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestTextDirection_MarshalXML(t *testing.T) {
@@ -17,7 +17,7 @@ func TestTextDirection_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:          "WithVal",
-			textDir:       TextDirection{Val: simpletypes.TextDirectionLrTb},
+			textDir:       TextDirection{Val: stypes.TextDirectionLrTb},
 			expected:      `<w:textDirection w:val="lrTb"></w:textDirection>`,
 			shouldMarshal: true,
 		},
@@ -29,7 +29,7 @@ func TestTextDirection_MarshalXML(t *testing.T) {
 		},
 		{
 			name:          "Empty",
-			textDir:       TextDirection{Val: simpletypes.TextDirection("")},
+			textDir:       TextDirection{Val: stypes.TextDirection("")},
 			expected:      ``,
 			shouldMarshal: false, // Not expected to marshal because Val is empty
 		},
@@ -61,7 +61,7 @@ func TestTextDirection_UnmarshalXML(t *testing.T) {
 	}{
 		{
 			xmlStr:   `<w:textDirection w:val="lrTb"></w:textDirection>`,
-			expected: TextDirection{Val: simpletypes.TextDirectionLrTb},
+			expected: TextDirection{Val: stypes.TextDirectionLrTb},
 		},
 		{
 			xmlStr:   `<w:textDirection></w:textDirection>`,

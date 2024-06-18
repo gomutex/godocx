@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestPageSize_MarshalXML(t *testing.T) {
@@ -19,7 +19,7 @@ func TestPageSize_MarshalXML(t *testing.T) {
 			input: PageSize{
 				Width:  uint64Ptr(12240),
 				Height: uint64Ptr(15840),
-				Orient: simpletypes.PageOrientLandscape,
+				Orient: stypes.PageOrientLandscape,
 				Code:   intPtr(1),
 			},
 			expected: `<w:pgSz w:w="12240" w:h="15840" w:orient="landscape" w:code="1"></w:pgSz>`,
@@ -70,7 +70,7 @@ func TestPageSize_UnmarshalXML(t *testing.T) {
 			expected: PageSize{
 				Width:  uint64Ptr(12240),
 				Height: uint64Ptr(15840),
-				Orient: simpletypes.PageOrientLandscape,
+				Orient: stypes.PageOrientLandscape,
 				Code:   intPtr(1),
 			},
 		},

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestDocument_MarshalXML(t *testing.T) {
@@ -19,7 +19,7 @@ func TestDocument_MarshalXML(t *testing.T) {
 			input: Document{
 				Background: &Background{
 					Color:      StringPtr("FF0000"),
-					ThemeColor: ThemeColorPtr(simpletypes.ThemeColorAccent1),
+					ThemeColor: ThemeColorPtr(stypes.ThemeColorAccent1),
 					ThemeTint:  StringPtr("500"),
 					ThemeShade: StringPtr("200"),
 				},

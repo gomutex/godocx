@@ -3,11 +3,11 @@ package docxrun
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 type VertAlign struct {
-	Val simpletypes.VerticalAlignRun `xml:"val,attr,omitempty"`
+	Val stypes.VerticalAlignRun `xml:"val,attr,omitempty"`
 }
 
 func (v *VertAlign) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

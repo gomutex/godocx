@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestTextBorder_MarshalXML(t *testing.T) {
@@ -17,21 +17,21 @@ func TestTextBorder_MarshalXML(t *testing.T) {
 		{
 			name: "With all attributes",
 			input: TextBorder{
-				Val:        simpletypes.BorderStyleSingle,
+				Val:        stypes.BorderStyleSingle,
 				Color:      StringPtr("FF0000"),
-				ThemeColor: themeColorPointer(simpletypes.ThemeColorAccent1),
+				ThemeColor: themeColorPointer(stypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
-				Shadow:     OnOffPtr(simpletypes.OnOffTrue),
-				Frame:      OnOffPtr(simpletypes.OnOffTrue),
+				Shadow:     OnOffPtr(stypes.OnOffTrue),
+				Frame:      OnOffPtr(stypes.OnOffTrue),
 			},
 			expected: `<w:bdr w:val="single" w:color="FF0000" w:themeColor="accent1" w:themeTint="500" w:themeShade="200" w:space="0" w:shadow="true" w:frame="true"></w:bdr>`,
 		},
 		{
 			name: "Without optional attributes",
 			input: TextBorder{
-				Val: simpletypes.BorderStyleDouble,
+				Val: stypes.BorderStyleDouble,
 			},
 			expected: `<w:bdr w:val="double"></w:bdr>`,
 		},
@@ -68,21 +68,21 @@ func TestTextBorder_UnmarshalXML(t *testing.T) {
 			inputXML: `<w:bdr w:val="single" w:color="FF0000" w:themeColor="accent1" w:themeTint="500" ` +
 				`w:themeShade="200" w:space="0" w:shadow="true" w:frame="true"></w:bdr>`,
 			expected: TextBorder{
-				Val:        simpletypes.BorderStyleSingle,
+				Val:        stypes.BorderStyleSingle,
 				Color:      StringPtr("FF0000"),
-				ThemeColor: themeColorPointer(simpletypes.ThemeColorAccent1),
+				ThemeColor: themeColorPointer(stypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
-				Shadow:     OnOffPtr(simpletypes.OnOffTrue),
-				Frame:      OnOffPtr(simpletypes.OnOffTrue),
+				Shadow:     OnOffPtr(stypes.OnOffTrue),
+				Frame:      OnOffPtr(stypes.OnOffTrue),
 			},
 		},
 		{
 			name:     "Without optional attributes",
 			inputXML: `<w:bdr w:val="double"></w:bdr>`,
 			expected: TextBorder{
-				Val: simpletypes.BorderStyleDouble,
+				Val: stypes.BorderStyleDouble,
 			},
 		},
 	}
@@ -171,10 +171,10 @@ func StringPtr(s string) *string {
 	return &s
 }
 
-func OnOffPtr(o simpletypes.OnOff) *simpletypes.OnOff {
+func OnOffPtr(o stypes.OnOff) *stypes.OnOff {
 	return &o
 }
 
-func themeColorPointer(t simpletypes.ThemeColor) *simpletypes.ThemeColor {
+func themeColorPointer(t stypes.ThemeColor) *stypes.ThemeColor {
 	return &t
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/gomutex/godocx/elemtypes"
+	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/formatting"
 )
 
@@ -14,7 +15,7 @@ type RunProperty struct {
 	Color     *formatting.Color     `xml:"color,omitempty"`
 	Size      *FontSize             `xml:"sz,omitempty"`
 	SizeCs    *FontSizeCS           `xml:"szCs,omitempty"`
-	Shading   *Shading              `xml:"shd,omitempty"`
+	Shading   *ctypes.Shading       `xml:"shd,omitempty"`
 	Highlight *formatting.Highlight `xml:"highlight,omitempty"`
 	Underline *formatting.Underline `xml:"u,omitempty"`
 	Effect    *Effect               `xml:"effect,omitempty"`

@@ -3,12 +3,12 @@ package hdrftr
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Different First Page Headers and Footers
 type TitlePg struct {
-	Val simpletypes.OnOff `xml:"val,attr,omitempty"`
+	Val stypes.OnOff `xml:"val,attr,omitempty"`
 }
 
 func (t *TitlePg) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

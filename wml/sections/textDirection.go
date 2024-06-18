@@ -3,12 +3,12 @@ package sections
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // TextDirection represents the text direction settings in a Word document.
 type TextDirection struct {
-	Val simpletypes.TextDirection `xml:"val,attr,omitempty"`
+	Val stypes.TextDirection `xml:"val,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the TextDirection type.
