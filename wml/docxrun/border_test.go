@@ -19,7 +19,7 @@ func TestTextBorder_MarshalXML(t *testing.T) {
 			input: TextBorder{
 				Val:        simpletypes.BorderStyleSingle,
 				Color:      StringPtr("FF0000"),
-				ThemeColor: StringPtr("accent1"),
+				ThemeColor: themeColorPointer(simpletypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
@@ -70,7 +70,7 @@ func TestTextBorder_UnmarshalXML(t *testing.T) {
 			expected: TextBorder{
 				Val:        simpletypes.BorderStyleSingle,
 				Color:      StringPtr("FF0000"),
-				ThemeColor: StringPtr("accent1"),
+				ThemeColor: themeColorPointer(simpletypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
@@ -173,4 +173,8 @@ func StringPtr(s string) *string {
 
 func OnOffPtr(o simpletypes.OnOff) *simpletypes.OnOff {
 	return &o
+}
+
+func themeColorPointer(t simpletypes.ThemeColor) *simpletypes.ThemeColor {
+	return &t
 }
