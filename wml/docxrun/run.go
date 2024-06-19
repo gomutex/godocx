@@ -152,7 +152,7 @@ func (r *Run) HideText(value bool) *Run {
 }
 
 func (r *Run) Spacing(value int) *Run {
-	r.RunProperty.Spacing = elemtypes.NewSingleIntVal(value)
+	r.RunProperty.Spacing = ctypes.NewDecimalNum(value)
 	return r
 }
 

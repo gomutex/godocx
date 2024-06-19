@@ -10,10 +10,10 @@ import (
 // East Asian Typography Settings
 type EALayout struct {
 	ID           *int                    `xml:"id,attr,omitempty"`
-	Combine      *stypes.OnOff           `xml:"combine,attr,omitempty"`
+	Combine      *stypes.BinFlag         `xml:"combine,attr,omitempty"`
 	CombineBrkts *stypes.CombineBrackets `xml:"combineBrackets,attr,omitempty"`
-	Vert         *stypes.OnOff           `xml:"vert,attr,omitempty"`
-	VertCompress *stypes.OnOff           `xml:"vertCompress,attr,omitempty"`
+	Vert         *stypes.BinFlag         `xml:"vert,attr,omitempty"`
+	VertCompress *stypes.BinFlag         `xml:"vertCompress,attr,omitempty"`
 }
 
 func (ea *EALayout) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

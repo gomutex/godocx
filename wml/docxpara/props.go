@@ -8,93 +8,123 @@ import (
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
 	"github.com/gomutex/godocx/wml/formatting"
-	"github.com/gomutex/godocx/wml/liststyle"
+	"github.com/gomutex/godocx/wml/sections"
 )
 
 // Numbering Level Associated Paragraph Properties
-type ParagraphProperty struct {
+type ParagraphProp struct {
 	// This element specifies the style ID of the paragraph style which shall be used to format the contents of this paragraph.
 	Style *elemtypes.SingleStrVal `xml:"pStyle,omitempty"`
 
 	//Keep Paragraph With Next Paragraph
-	KeepNext *elemtypes.OptOnOffElem `xml:"keepNext,omitempty"`
+	KeepNext *elemtypes.OptBinFlagElem `xml:"keepNext,omitempty"`
 
 	//Keep All Lines On One Page
-	KeepLines *elemtypes.OptOnOffElem `xml:"keepLines,omitempty"`
+	KeepLines *elemtypes.OptBinFlagElem `xml:"keepLines,omitempty"`
 
 	//Start Paragraph on Next Page
-	PageBreakBefore *elemtypes.OptOnOffElem `xml:"pageBreakBefore,omitempty"`
+	PageBreakBefore *elemtypes.OptBinFlagElem `xml:"pageBreakBefore,omitempty"`
 
 	//Allow First/Last Line to Display on a Separate Page
-	WindowControl *elemtypes.OptOnOffElem `xml:"widowControl,omitempty"`
+	WindowControl *elemtypes.OptBinFlagElem `xml:"widowControl,omitempty"`
 
 	//Suppress Line Numbers for Paragraph
-	SuppressLineNmbrs *elemtypes.OptOnOffElem `xml:"suppressLineNumbers,omitempty"`
+	SuppressLineNmbrs *elemtypes.OptBinFlagElem `xml:"suppressLineNumbers,omitempty"`
 
 	//Suppress Hyphenation for Paragraph
-	SuppressAutoHyphens *elemtypes.OptOnOffElem `xml:"suppressAutoHyphens,omitempty"`
+	SuppressAutoHyphens *elemtypes.OptBinFlagElem `xml:"suppressAutoHyphens,omitempty"`
 
 	//Use East Asian Typography Rules for First and Last Character per Line
-	Kinsoku *elemtypes.OptOnOffElem `xml:"kinsoku,omitempty"`
+	Kinsoku *elemtypes.OptBinFlagElem `xml:"kinsoku,omitempty"`
 
 	//Allow Line Breaking At Character Level
-	WordWrap *elemtypes.OptOnOffElem `xml:"wordWrap,omitempty"`
+	WordWrap *elemtypes.OptBinFlagElem `xml:"wordWrap,omitempty"`
 
 	//Allow Punctuation to Extent Past Text Extents
-	OverflowPunct *elemtypes.OptOnOffElem `xml:"overflowPunct,omitempty"`
+	OverflowPunct *elemtypes.OptBinFlagElem `xml:"overflowPunct,omitempty"`
 
 	//Compress Punctuation at Start of a Line
-	TopLinePunct *elemtypes.OptOnOffElem `xml:"topLinePunct,omitempty"`
+	TopLinePunct *elemtypes.OptBinFlagElem `xml:"topLinePunct,omitempty"`
 
 	//Automatically Adjust Spacing of Latin and East Asian Text
-	AutoSpaceDE *elemtypes.OptOnOffElem `xml:"autoSpaceDE,omitempty"`
+	AutoSpaceDE *elemtypes.OptBinFlagElem `xml:"autoSpaceDE,omitempty"`
 
 	//Automatically Adjust Spacing of East Asian Text and Numbers
-	AutoSpaceDN *elemtypes.OptOnOffElem `xml:"autoSpaceDN,omitempty"`
+	AutoSpaceDN *elemtypes.OptBinFlagElem `xml:"autoSpaceDN,omitempty"`
 
 	//Right to Left Paragraph Layout
-	Bidi *elemtypes.OptOnOffElem `xml:"bidi,omitempty"`
+	Bidi *elemtypes.OptBinFlagElem `xml:"bidi,omitempty"`
 
 	//Automatically Adjust Right Indent When Using Document Grid
-	AdjustRightInd *elemtypes.OptOnOffElem `xml:"adjustRightInd,omitempty"`
+	AdjustRightInd *elemtypes.OptBinFlagElem `xml:"adjustRightInd,omitempty"`
 
 	//Use Document Grid Settings for Inter-Line Paragraph Spacing
-	SnapToGrid *elemtypes.OptOnOffElem `xml:"snapToGrid,omitempty"`
+	SnapToGrid *elemtypes.OptBinFlagElem `xml:"snapToGrid,omitempty"`
 
 	//Ignore Spacing Above and Below When Using Identical Styles
-	CtxlSpacing *elemtypes.OptOnOffElem `xml:"contextualSpacing,omitempty"`
+	CtxlSpacing *elemtypes.OptBinFlagElem `xml:"contextualSpacing,omitempty"`
 
 	// Use Left/Right Indents as Inside/Outside Indents
-	MirrorIndents *elemtypes.OptOnOffElem `xml:"mirrorIndents,omitempty"`
+	MirrorIndents *elemtypes.OptBinFlagElem `xml:"mirrorIndents,omitempty"`
+
+	// Prevent Text Frames From Overlapping
+	SuppressOverlap *elemtypes.OptBinFlagElem `xml:"suppressOverlap,omitempty"`
 
 	//This element specifies the shading applied to the contents of the paragraph.
 	Shading *ctypes.Shading `xml:"shd,omitempty"`
 
+	//Paragraph Text Flow Direction
+	TextDirection *ctypes.TextDirection `xml:"textDirection,omitempty"`
+
+	//Vertical Character Alignment on Line
+	TextAlignment *ctypes.TextAlign `xml:"textAlignment,omitempty"`
+
+	//Allow Surrounding Paragraphs to Tight Wrap to Text Box Contents
+	TextboxTightWrap *ctypes.TextboxTightWrap `xml:"textboxTightWrap,omitempty"`
+
 	//Set of Custom Tab Stops
 	Tabs ctypes.Tabs `xml:"tabs,omitempty"`
 
-	DivID             *string
-	Justification     *formatting.Justification    `xml:"jc,omitempty"`
-	RunProperty       *docxrun.RunProperty         `xml:"rPr,omitempty"`
-	NumberingProperty *liststyle.NumberingProperty `xml:"numPr,omitempty"`
+	//Associated Outline Level
+	OutlineLvl *ctypes.DecimalNum `xml:"outlineLvl,omitempty"`
 
-	// TODO: Implement this
+	//Associated HTML div ID
+	DivID *ctypes.DecimalNum `xml:"divId,omitempty"`
+
+	//Paragraph Conditional Formatting
+	CnfStyle *ctypes.Cnf `xml:"cnfStyle,omitempty"`
+
+	//Run Properties for the Paragraph Mark
+	RunProperty *docxrun.RunProperty `xml:"rPr,omitempty"`
+
+	//Paragraph Alignment
+	Justification *formatting.Justification `xml:"jc,omitempty"`
+
+	//Revision Information for Paragraph Properties
+	PPrChange *PPrChange `xml:"pPrChange,omitempty"`
+
 	// Text Frame Properties
-	// FrameProp *FrameProp `xml:"framePr,omitempty"`
-	// This element specifies that the current paragraph references a numbering definition instance in the current document.
-	// NumPr *NumPr `xml:"numpr,omitempty"`
-	//This element specifies the borders for the parent paragraph. Each child element shall specify a specific type of border (left, right, bottom, top, and between).
-	// Border *Border `xml:"pBdr,omitempty"`
-	// Spacing Spacing
-	//Indent Indent
+	FrameProp *FrameProp `xml:"framePr,omitempty"`
+
+	//Numbering Definition Instance Reference
+	NumProp *NumProp `xml:"numPr,omitempty"`
+
+	//Paragraph Borders
+	Border *ParaBorder `xml:"pBdr,omitempty"`
+
+	//Spacing Between Lines and Above/Below Paragraph
+	Spacing *Spacing `xml:"spacing,omitempty"`
+
+	Indent *Indent              `xml:"ind,omitempty"`
+	SectPr sections.SectionProp `xml:"sectPr,omitempty"`
 }
 
-type onOffElems struct {
-	elem    *elemtypes.OptOnOffElem
+type binElems struct {
+	elem    *elemtypes.OptBinFlagElem
 	XMLName string
 }
 
-func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+func (pp *ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	elem := xml.StartElement{Name: xml.Name{Local: "w:pPr"}}
 
 	// Opening <w:pPr> element
@@ -102,7 +132,7 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 		return err
 	}
 
-	ooElems := []onOffElems{
+	bElems := []binElems{
 		{pp.KeepNext, "w:keepNext"},
 		{pp.KeepLines, "w:keepLines"},
 		{pp.KeepLines, "w:keepLines"},
@@ -122,9 +152,10 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 		{pp.CtxlSpacing, "w:contextualSpacing"},
 		{pp.MirrorIndents, "w:mirrorIndents"},
 		{pp.WordWrap, "w:wordWrap"},
+		{pp.SuppressOverlap, "w:suppressOverlap"},
 	}
 
-	for _, entry := range ooElems {
+	for _, entry := range bElems {
 		if entry.elem == nil {
 			continue
 		}
@@ -156,17 +187,81 @@ func (pp *ParagraphProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 		}
 	}
 
-	if pp.NumberingProperty != nil {
-		if err = pp.NumberingProperty.MarshalXML(e, xml.StartElement{}); err != nil {
+	if pp.TextDirection != nil {
+		if err = pp.TextDirection.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("TextDirection: %w", err)
+		}
+	}
+
+	if pp.TextAlignment != nil {
+		if err = pp.TextAlignment.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("TextAlignment: %w", err)
+		}
+	}
+
+	if pp.TextboxTightWrap != nil {
+		if err = pp.TextboxTightWrap.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("TextboxTightWrap: %w", err)
+		}
+	}
+
+	if pp.OutlineLvl != nil {
+		if err = pp.OutlineLvl.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:outlineLvl"},
+		}); err != nil {
+			return fmt.Errorf("OutlineLvl: %w", err)
+		}
+	}
+
+	if pp.DivID != nil {
+		if err = pp.DivID.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("DivID: %w", err)
+		}
+	}
+
+	if pp.CnfStyle != nil {
+		if err = pp.CnfStyle.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("CnfStyle: %w", err)
+		}
+	}
+
+	if pp.NumProp != nil {
+		if err = pp.NumProp.MarshalXML(e, xml.StartElement{}); err != nil {
 			return fmt.Errorf("NumberingProperty: %w", err)
 		}
 	}
 
-	if err = e.EncodeToken(elem.End()); err != nil {
-		return err
+	if pp.PPrChange != nil {
+		if err = pp.PPrChange.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("PPrChange: %w", err)
+		}
 	}
 
-	return nil
+	if pp.FrameProp != nil {
+		if err = pp.FrameProp.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("FrameProp: %w", err)
+		}
+	}
+
+	if pp.Border != nil {
+		if err = pp.Border.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("Border: %w", err)
+		}
+	}
+
+	if pp.Spacing != nil {
+		if err = pp.Spacing.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("Spacing: %w", err)
+		}
+	}
+
+	if pp.Indent != nil {
+		if err = pp.Indent.MarshalXML(e, xml.StartElement{}); err != nil {
+			return fmt.Errorf("Indent: %w", err)
+		}
+	}
+
+	return e.EncodeToken(elem.End())
 }
 
 // NewParagraphStyle creates a new ParagraphStyle.
@@ -179,6 +274,6 @@ func DefaultParagraphStyle() *elemtypes.SingleStrVal {
 	return &elemtypes.SingleStrVal{Val: "Normal"}
 }
 
-func DefaultParaProperty() *ParagraphProperty {
-	return &ParagraphProperty{}
+func DefaultParaProperty() *ParagraphProp {
+	return &ParagraphProp{}
 }

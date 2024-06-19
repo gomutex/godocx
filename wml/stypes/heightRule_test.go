@@ -5,22 +5,19 @@ import (
 	"testing"
 )
 
-func TestOnOffFromStr_ValidValues(t *testing.T) {
+func TestHeightRuleFromStr_ValidValues(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected OnOff
+		expected HeightRule
 	}{
-		{"0", OnOffZero},
-		{"1", OnOffOne},
-		{"false", OnOffFalse},
-		{"true", OnOffTrue},
-		{"off", OnOffOff},
-		{"on", OnOffOn},
+		{"auto", HeightRuleAuto},
+		{"exact", HeightRuleExact},
+		{"atLeast", HeightRuleAtLeast},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			result, err := OnOffFromStr(tt.input)
+			result, err := HeightRuleFromStr(tt.input)
 			if err != nil {
 				t.Fatalf("Unexpected error: %v", err)
 			}
@@ -32,39 +29,36 @@ func TestOnOffFromStr_ValidValues(t *testing.T) {
 	}
 }
 
-func TestOnOffFromStr_InvalidValue(t *testing.T) {
+func TestHeightRuleFromStr_InvalidValue(t *testing.T) {
 	input := "invalidValue"
 
-	result, err := OnOffFromStr(input)
+	result, err := HeightRuleFromStr(input)
 
 	if err == nil {
 		t.Fatalf("Expected error for invalid value %s, but got none. Result: %s", input, result)
 	}
 
-	expectedError := "invalid OnOff string"
+	expectedError := "Invalid HeightRule value"
 	if err.Error() != expectedError {
 		t.Errorf("Expected error message '%s' but got '%s'", expectedError, err.Error())
 	}
 }
 
-func TestOnOff_UnmarshalXMLAttr_ValidValues(t *testing.T) {
+func TestHeightRule_UnmarshalXMLAttr_ValidValues(t *testing.T) {
 	tests := []struct {
 		inputXML string
-		expected OnOff
+		expected HeightRule
 	}{
-		{`<element onOff="0"></element>`, OnOffZero},
-		{`<element onOff="1"></element>`, OnOffOne},
-		{`<element onOff="false"></element>`, OnOffFalse},
-		{`<element onOff="true"></element>`, OnOffTrue},
-		{`<element onOff="off"></element>`, OnOffOff},
-		{`<element onOff="on"></element>`, OnOffOn},
+		{`<element val="auto"></element>`, HeightRuleAuto},
+		{`<element val="exact"></element>`, HeightRuleExact},
+		{`<element val="atLeast"></element>`, HeightRuleAtLeast},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.inputXML, func(t *testing.T) {
 			type Element struct {
-				XMLName xml.Name `xml:"element"`
-				OnOff   OnOff    `xml:"onOff,attr"`
+				XMLName xml.Name   `xml:"element"`
+				Val     HeightRule `xml:"val,attr"`
 			}
 
 			var elem Element
@@ -74,19 +68,19 @@ func TestOnOff_UnmarshalXMLAttr_ValidValues(t *testing.T) {
 				t.Fatalf("Error unmarshaling XML: %v", err)
 			}
 
-			if elem.OnOff != tt.expected {
-				t.Errorf("Expected %s but got %s", tt.expected, elem.OnOff)
+			if elem.Val != tt.expected {
+				t.Errorf("Expected %s but got %s", tt.expected, elem.Val)
 			}
 		})
 	}
 }
 
-func TestOnOff_UnmarshalXMLAttr_InvalidValue(t *testing.T) {
-	inputXML := `<element onOff="invalidValue"></element>`
+func TestHeightRule_UnmarshalXMLAttr_InvalidValue(t *testing.T) {
+	inputXML := `<element val="invalidValue"></element>`
 
 	type Element struct {
-		XMLName xml.Name `xml:"element"`
-		OnOff   OnOff    `xml:"onOff,attr"`
+		XMLName xml.Name   `xml:"element"`
+		Val     HeightRule `xml:"val,attr"`
 	}
 
 	var elem Element
@@ -97,7 +91,7 @@ func TestOnOff_UnmarshalXMLAttr_InvalidValue(t *testing.T) {
 		t.Fatalf("Expected error for invalid value, but got none")
 	}
 
-	expectedError := "invalid OnOff string"
+	expectedError := "Invalid HeightRule value"
 	if err.Error() != expectedError {
 		t.Errorf("Expected error message '%s' but got '%s'", expectedError, err.Error())
 	}

@@ -20,7 +20,7 @@ type RunProperty struct {
 	Underline *formatting.Underline `xml:"u,omitempty"`
 	Effect    *Effect               `xml:"effect,omitempty"`
 	ExpaComp  *ExpaComp             `xml:"w,omitempty"`
-	Border    *TextBorder           `xml:"bdr,omitempty"`
+	Border    *ctypes.Border        `xml:"bdr,omitempty"`
 	FitText   *FitText              `xml:"fitText,omitempty"`
 	VertAlign *VertAlign            `xml:"vertAlign,omitempty"`
 	Em        *Em                   `xml:"em,omitempty"`
@@ -48,9 +48,9 @@ type RunProperty struct {
 	SpecVanish   *elemtypes.OptBoolElem     `xml:"specVanish,omitempty"`
 	OMath        *elemtypes.OptBoolElem     `xml:"oMath,omitempty"`
 	Kern         *elemtypes.SingleUint64Val `xml:"kern,omitempty"`
-	Spacing      *elemtypes.SingleIntVal    `xml:"spacing,omitempty"`
 	Style        *elemtypes.SingleStrVal    `xml:"rStyle,omitempty"`
-	Position     *elemtypes.SingleIntVal    `xml:"position,omitempty"`
+	Position     *ctypes.DecimalNum         `xml:"position,omitempty"`
+	Spacing      *ctypes.DecimalNum         `xml:"spacing,omitempty"`
 }
 
 // NewRunProperty creates a new RunProperty with default values.

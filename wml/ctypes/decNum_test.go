@@ -1,4 +1,4 @@
-package elemtypes
+package ctypes
 
 import (
 	"encoding/xml"
@@ -6,21 +6,21 @@ import (
 	"testing"
 )
 
-func TestSingleIntVal_MarshalXML(t *testing.T) {
+func TestDecimalNum_MarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    SingleIntVal
+		input    DecimalNum
 		expected string
 	}{
 		{
 			name:     "With value",
-			input:    SingleIntVal{Val: 10},
-			expected: `<w:spacing w:val="10"></w:spacing>`,
+			input:    DecimalNum{Val: 10},
+			expected: `<w:outlineLvl w:val="10"></w:outlineLvl>`,
 		},
 		{
 			name:     "Empty value",
-			input:    SingleIntVal{Val: -1},
-			expected: `<w:spacing w:val="-1"></w:spacing>`,
+			input:    DecimalNum{Val: -1},
+			expected: `<w:outlineLvl w:val="-1"></w:outlineLvl>`,
 		},
 	}
 
@@ -28,7 +28,7 @@ func TestSingleIntVal_MarshalXML(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var result strings.Builder
 			encoder := xml.NewEncoder(&result)
-			start := xml.StartElement{Name: xml.Name{Local: "w:spacing"}}
+			start := xml.StartElement{Name: xml.Name{Local: "w:outlineLvl"}}
 
 			err := tt.input.MarshalXML(encoder, start)
 			if err != nil {
@@ -45,27 +45,27 @@ func TestSingleIntVal_MarshalXML(t *testing.T) {
 	}
 }
 
-func TestSingleIntVal_UnmarshalXML(t *testing.T) {
+func TestDecimalNum_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
 		inputXML string
-		expected SingleIntVal
+		expected DecimalNum
 	}{
 		{
 			name:     "With value",
-			inputXML: `<w:spacing w:val="00122"></w:spacing>`,
-			expected: SingleIntVal{Val: 122},
+			inputXML: `<w:outlineLvl w:val="00122"></w:outlineLvl>`,
+			expected: DecimalNum{Val: 122},
 		},
 		{
 			name:     "Empty value",
-			inputXML: `<w:spacing w:val="+3"></w:spacing>`,
-			expected: SingleIntVal{Val: 3},
+			inputXML: `<w:outlineLvl w:val="+3"></w:outlineLvl>`,
+			expected: DecimalNum{Val: 3},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var result SingleIntVal
+			var result DecimalNum
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &result)
 			if err != nil {

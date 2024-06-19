@@ -15,7 +15,7 @@ func TestFormProt_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "WithVal",
-			formProt: FormProt{Val: stypes.OnOff("on")},
+			formProt: FormProt{Val: stypes.BinFlag("on")},
 			expected: `<w:formProt w:val="on"></w:formProt>`,
 		},
 		{
@@ -47,7 +47,7 @@ func TestFormProt_UnmarshalXML(t *testing.T) {
 	}{
 		{
 			xmlStr:   `<w:formProt w:val="on"></w:formProt>`,
-			expected: FormProt{Val: stypes.OnOff("on")},
+			expected: FormProt{Val: stypes.BinFlag("on")},
 		},
 		{
 			xmlStr:   `<w:formProt></w:formProt>`,

@@ -1,4 +1,4 @@
-package docxrun
+package ctypes
 
 import (
 	"encoding/xml"
@@ -8,29 +8,29 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
-func TestTextBorder_MarshalXML(t *testing.T) {
+func TestBorder_MarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    TextBorder
+		input    Border
 		expected string
 	}{
 		{
 			name: "With all attributes",
-			input: TextBorder{
+			input: Border{
 				Val:        stypes.BorderStyleSingle,
 				Color:      StringPtr("FF0000"),
 				ThemeColor: themeColorPointer(stypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
-				Shadow:     OnOffPtr(stypes.OnOffTrue),
-				Frame:      OnOffPtr(stypes.OnOffTrue),
+				Shadow:     BinFlagPtr(stypes.BinFlagTrue),
+				Frame:      BinFlagPtr(stypes.BinFlagTrue),
 			},
 			expected: `<w:bdr w:val="single" w:color="FF0000" w:themeColor="accent1" w:themeTint="500" w:themeShade="200" w:space="0" w:shadow="true" w:frame="true"></w:bdr>`,
 		},
 		{
 			name: "Without optional attributes",
-			input: TextBorder{
+			input: Border{
 				Val: stypes.BorderStyleDouble,
 			},
 			expected: `<w:bdr w:val="double"></w:bdr>`,
@@ -57,31 +57,31 @@ func TestTextBorder_MarshalXML(t *testing.T) {
 	}
 }
 
-func TestTextBorder_UnmarshalXML(t *testing.T) {
+func TestBorder_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
 		inputXML string
-		expected TextBorder
+		expected Border
 	}{
 		{
 			name: "With all attributes",
 			inputXML: `<w:bdr w:val="single" w:color="FF0000" w:themeColor="accent1" w:themeTint="500" ` +
 				`w:themeShade="200" w:space="0" w:shadow="true" w:frame="true"></w:bdr>`,
-			expected: TextBorder{
+			expected: Border{
 				Val:        stypes.BorderStyleSingle,
 				Color:      StringPtr("FF0000"),
 				ThemeColor: themeColorPointer(stypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
-				Shadow:     OnOffPtr(stypes.OnOffTrue),
-				Frame:      OnOffPtr(stypes.OnOffTrue),
+				Shadow:     BinFlagPtr(stypes.BinFlagTrue),
+				Frame:      BinFlagPtr(stypes.BinFlagTrue),
 			},
 		},
 		{
 			name:     "Without optional attributes",
 			inputXML: `<w:bdr w:val="double"></w:bdr>`,
-			expected: TextBorder{
+			expected: Border{
 				Val: stypes.BorderStyleDouble,
 			},
 		},
@@ -89,7 +89,7 @@ func TestTextBorder_UnmarshalXML(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var result TextBorder
+			var result Border
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &result)
 			if err != nil {
@@ -171,7 +171,7 @@ func StringPtr(s string) *string {
 	return &s
 }
 
-func OnOffPtr(o stypes.OnOff) *stypes.OnOff {
+func BinFlagPtr(o stypes.BinFlag) *stypes.BinFlag {
 	return &o
 }
 

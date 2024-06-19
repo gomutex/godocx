@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/gomutex/godocx/elemtypes"
+	"github.com/gomutex/godocx/wml/ctypes"
 )
 
 func optBoolElemPtr(value elemtypes.OptBoolElem) *elemtypes.OptBoolElem {
@@ -17,7 +18,7 @@ func singleUint64ValPtr(value elemtypes.SingleUint64Val) *elemtypes.SingleUint64
 	return &value
 }
 
-func singleIntValPtr(value elemtypes.SingleIntVal) *elemtypes.SingleIntVal {
+func singleIntValPtr(value ctypes.DecimalNum) *ctypes.DecimalNum {
 	return &value
 }
 
@@ -56,9 +57,9 @@ func TestRunProperty_MarshalXML(t *testing.T) {
 				SpecVanish:   optBoolElemPtr(elemtypes.OptBoolElem{}),
 				OMath:        optBoolElemPtr(elemtypes.OptBoolElem{}),
 				Kern:         singleUint64ValPtr(elemtypes.SingleUint64Val{Val: 20}),
-				Spacing:      singleIntValPtr(elemtypes.SingleIntVal{Val: 100}),
+				Spacing:      singleIntValPtr(ctypes.DecimalNum{Val: 100}),
 				Style:        singleStrValPtr(elemtypes.SingleStrVal{Val: "Heading1"}),
-				Position:     singleIntValPtr(elemtypes.SingleIntVal{Val: 10}),
+				Position:     singleIntValPtr(ctypes.DecimalNum{Val: 10}),
 			},
 			expected: `<w:rPr><w:b></w:b><w:bCs></w:bCs><w:rtl></w:rtl><w:specVanish></w:specVanish><w:oMath></w:oMath><w:cs></w:cs><w:i></w:i><w:iCs></w:iCs><w:strike></w:strike><w:dstrike></w:dstrike><w:outline></w:outline><w:shadow></w:shadow><w:caps></w:caps><w:smallCaps></w:smallCaps><w:snapToGrid></w:snapToGrid><w:emboss></w:emboss><w:imprint></w:imprint><w:vanish></w:vanish><w:webHidden></w:webHidden><w:noProof></w:noProof><w:rStyle w:val="Heading1"></w:rStyle><w:spacing w:val="100"></w:spacing><w:kern w:val="20"></w:kern><w:position w:val="10"></w:position></w:rPr>`,
 		},
@@ -125,9 +126,9 @@ func TestRunProperty_UnmarshalXML(t *testing.T) {
 				SpecVanish:   optBoolElemPtr(elemtypes.OptBoolElem{}),
 				OMath:        optBoolElemPtr(elemtypes.OptBoolElem{}),
 				Kern:         singleUint64ValPtr(elemtypes.SingleUint64Val{Val: 20}),
-				Spacing:      singleIntValPtr(elemtypes.SingleIntVal{Val: 100}),
+				Spacing:      singleIntValPtr(ctypes.DecimalNum{Val: 100}),
 				Style:        singleStrValPtr(elemtypes.SingleStrVal{Val: "Heading1"}),
-				Position:     singleIntValPtr(elemtypes.SingleIntVal{Val: 10}),
+				Position:     singleIntValPtr(ctypes.DecimalNum{Val: 10}),
 			},
 		},
 		{

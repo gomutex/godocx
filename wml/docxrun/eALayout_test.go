@@ -5,21 +5,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/stypes"
 )
-
-// Helper functions to create pointers
-func intPtr(i int) *int {
-	return &i
-}
-
-func onOffPtr(value stypes.OnOff) *stypes.OnOff {
-	return &value
-}
-
-func combineBracketsPtr(value stypes.CombineBrackets) *stypes.CombineBrackets {
-	return &value
-}
 
 func TestEALayout_MarshalXML(t *testing.T) {
 	tests := []struct {
@@ -30,46 +18,46 @@ func TestEALayout_MarshalXML(t *testing.T) {
 		{
 			name: "All attributes set",
 			layout: EALayout{
-				ID:           intPtr(1),
-				Combine:      onOffPtr(stypes.OnOffOn),
-				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsRound),
-				Vert:         onOffPtr(stypes.OnOffOff),
-				VertCompress: onOffPtr(stypes.OnOffOn),
+				ID:           internal.ToPtr(1),
+				Combine:      internal.ToPtr(stypes.BinFlagOn),
+				CombineBrkts: internal.ToPtr(stypes.CombineBracketsRound),
+				Vert:         internal.ToPtr(stypes.BinFlagOff),
+				VertCompress: internal.ToPtr(stypes.BinFlagOn),
 			},
 			expected: `<w:eastAsianLayout w:id="1" w:combine="on" w:combineBrackets="round" w:vert="off" w:vertCompress="on"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only ID set",
 			layout: EALayout{
-				ID: intPtr(2),
+				ID: internal.ToPtr(2),
 			},
 			expected: `<w:eastAsianLayout w:id="2"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only Combine set",
 			layout: EALayout{
-				Combine: onOffPtr(stypes.OnOffOn),
+				Combine: internal.ToPtr(stypes.BinFlagOn),
 			},
 			expected: `<w:eastAsianLayout w:combine="on"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only CombineBrkts set",
 			layout: EALayout{
-				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsSquare),
+				CombineBrkts: internal.ToPtr(stypes.CombineBracketsSquare),
 			},
 			expected: `<w:eastAsianLayout w:combineBrackets="square"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only Vert set",
 			layout: EALayout{
-				Vert: onOffPtr(stypes.OnOffOff),
+				Vert: internal.ToPtr(stypes.BinFlagOff),
 			},
 			expected: `<w:eastAsianLayout w:vert="off"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only VertCompress set",
 			layout: EALayout{
-				VertCompress: onOffPtr(stypes.OnOffOn),
+				VertCompress: internal.ToPtr(stypes.BinFlagOn),
 			},
 			expected: `<w:eastAsianLayout w:vertCompress="on"></w:eastAsianLayout>`,
 		},
@@ -108,46 +96,46 @@ func TestEALayout_UnmarshalXML(t *testing.T) {
 			name:     "All attributes set",
 			inputXML: `<w:eastAsianLayout w:id="1" w:combine="on" w:combineBrackets="round" w:vert="off" w:vertCompress="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				ID:           intPtr(1),
-				Combine:      onOffPtr(stypes.OnOffOn),
-				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsRound),
-				Vert:         onOffPtr(stypes.OnOffOff),
-				VertCompress: onOffPtr(stypes.OnOffOn),
+				ID:           internal.ToPtr(1),
+				Combine:      internal.ToPtr(stypes.BinFlagOn),
+				CombineBrkts: internal.ToPtr(stypes.CombineBracketsRound),
+				Vert:         internal.ToPtr(stypes.BinFlagOff),
+				VertCompress: internal.ToPtr(stypes.BinFlagOn),
 			},
 		},
 		{
 			name:     "Only ID set",
 			inputXML: `<w:eastAsianLayout w:id="2"></w:eastAsianLayout>`,
 			expected: EALayout{
-				ID: intPtr(2),
+				ID: internal.ToPtr(2),
 			},
 		},
 		{
 			name:     "Only Combine set",
 			inputXML: `<w:eastAsianLayout w:combine="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				Combine: onOffPtr(stypes.OnOffOn),
+				Combine: internal.ToPtr(stypes.BinFlagOn),
 			},
 		},
 		{
 			name:     "Only CombineBrkts set",
 			inputXML: `<w:eastAsianLayout w:combineBrackets="square"></w:eastAsianLayout>`,
 			expected: EALayout{
-				CombineBrkts: combineBracketsPtr(stypes.CombineBracketsSquare),
+				CombineBrkts: internal.ToPtr(stypes.CombineBracketsSquare),
 			},
 		},
 		{
 			name:     "Only Vert set",
 			inputXML: `<w:eastAsianLayout w:vert="off"></w:eastAsianLayout>`,
 			expected: EALayout{
-				Vert: onOffPtr(stypes.OnOffOff),
+				Vert: internal.ToPtr(stypes.BinFlagOff),
 			},
 		},
 		{
 			name:     "Only VertCompress set",
 			inputXML: `<w:eastAsianLayout w:vertCompress="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				VertCompress: onOffPtr(stypes.OnOffOn),
+				VertCompress: internal.ToPtr(stypes.BinFlagOn),
 			},
 		},
 		{

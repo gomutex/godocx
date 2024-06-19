@@ -56,7 +56,7 @@ func DefaultShading() *Shading {
 	color := "auto"
 	fill := "FFFFFF"
 	return &Shading{
-		Val:   "Clear",
+		Val:   stypes.ShdClear,
 		Color: &color,
 		Fill:  &fill,
 	}

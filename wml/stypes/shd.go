@@ -130,7 +130,7 @@ func ShadingFromStr(value string) (Shading, error) {
 	case "pct95":
 		return ShdPct95, nil
 	default:
-		return "", errors.New("invalid Shd value")
+		return "", errors.New("invalid shading value")
 	}
 }
 

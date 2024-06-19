@@ -1,4 +1,4 @@
-package sections
+package ctypes
 
 import (
 	"encoding/xml"

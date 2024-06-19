@@ -3,10 +3,11 @@ package sections
 import (
 	"encoding/xml"
 
+	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/hdrftr"
 )
 
-// Section Properties : w:sectPr
+// Document Final Section Properties : w:sectPr
 type SectionProp struct {
 	HeaderReference *hdrftr.HeaderReference `xml:"headerReference,omitempty"`
 	FooterReference *hdrftr.FooterReference `xml:"footerReference,omitempty"`
@@ -16,7 +17,7 @@ type SectionProp struct {
 	PageNum         *PageNumbering          `xml:"pgNumType,omitempty"`
 	FormProt        *FormProt               `xml:"formProt,omitempty"`
 	TitlePg         *hdrftr.TitlePg         `xml:"titlePg,omitempty"`
-	TextDir         *TextDirection          `xml:"textDirection,omitempty"`
+	TextDir         *ctypes.TextDirection   `xml:"textDirection,omitempty"`
 	DocGrid         *DocGrid                `xml:"docGrid,omitempty"`
 }
 
