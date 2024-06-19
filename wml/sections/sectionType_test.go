@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestSectionType_MarshalXML(t *testing.T) {
@@ -16,7 +16,7 @@ func TestSectionType_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "Valid SectionType",
-			input:    SectionType{Val: simpletypes.SectionMark("nextPage")},
+			input:    SectionType{Val: stypes.SectionMark("nextPage")},
 			expected: `<w:type w:val="nextPage"></w:type>`,
 		},
 		{
@@ -55,7 +55,7 @@ func TestSectionType_UnmarshalXML(t *testing.T) {
 		{
 			name:     "Valid SectionType",
 			inputXML: `<w:type w:val="nextPage"></w:type>`,
-			expected: SectionType{Val: simpletypes.SectionMark("nextPage")},
+			expected: SectionType{Val: stypes.SectionMark("nextPage")},
 		},
 		{
 			name:     "Empty SectionType",

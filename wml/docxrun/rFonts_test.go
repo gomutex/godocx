@@ -5,20 +5,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestRunFontsMarshalXML(t *testing.T) {
 	rf := RunFonts{
-		Hint:          simpletypes.FontTypeHintDefault,
+		Hint:          stypes.FontTypeHintDefault,
 		Ascii:         "Arial",
 		HAnsi:         "Calibri",
 		EastAsia:      "SimSun",
 		CS:            "Arial",
-		AsciiTheme:    simpletypes.ThemeFontMajorAscii,
-		HAnsiTheme:    simpletypes.ThemeFontMajorHAnsi,
-		EastAsiaTheme: simpletypes.ThemeFontMajorEastAsia,
-		CSTheme:       simpletypes.ThemeFontMajorBidi,
+		AsciiTheme:    stypes.ThemeFontMajorAscii,
+		HAnsiTheme:    stypes.ThemeFontMajorHAnsi,
+		EastAsiaTheme: stypes.ThemeFontMajorEastAsia,
+		CSTheme:       stypes.ThemeFontMajorBidi,
 	}
 
 	var output strings.Builder
@@ -45,15 +45,15 @@ func TestRunFontsUnmarshalXML(t *testing.T) {
 	}
 
 	expected := RunFonts{
-		Hint:          simpletypes.FontTypeHintDefault,
+		Hint:          stypes.FontTypeHintDefault,
 		Ascii:         "Arial",
 		HAnsi:         "Calibri",
 		EastAsia:      "SimSun",
 		CS:            "Arial",
-		AsciiTheme:    simpletypes.ThemeFontMajorAscii,
-		HAnsiTheme:    simpletypes.ThemeFontMajorHAnsi,
-		EastAsiaTheme: simpletypes.ThemeFontMajorEastAsia,
-		CSTheme:       simpletypes.ThemeFontMajorBidi,
+		AsciiTheme:    stypes.ThemeFontMajorAscii,
+		HAnsiTheme:    stypes.ThemeFontMajorHAnsi,
+		EastAsiaTheme: stypes.ThemeFontMajorEastAsia,
+		CSTheme:       stypes.ThemeFontMajorBidi,
 	}
 
 	if rf != expected {

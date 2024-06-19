@@ -4,15 +4,15 @@ import (
 	"encoding/xml"
 	"strconv"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Page Size : w:pgSz
 type PageSize struct {
-	Width  *uint64                `xml:"w,attr,omitempty"`
-	Height *uint64                `xml:"h,attr,omitempty"`
-	Orient simpletypes.PageOrient `xml:"orient,attr,omitempty"`
-	Code   *int                   `xml:"code,attr,omitempty"`
+	Width  *uint64           `xml:"w,attr,omitempty"`
+	Height *uint64           `xml:"h,attr,omitempty"`
+	Orient stypes.PageOrient `xml:"orient,attr,omitempty"`
+	Code   *int              `xml:"code,attr,omitempty"`
 }
 
 func (p *PageSize) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

@@ -3,11 +3,11 @@ package sections
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 type SectionType struct {
-	Val simpletypes.SectionMark `xml:"val,attr,omitempty"`
+	Val stypes.SectionMark `xml:"val,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the SectionType type.

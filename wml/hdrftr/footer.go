@@ -3,13 +3,13 @@ package hdrftr
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Footer Reference
 type FooterReference struct {
-	Type simpletypes.HdrFtrType `xml:"type,attr"` //Footer or Footer Type
-	ID   string                 `xml:"id,attr"`   //Relationship to Part
+	Type stypes.HdrFtrType `xml:"type,attr"` //Footer or Footer Type
+	ID   string            `xml:"id,attr"`   //Relationship to Part
 }
 
 func (h *FooterReference) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

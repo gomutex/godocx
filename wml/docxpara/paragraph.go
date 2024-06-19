@@ -5,9 +5,9 @@ import (
 
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml"
+	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
 	"github.com/gomutex/godocx/wml/formatting"
-	"github.com/gomutex/godocx/wml/liststyle"
 	"github.com/gomutex/godocx/wml/runcontent"
 )
 
@@ -18,7 +18,7 @@ type ParagraphChild struct {
 
 type Paragraph struct {
 	id       string
-	Property *ParagraphProperty
+	Property *ParagraphProp
 
 	Children []*ParagraphChild
 }
@@ -85,17 +85,16 @@ func (p *Paragraph) Justification(value string) *Paragraph {
 }
 
 func (p *Paragraph) Numbering(id int, level int) {
-	numberingID := liststyle.NewNumberingID(id)
-	indentLevel := liststyle.NewIndentLevel(level)
 
 	if p.Property == nil {
 		p.Property = DefaultParaProperty()
 	}
 
-	if p.Property.NumberingProperty == nil {
-		p.Property.NumberingProperty = liststyle.NewNumberingProperty()
+	if p.Property.NumProp == nil {
+		p.Property.NumProp = &NumProp{}
 	}
-	p.Property.NumberingProperty.AddNumber(numberingID, indentLevel)
+	p.Property.NumProp.NumID = ctypes.NewDecimalNum(id)
+	p.Property.NumProp.ILvl = ctypes.NewDecimalNum(level)
 }
 
 // Appends a new text to the Paragraph.
@@ -211,7 +210,7 @@ loop:
 
 				p.Children = append(p.Children, &ParagraphChild{Run: r})
 			case "pPr":
-				p.Property = &ParagraphProperty{}
+				p.Property = &ParagraphProp{}
 				if err = d.DecodeElement(p.Property, &elem); err != nil {
 					return err
 				}

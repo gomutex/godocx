@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestBackground_MarshalXML(t *testing.T) {
@@ -18,7 +18,7 @@ func TestBackground_MarshalXML(t *testing.T) {
 			name: "With all attributes",
 			input: Background{
 				Color:      StringPtr("FFFFFF"),
-				ThemeColor: ThemeColorPtr(simpletypes.ThemeColorAccent1),
+				ThemeColor: ThemeColorPtr(stypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 			},
@@ -64,7 +64,7 @@ func TestBackground_UnmarshalXML(t *testing.T) {
 			inputXML: `<w:background w:color="FFFFFF" w:themeColor="accent1" w:themeTint="500" w:themeShade="200"></w:background>`,
 			expected: Background{
 				Color:      StringPtr("FFFFFF"),
-				ThemeColor: ThemeColorPtr(simpletypes.ThemeColorAccent1),
+				ThemeColor: ThemeColorPtr(stypes.ThemeColorAccent1),
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 			},
@@ -134,6 +134,6 @@ func StringPtr(s string) *string {
 	return &s
 }
 
-func ThemeColorPtr(t simpletypes.ThemeColor) *simpletypes.ThemeColor {
+func ThemeColorPtr(t stypes.ThemeColor) *stypes.ThemeColor {
 	return &t
 }

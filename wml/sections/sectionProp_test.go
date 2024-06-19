@@ -6,8 +6,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/hdrftr"
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestSectionProp_MarshalXML(t *testing.T) {
@@ -27,10 +28,10 @@ func TestSectionProp_MarshalXML(t *testing.T) {
 				},
 				Type:       &SectionType{Val: "nextPage"},
 				PageMargin: &PageMargin{Top: intPtr(1440), Bottom: intPtr(1440), Left: intPtr(1440), Right: intPtr(1440)},
-				PageNum:    &PageNumbering{Format: simpletypes.NumFmtDecimal},
+				PageNum:    &PageNumbering{Format: stypes.NumFmtDecimal},
 				FormProt:   &FormProt{Val: "true"},
 				TitlePg:    &hdrftr.TitlePg{Val: "true"},
-				TextDir:    &TextDirection{Val: "lrTb"},
+				TextDir:    &ctypes.TextDirection{Val: "lrTb"},
 				DocGrid:    &DocGrid{Type: "default", LinePitch: intPtr(360)},
 			},
 			expected: `<w:sectPr><w:headerReference w:type="default" r:id="rId1"></w:headerReference><w:footerReference w:type="default" r:id="rId2"></w:footerReference><w:type w:val="nextPage"></w:type><w:pgSz w:w="12240" w:h="15840"></w:pgSz><w:pgMar w:left="1440" w:right="1440" w:top="1440" w:bottom="1440"></w:pgMar><w:pgNumType w:fmt="decimal"></w:pgNumType><w:formProt w:val="true"></w:formProt><w:titlePg w:val="true"></w:titlePg><w:textDirection w:val="lrTb"></w:textDirection><w:docGrid w:type="default" w:linePitch="360"></w:docGrid></w:sectPr>`,
@@ -118,10 +119,10 @@ func TestSectionProp_UnmarshalXML(t *testing.T) {
 				},
 				Type:       &SectionType{Val: "nextPage"},
 				PageMargin: &PageMargin{Top: intPtr(1440), Bottom: intPtr(1440), Left: intPtr(1440), Right: intPtr(1440)},
-				PageNum:    &PageNumbering{Format: simpletypes.NumFmtDecimal},
+				PageNum:    &PageNumbering{Format: stypes.NumFmtDecimal},
 				FormProt:   &FormProt{Val: "true"},
 				TitlePg:    &hdrftr.TitlePg{Val: "true"},
-				TextDir:    &TextDirection{Val: "lrTb"},
+				TextDir:    &ctypes.TextDirection{Val: "lrTb"},
 				DocGrid:    &DocGrid{Type: "default", LinePitch: intPtr(360)},
 			},
 		},

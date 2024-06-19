@@ -4,14 +4,14 @@ import (
 	"encoding/xml"
 	"strconv"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // DocGrid represents the document grid settings.
 type DocGrid struct {
-	Type      simpletypes.DocGridType `xml:"type,attr,omitempty"`
-	LinePitch *int                    `xml:"linePitch,attr,omitempty"`
-	CharSpace *int                    `xml:"charSpace,attr,omitempty"`
+	Type      stypes.DocGridType `xml:"type,attr,omitempty"`
+	LinePitch *int               `xml:"linePitch,attr,omitempty"`
+	CharSpace *int               `xml:"charSpace,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the DocGrid type.

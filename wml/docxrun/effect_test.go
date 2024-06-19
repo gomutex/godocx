@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestEffect_MarshalXML(t *testing.T) {
@@ -16,7 +16,7 @@ func TestEffect_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "With value",
-			input:    Effect{Val: TextEffectPtr(simpletypes.TextEffectBlinkBackground)},
+			input:    Effect{Val: TextEffectPtr(stypes.TextEffectBlinkBackground)},
 			expected: `<w:effect w:val="blinkBackground"></w:effect>`,
 		},
 		{
@@ -55,7 +55,7 @@ func TestEffect_UnmarshalXML(t *testing.T) {
 		{
 			name:     "With value",
 			inputXML: `<w:effect w:val="blinkBackground"></w:effect>`,
-			expected: Effect{Val: TextEffectPtr(simpletypes.TextEffectBlinkBackground)},
+			expected: Effect{Val: TextEffectPtr(stypes.TextEffectBlinkBackground)},
 		},
 		{
 			name:     "Without value",
@@ -89,6 +89,6 @@ func TestEffect_UnmarshalXML(t *testing.T) {
 	}
 }
 
-func TextEffectPtr(value simpletypes.TextEffect) *simpletypes.TextEffect {
+func TextEffectPtr(value stypes.TextEffect) *stypes.TextEffect {
 	return &value
 }

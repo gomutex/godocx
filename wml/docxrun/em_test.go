@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestEm_MarshalXML(t *testing.T) {
@@ -16,27 +16,27 @@ func TestEm_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "Valid Value - none",
-			em:       Em{Val: simpletypes.EmNone},
+			em:       Em{Val: stypes.EmNone},
 			expected: `<w:em w:val="none"></w:em>`,
 		},
 		{
 			name:     "Valid Value - dot",
-			em:       Em{Val: simpletypes.EmDot},
+			em:       Em{Val: stypes.EmDot},
 			expected: `<w:em w:val="dot"></w:em>`,
 		},
 		{
 			name:     "Valid Value - comma",
-			em:       Em{Val: simpletypes.EmComma},
+			em:       Em{Val: stypes.EmComma},
 			expected: `<w:em w:val="comma"></w:em>`,
 		},
 		{
 			name:     "Valid Value - circle",
-			em:       Em{Val: simpletypes.EmCircle},
+			em:       Em{Val: stypes.EmCircle},
 			expected: `<w:em w:val="circle"></w:em>`,
 		},
 		{
 			name:     "Valid Value - underDot",
-			em:       Em{Val: simpletypes.EmUnderDot},
+			em:       Em{Val: stypes.EmUnderDot},
 			expected: `<w:em w:val="underDot"></w:em>`,
 		},
 	}
@@ -70,27 +70,27 @@ func TestEm_UnmarshalXML(t *testing.T) {
 		{
 			name:     "Valid Value - none",
 			inputXML: `<w:em w:val="none"></w:em>`,
-			expected: Em{Val: simpletypes.EmNone},
+			expected: Em{Val: stypes.EmNone},
 		},
 		{
 			name:     "Valid Value - dot",
 			inputXML: `<w:em w:val="dot"></w:em>`,
-			expected: Em{Val: simpletypes.EmDot},
+			expected: Em{Val: stypes.EmDot},
 		},
 		{
 			name:     "Valid Value - comma",
 			inputXML: `<w:em w:val="comma"></w:em>`,
-			expected: Em{Val: simpletypes.EmComma},
+			expected: Em{Val: stypes.EmComma},
 		},
 		{
 			name:     "Valid Value - circle",
 			inputXML: `<w:em w:val="circle"></w:em>`,
-			expected: Em{Val: simpletypes.EmCircle},
+			expected: Em{Val: stypes.EmCircle},
 		},
 		{
 			name:     "Valid Value - underDot",
 			inputXML: `<w:em w:val="underDot"></w:em>`,
-			expected: Em{Val: simpletypes.EmUnderDot},
+			expected: Em{Val: stypes.EmUnderDot},
 		},
 	}
 

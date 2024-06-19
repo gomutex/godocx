@@ -4,22 +4,22 @@ import "encoding/xml"
 
 // Justification represents the justification of a paragraph.
 type Justification struct {
-	Value string
+	Val string
 }
 
 // NewJustification creates a new Justification.
 func NewJustification(val string) *Justification {
-	return &Justification{Value: val}
+	return &Justification{Val: val}
 }
 
 // DefaultJustification creates the default Justification with the value "centerGroup".
 func DefaultJustification() *Justification {
-	return &Justification{Value: "centerGroup"}
+	return &Justification{Val: "centerGroup"}
 }
 
 func (j *Justification) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:jc"
-	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: j.Value})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: j.Val})
 	return e.EncodeElement("", start)
 }
 
@@ -32,6 +32,6 @@ func (j *Justification) UnmarshalXML(d *xml.Decoder, start xml.StartElement) err
 		}
 	}
 
-	j.Value = attr
+	j.Val = attr
 	return d.Skip() // Skipping the inner content
 }

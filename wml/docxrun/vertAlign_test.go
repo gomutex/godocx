@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestVertAlign_MarshalXML(t *testing.T) {
@@ -16,7 +16,7 @@ func TestVertAlign_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:      "Valid Value",
-			vertAlign: VertAlign{Val: simpletypes.VerticalAlignRunBaseline},
+			vertAlign: VertAlign{Val: stypes.VerticalAlignRunBaseline},
 			expected:  `<w:vertAlign w:val="baseline"></w:vertAlign>`,
 		},
 	}
@@ -49,7 +49,7 @@ func TestVertAlign_UnmarshalXML(t *testing.T) {
 		{
 			name:     "Valid Value",
 			inputXML: `<w:vertAlign w:val="baseline"></w:vertAlign>`,
-			expected: VertAlign{Val: simpletypes.VerticalAlignRunBaseline},
+			expected: VertAlign{Val: stypes.VerticalAlignRunBaseline},
 		},
 	}
 

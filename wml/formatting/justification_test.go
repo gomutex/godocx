@@ -20,8 +20,8 @@ func TestJustification(t *testing.T) {
 		t.Fatalf("Error unmarshaling XML to Justification: %v", err)
 	}
 
-	if testJustification.Value != unmarshaledJustification.Value {
-		t.Errorf("Expected justification value %s, got %s", testJustification.Value, unmarshaledJustification.Value)
+	if testJustification.Val != unmarshaledJustification.Val {
+		t.Errorf("Expected justification value %s, got %s", testJustification.Val, unmarshaledJustification.Val)
 	}
 
 	expectedXMLString := `<w:jc w:val="left">`

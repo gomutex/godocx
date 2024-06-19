@@ -3,12 +3,12 @@ package sections
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/simpletypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // PageNumbering represents the page numbering format in a Word document.
 type PageNumbering struct {
-	Format simpletypes.NumFmt `xml:"fmt,attr,omitempty"`
+	Format stypes.NumFmt `xml:"fmt,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the PageNumbering type.
