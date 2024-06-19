@@ -1,10 +1,12 @@
-package dml
+package dmlpic
 
 import (
 	"encoding/xml"
 	"strings"
 	"testing"
 
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/dmlprops"
 	"github.com/gomutex/godocx/types"
 )
 
@@ -15,13 +17,13 @@ func TestMarshalNonVisualPicProp(t *testing.T) {
 	}{
 		{
 			prop: &NonVisualPicProp{
-				CNvPr: &CNvPr{
+				CNvPr: &dmlct.CNvPr{
 					ID:          "1",
 					Name:        "Pic1",
 					Description: "Description of Pic1",
 				},
 				CNvPicPr: &CNvPicPr{
-					PicLocks: &PicLocks{
+					PicLocks: &dmlprops.PicLocks{
 						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
@@ -30,7 +32,7 @@ func TestMarshalNonVisualPicProp(t *testing.T) {
 		},
 		{
 			prop: &NonVisualPicProp{
-				CNvPr: &CNvPr{
+				CNvPr: &dmlct.CNvPr{
 					ID:          "2",
 					Name:        "Pic2",
 					Description: "Description of Pic2",
@@ -63,13 +65,13 @@ func TestUnmarshalNonVisualPicProp(t *testing.T) {
 		{
 			inputXML: `<pic:nvPicPr><pic:cNvPr id="1" name="Pic1" descr="Description of Pic1"></pic:cNvPr><pic:cNvPicPr><a:picLocks noChangeAspect="1"></a:picLocks></pic:cNvPicPr></pic:nvPicPr>`,
 			expected: NonVisualPicProp{
-				CNvPr: &CNvPr{
+				CNvPr: &dmlct.CNvPr{
 					ID:          "1",
 					Name:        "Pic1",
 					Description: "Description of Pic1",
 				},
 				CNvPicPr: &CNvPicPr{
-					PicLocks: &PicLocks{
+					PicLocks: &dmlprops.PicLocks{
 						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
@@ -78,7 +80,7 @@ func TestUnmarshalNonVisualPicProp(t *testing.T) {
 		{
 			inputXML: `<pic:nvPicPr><pic:cNvPr id="2" name="Pic2" descr="Description of Pic2"></pic:cNvPr></pic:nvPicPr>`,
 			expected: NonVisualPicProp{
-				CNvPr: &CNvPr{
+				CNvPr: &dmlct.CNvPr{
 					ID:          "2",
 					Name:        "Pic2",
 					Description: "Description of Pic2",

@@ -1,10 +1,12 @@
-package dml
+package dmlpic
 
 import (
 	"encoding/xml"
 	"strings"
 	"testing"
 
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/dmlprops"
 	"github.com/gomutex/godocx/types"
 )
 
@@ -12,13 +14,13 @@ func TestPicMarshalXML(t *testing.T) {
 	rect := "rect"
 	p := &Pic{
 		NonVisualPicProp: &NonVisualPicProp{
-			CNvPr: &CNvPr{
+			CNvPr: &dmlct.CNvPr{
 				ID:          "1",
 				Name:        "Pic 1",
 				Description: "Description",
 			},
 			CNvPicPr: &CNvPicPr{
-				PicLocks: &PicLocks{
+				PicLocks: &dmlprops.PicLocks{
 					NoChangeAspect:     types.NewOptBool(true),
 					NoChangeArrowheads: types.NewOptBool(true),
 				},
@@ -38,7 +40,7 @@ func TestPicMarshalXML(t *testing.T) {
 					X: 0,
 					Y: 0,
 				},
-				Extent: &Extent{
+				Extent: &dmlct.PSize2D{
 					Width:  100000,
 					Height: 100000,
 				},

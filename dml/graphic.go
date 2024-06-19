@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/common/constants"
+	"github.com/gomutex/godocx/dml/dmlpic"
 )
 
 type Graphic struct {
@@ -19,11 +20,11 @@ func DefaultGraphic() *Graphic {
 }
 
 type GraphicData struct {
-	URI string `xml:"uri,attr,omitempty"`
-	Pic *Pic   `xml:"pic,omitempty"`
+	URI string      `xml:"uri,attr,omitempty"`
+	Pic *dmlpic.Pic `xml:"pic,omitempty"`
 }
 
-func NewPicGraphic(pic *Pic) *Graphic {
+func NewPicGraphic(pic *dmlpic.Pic) *Graphic {
 	return &Graphic{
 		Data: &GraphicData{
 			URI: constants.DrawingMLPicNS,

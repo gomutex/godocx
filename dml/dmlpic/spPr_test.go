@@ -1,4 +1,4 @@
-package dml
+package dmlpic
 
 import (
 	"encoding/xml"

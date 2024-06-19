@@ -18,8 +18,6 @@ type Drawing struct {
 	Anchor []*Anchor `xml:"anchor,omitempty"`
 }
 
-type WrapNone struct{} // Just empty tag
-
 func (dr *Drawing) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 loop:
 	for {

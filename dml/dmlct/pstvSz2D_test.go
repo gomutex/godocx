@@ -1,4 +1,4 @@
-package dml
+package dmlct
 
 import (
 	"encoding/xml"
@@ -8,10 +8,10 @@ import (
 	"github.com/gomutex/godocx/common/units"
 )
 
-func TestNewExtent(t *testing.T) {
+func TestNewPSize2D(t *testing.T) {
 	width := units.Emu(100)
 	height := units.Emu(200)
-	extent := NewExtent(width, height)
+	extent := NewPostvSz2D(width, height)
 
 	if extent.Width != uint64(width) {
 		t.Errorf("Width does not match. Expected %d, got %d", width, extent.Width)
@@ -22,19 +22,19 @@ func TestNewExtent(t *testing.T) {
 	}
 }
 
-func TestMarshalExtent(t *testing.T) {
+func TestMarshalPSize2D(t *testing.T) {
 	tests := []struct {
-		extent      *Extent
+		extent      *PSize2D
 		expectedXML string
 		xmlName     string
 	}{
 		{
-			extent:      NewExtent(units.Emu(100), units.Emu(200)),
+			extent:      NewPostvSz2D(units.Emu(100), units.Emu(200)),
 			expectedXML: `<w:extent cx="100" cy="200"></w:extent>`,
 			xmlName:     "w:extent",
 		},
 		{
-			extent:      NewExtent(units.Emu(150), units.Emu(250)),
+			extent:      NewPostvSz2D(units.Emu(150), units.Emu(250)),
 			expectedXML: `<a:ext cx="150" cy="250"></a:ext>`,
 			xmlName:     "a:ext",
 		},
@@ -63,21 +63,21 @@ func TestMarshalExtent(t *testing.T) {
 	}
 }
 
-func TestUnmarshalExtent(t *testing.T) {
+func TestUnmarshalPSize2D(t *testing.T) {
 	tests := []struct {
 		inputXML    string
-		expectedExt Extent
+		expectedExt PSize2D
 	}{
 		{
 			inputXML: `<w:extent cx="100" cy="200"></w:extent>`,
-			expectedExt: Extent{
+			expectedExt: PSize2D{
 				Width:  100,
 				Height: 200,
 			},
 		},
 		{
 			inputXML: `<a:extent cx="150" cy="250"></a:extent>`,
-			expectedExt: Extent{
+			expectedExt: PSize2D{
 				Width:  150,
 				Height: 250,
 			},
@@ -86,7 +86,7 @@ func TestUnmarshalExtent(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.inputXML, func(t *testing.T) {
-			var extent Extent
+			var extent PSize2D
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &extent)
 			if err != nil {

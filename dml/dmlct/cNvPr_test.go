@@ -1,4 +1,4 @@
-package dml
+package dmlct
 
 import (
 	"encoding/xml"
@@ -30,13 +30,22 @@ func TestMarshalCNvPr(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.expectedXML, func(t *testing.T) {
-			generatedXML, err := xml.Marshal(tt.cnvpr)
+			var result strings.Builder
+			encoder := xml.NewEncoder(&result)
+
+			start := xml.StartElement{Name: xml.Name{Local: "pic:cNvPr"}}
+			err := tt.cnvpr.MarshalXML(encoder, start)
 			if err != nil {
 				t.Fatalf("Error marshaling XML: %v", err)
 			}
 
-			if strings.TrimSpace(string(generatedXML)) != tt.expectedXML {
-				t.Errorf("Expected XML:\n%s\nBut got:\n%s", tt.expectedXML, generatedXML)
+			err = encoder.Flush()
+			if err != nil {
+				t.Errorf("Error flushing encoder: %v", err)
+			}
+
+			if result.String() != tt.expectedXML {
+				t.Errorf("Expected XML:\n%s\nBut got:\n%s", tt.expectedXML, result.String())
 			}
 		})
 	}

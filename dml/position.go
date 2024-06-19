@@ -2,6 +2,9 @@ package dml
 
 import (
 	"encoding/xml"
+	"errors"
+
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 type PositionType struct {
@@ -10,16 +13,21 @@ type PositionType struct {
 }
 
 type PoistionH struct {
-	RelativeFrom RelativeFromHType `xml:"relativeFrom,attr"`
-	PosOffset    int               `xml:"posOffset"`
+	RelativeFrom dmlst.RelFromH `xml:"relativeFrom,attr"`
+	PosOffset    int            `xml:"posOffset"`
 }
 
 type PoistionV struct {
-	RelativeFrom RelativeFromVType `xml:"relativeFrom,attr"`
-	PosOffset    int               `xml:"posOffset"`
+	RelativeFrom dmlst.RelFromV `xml:"relativeFrom,attr"`
+	PosOffset    int            `xml:"posOffset"`
 }
 
 func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+
+	if p.RelativeFrom == "" {
+		return errors.New("Invalid RelativeFrom in PoistionH")
+	}
+
 	start.Name.Local = "wp:positionH"
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "relativeFrom"}, Value: string(p.RelativeFrom)})
@@ -38,6 +46,10 @@ func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 func (p *PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if p.RelativeFrom == "" {
+		return errors.New("Invalid RelativeFrom in PoistionV")
+	}
+
 	start.Name.Local = "wp:positionV"
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "relativeFrom"}, Value: string(p.RelativeFrom)})

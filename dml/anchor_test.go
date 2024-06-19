@@ -3,19 +3,22 @@ package dml
 import (
 	"encoding/xml"
 	"testing"
+
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestMarshalAnchor(t *testing.T) {
-	simplePosAttr := 1
-	var distTAttr uint = 2
-	var distBAttr uint = 3
-	var distLAttr uint = 4
-	var distRAttr uint = 5
-	layoutInCellAttr := 6
-	allowOverlapAttr := 7
-	relativeHeightAttr := 8
-	behindDocAttr := 9
-	lockedAttr := 10
+	simplePos := 1
+	var distT uint = 2
+	var distB uint = 3
+	var distL uint = 4
+	var distR uint = 5
+	layoutInCell := 6
+	allowOverlap := 7
+	relativeHeight := 8
+	behindDoc := 9
+	locked := 10
 
 	tests := []struct {
 		anchor      *Anchor
@@ -24,17 +27,17 @@ func TestMarshalAnchor(t *testing.T) {
 	}{
 		{
 			anchor: &Anchor{
-				SimplePosAttr:      &simplePosAttr,
-				DistTAttr:          &distTAttr,
-				DistBAttr:          &distBAttr,
-				DistLAttr:          &distLAttr,
-				DistRAttr:          &distRAttr,
-				LayoutInCellAttr:   &layoutInCellAttr,
-				AllowOverlapAttr:   &allowOverlapAttr,
-				RelativeHeightAttr: &relativeHeightAttr,
-				BehindDocAttr:      &behindDocAttr,
-				LockedAttr:         &lockedAttr,
-				Extent: &Extent{
+				SimplePosAttr:  &simplePos,
+				DistT:          &distT,
+				DistB:          &distB,
+				DistL:          &distL,
+				DistR:          &distR,
+				LayoutInCell:   layoutInCell,
+				AllowOverlap:   allowOverlap,
+				RelativeHeight: relativeHeight,
+				BehindDoc:      behindDoc,
+				Locked:         locked,
+				Extent: dmlct.PSize2D{
 					Width:  100,
 					Height: 200,
 				},
@@ -44,9 +47,15 @@ func TestMarshalAnchor(t *testing.T) {
 					RightEdge:  3,
 					BottomEdge: 4,
 				},
-				WrapNone: &WrapNone{},
+				Wrap: WrapNone{},
+				PositionH: PoistionH{
+					RelativeFrom: dmlst.RelFromHColumn,
+				},
+				PositionV: PoistionV{
+					RelativeFrom: dmlst.RelFromVLine,
+				},
 			},
-			expectedXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone></wp:anchor>`,
+			expectedXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr></wp:docPr><a:graphic></a:graphic></wp:anchor>`,
 			xmlName:     "wp:anchor",
 		},
 	}
@@ -67,35 +76,35 @@ func TestMarshalAnchor(t *testing.T) {
 
 func TestUnmarshalAnchor(t *testing.T) {
 
-	simplePosAttr := 1
-	var distTAttr uint = 2
-	var distBAttr uint = 3
-	var distLAttr uint = 4
-	var distRAttr uint = 5
-	layoutInCellAttr := 6
-	allowOverlapAttr := 7
-	relativeHeightAttr := 8
-	behindDocAttr := 9
-	lockedAttr := 10
+	simplePos := 1
+	var distT uint = 2
+	var distB uint = 3
+	var distL uint = 4
+	var distR uint = 5
+	layoutInCell := 6
+	allowOverlap := 7
+	relativeHeight := 8
+	behindDoc := 9
+	locked := 10
 
 	tests := []struct {
 		inputXML string
 		expected Anchor
 	}{
 		{
-			inputXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone></wp:anchor>`,
+			inputXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr></wp:docPr><a:graphic></a:graphic></wp:anchor>`,
 			expected: Anchor{
-				SimplePosAttr:      &simplePosAttr,
-				DistTAttr:          &distTAttr,
-				DistBAttr:          &distBAttr,
-				DistLAttr:          &distLAttr,
-				DistRAttr:          &distRAttr,
-				LayoutInCellAttr:   &layoutInCellAttr,
-				AllowOverlapAttr:   &allowOverlapAttr,
-				RelativeHeightAttr: &relativeHeightAttr,
-				BehindDocAttr:      &behindDocAttr,
-				LockedAttr:         &lockedAttr,
-				Extent: &Extent{
+				SimplePosAttr:  &simplePos,
+				DistT:          &distT,
+				DistB:          &distB,
+				DistL:          &distL,
+				DistR:          &distR,
+				LayoutInCell:   layoutInCell,
+				AllowOverlap:   allowOverlap,
+				RelativeHeight: relativeHeight,
+				BehindDoc:      behindDoc,
+				Locked:         locked,
+				Extent: dmlct.PSize2D{
 					Width:  100,
 					Height: 200,
 				},
@@ -105,33 +114,7 @@ func TestUnmarshalAnchor(t *testing.T) {
 					RightEdge:  3,
 					BottomEdge: 4,
 				},
-				WrapNone: &WrapNone{},
-			},
-		},
-		{
-			inputXML: `<wp:anchor distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent></wp:anchor>`,
-			expected: Anchor{
-				SimplePosAttr:      &simplePosAttr,
-				DistTAttr:          &distTAttr,
-				DistBAttr:          &distBAttr,
-				DistLAttr:          &distLAttr,
-				DistRAttr:          &distRAttr,
-				LayoutInCellAttr:   &layoutInCellAttr,
-				AllowOverlapAttr:   &allowOverlapAttr,
-				RelativeHeightAttr: &relativeHeightAttr,
-				BehindDocAttr:      nil,
-				LockedAttr:         &lockedAttr,
-				Extent: &Extent{
-					Width:  100,
-					Height: 200,
-				},
-				EffectExtent: &EffectExtent{
-					LeftEdge:   1,
-					TopEdge:    2,
-					RightEdge:  3,
-					BottomEdge: 4,
-				},
-				WrapNone: nil,
+				Wrap: WrapNone{},
 			},
 		},
 	}
@@ -146,57 +129,44 @@ func TestUnmarshalAnchor(t *testing.T) {
 			}
 
 			if *anchor.SimplePosAttr != *tt.expected.SimplePosAttr {
-				t.Errorf("Expected SimplePosAttr %d, but got %d", *tt.expected.SimplePosAttr, *anchor.SimplePosAttr)
+				t.Errorf("Expected SimplePos %d, but got %d", *tt.expected.SimplePosAttr, *anchor.SimplePosAttr)
 			}
-			if *anchor.DistTAttr != *tt.expected.DistTAttr {
-				t.Errorf("Expected DistTAttr %d, but got %d", *tt.expected.DistTAttr, *anchor.DistTAttr)
+			if *anchor.DistT != *tt.expected.DistT {
+				t.Errorf("Expected DistT %d, but got %d", *tt.expected.DistT, *anchor.DistT)
 			}
-			if *anchor.DistBAttr != *tt.expected.DistBAttr {
-				t.Errorf("Expected DistBAttr %d, but got %d", *tt.expected.DistBAttr, *anchor.DistBAttr)
+			if *anchor.DistB != *tt.expected.DistB {
+				t.Errorf("Expected DistB %d, but got %d", *tt.expected.DistB, *anchor.DistB)
 			}
-			if *anchor.DistLAttr != *tt.expected.DistLAttr {
-				t.Errorf("Expected DistLAttr %d, but got %d", *tt.expected.DistLAttr, *anchor.DistLAttr)
+			if *anchor.DistL != *tt.expected.DistL {
+				t.Errorf("Expected DistL %d, but got %d", *tt.expected.DistL, *anchor.DistL)
 			}
-			if *anchor.DistRAttr != *tt.expected.DistRAttr {
-				t.Errorf("Expected DistRAttr %d, but got %d", *tt.expected.DistRAttr, *anchor.DistRAttr)
+			if *anchor.DistR != *tt.expected.DistR {
+				t.Errorf("Expected DistR %d, but got %d", *tt.expected.DistR, *anchor.DistR)
 			}
-			if *anchor.LayoutInCellAttr != *tt.expected.LayoutInCellAttr {
-				t.Errorf("Expected LayoutInCellAttr %d, but got %d", *tt.expected.LayoutInCellAttr, *anchor.LayoutInCellAttr)
+			if anchor.LayoutInCell != tt.expected.LayoutInCell {
+				t.Errorf("Expected LayoutInCell %d, but got %d", tt.expected.LayoutInCell, anchor.LayoutInCell)
 			}
-			if *anchor.AllowOverlapAttr != *tt.expected.AllowOverlapAttr {
-				t.Errorf("Expected AllowOverlapAttr %d, but got %d", *tt.expected.AllowOverlapAttr, *anchor.AllowOverlapAttr)
+			if anchor.AllowOverlap != tt.expected.AllowOverlap {
+				t.Errorf("Expected AllowOverlap %d, but got %d", tt.expected.AllowOverlap, anchor.AllowOverlap)
 			}
-			if *anchor.RelativeHeightAttr != *tt.expected.RelativeHeightAttr {
-				t.Errorf("Expected RelativeHeightAttr %d, but got %d", *tt.expected.RelativeHeightAttr, *anchor.RelativeHeightAttr)
-			}
-
-			if tt.expected.BehindDocAttr != nil {
-				if anchor.BehindDocAttr == nil {
-					t.Errorf("Expected BehindDocAttr %d, but got nil", *tt.expected.BehindDocAttr)
-				}
-				if *anchor.BehindDocAttr != *tt.expected.BehindDocAttr {
-					t.Errorf("Expected BehindDocAttr %d, but got %d", *tt.expected.BehindDocAttr, *anchor.BehindDocAttr)
-				}
-			} else {
-				if anchor.BehindDocAttr != nil {
-					t.Errorf("Expected BehindDocAttr nil, but got %d", *anchor.BehindDocAttr)
-				}
+			if anchor.RelativeHeight != tt.expected.RelativeHeight {
+				t.Errorf("Expected RelativeHeight %d, but got %d", tt.expected.RelativeHeight, anchor.RelativeHeight)
 			}
 
-			if *anchor.LockedAttr != *tt.expected.LockedAttr {
-				t.Errorf("Expected LockedAttr %d, but got %d", *tt.expected.LockedAttr, *anchor.LockedAttr)
+			if anchor.BehindDoc != tt.expected.BehindDoc {
+				t.Errorf("Expected BehindDoc %d, but got %d", tt.expected.BehindDoc, anchor.BehindDoc)
+			}
+
+			if anchor.Locked != tt.expected.Locked {
+				t.Errorf("Expected Locked %d, but got %d", tt.expected.Locked, anchor.Locked)
 			}
 
 			// Validate nested structs
-			if anchor.Extent != nil {
-				if anchor.Extent.Width != tt.expected.Extent.Width {
-					t.Errorf("Expected Extent.Width %d, but got %d", tt.expected.Extent.Width, anchor.Extent.Width)
-				}
-				if anchor.Extent.Height != tt.expected.Extent.Height {
-					t.Errorf("Expected Extent.Height %d, but got %d", tt.expected.Extent.Height, anchor.Extent.Height)
-				}
-			} else if tt.expected.Extent != nil {
-				t.Errorf("Expected Extent %v, but got nil", tt.expected.Extent)
+			if anchor.Extent.Width != tt.expected.Extent.Width {
+				t.Errorf("Expected Extent.Width %d, but got %d", tt.expected.Extent.Width, anchor.Extent.Width)
+			}
+			if anchor.Extent.Height != tt.expected.Extent.Height {
+				t.Errorf("Expected Extent.Height %d, but got %d", tt.expected.Extent.Height, anchor.Extent.Height)
 			}
 
 			if anchor.EffectExtent != nil {

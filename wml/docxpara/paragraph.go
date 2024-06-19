@@ -5,6 +5,8 @@ import (
 
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml"
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/dmlpic"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
 	"github.com/gomutex/godocx/wml/formatting"
@@ -241,8 +243,8 @@ func (p *Paragraph) AddDrawing(rID string, width units.Inch, height units.Inch) 
 	eHeight := height.ToEmu()
 
 	inline := dml.Inline{
-		Extent:  dml.NewExtent(eWidth, eHeight),
-		Graphic: dml.NewPicGraphic(dml.NewPic(rID, eWidth, eHeight)),
+		Extent:  dmlct.NewPostvSz2D(eWidth, eHeight),
+		Graphic: dml.NewPicGraphic(dmlpic.NewPic(rID, eWidth, eHeight)),
 	}
 
 	runChildren := []*docxrun.RunChild{}

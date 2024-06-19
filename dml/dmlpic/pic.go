@@ -1,4 +1,4 @@
-package dml
+package dmlpic
 
 import (
 	"encoding/xml"
@@ -6,6 +6,8 @@ import (
 
 	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/common/units"
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/geom"
 )
 
 type Pic struct {
@@ -154,8 +156,8 @@ func (f *FillRect) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 type TransformGroup struct {
-	Extent *Extent `xml:"ext,omitempty"`
-	Offset *Offset `xml:"off,omitempty"`
+	Extent *dmlct.PSize2D `xml:"ext,omitempty"`
+	Offset *Offset        `xml:"off,omitempty"`
 }
 
 type TFGroupOption func(*TransformGroup)
@@ -172,7 +174,7 @@ func NewTransformGroup(options ...TFGroupOption) *TransformGroup {
 
 func WithTFExtent(width units.Emu, height units.Emu) TFGroupOption {
 	return func(tf *TransformGroup) {
-		tf.Extent = NewExtent(width, height)
+		tf.Extent = dmlct.NewPostvSz2D(width, height)
 	}
 }
 
@@ -220,8 +222,8 @@ func (o *Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 type PresetGeometry struct {
-	Preset       *string       `xml:"prst,attr,omitempty"`
-	AdjustValues *AdjustValues `xml:"avLst,omitempty"`
+	Preset       *string            `xml:"prst,attr,omitempty"`
+	AdjustValues *geom.AdjustValues `xml:"avLst,omitempty"`
 }
 
 func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

@@ -1,4 +1,4 @@
-package dml
+package dmlct
 
 import (
 	"encoding/xml"
@@ -12,7 +12,6 @@ type CNvPr struct {
 }
 
 func (c *CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "pic:cNvPr"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "id"}, Value: c.ID},
 		{Name: xml.Name{Local: "name"}, Value: c.Name},

@@ -4,18 +4,20 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
+
+	"github.com/gomutex/godocx/dml/dmlct"
 )
 
 type Inline struct {
 	/// Specifies the minimum distance which shall be maintained between the top edge of this drawing object and any subsequent text within the document when this graphical object is displayed within the document's contents.,
 	/// The distance shall be measured in EMUs (English Mektric Units).,
-	DistTAttr *uint `xml:"distT,attr,omitempty"`
-	DistBAttr *uint `xml:"distB,attr,omitempty"`
-	DistLAttr *uint `xml:"distL,attr,omitempty"`
-	DistRAttr *uint `xml:"distR,attr,omitempty"`
+	DistT *uint `xml:"distT,attr,omitempty"`
+	DistB *uint `xml:"distB,attr,omitempty"`
+	DistL *uint `xml:"distL,attr,omitempty"`
+	DistR *uint `xml:"distR,attr,omitempty"`
 
 	// Child elements:
-	Extent            *Extent                    `xml:"extent,omitempty"`
+	Extent            *dmlct.PSize2D             `xml:"extent,omitempty"`
 	DocProp           *DocProp                   `xml:"docPr,omitempty"`
 	Graphic           *Graphic                   `xml:"graphic,omitempty"`
 	CNvGraphicFramePr *NonVisualGraphicFrameProp `xml:"cNvGraphicFramePr,omitempty"`
@@ -32,20 +34,20 @@ func (i *Inline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		// {Name: xml.Name{Local: "xmlns:pic"}, Value: constants.DrawingMLPicNS},
 	}
 
-	if i.DistTAttr != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distT"}, Value: strconv.FormatUint(uint64(*i.DistTAttr), 10)})
+	if i.DistT != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distT"}, Value: strconv.FormatUint(uint64(*i.DistT), 10)})
 	}
 
-	if i.DistBAttr != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distB"}, Value: strconv.FormatUint(uint64(*i.DistBAttr), 10)})
+	if i.DistB != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distB"}, Value: strconv.FormatUint(uint64(*i.DistB), 10)})
 	}
 
-	if i.DistLAttr != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distL"}, Value: strconv.FormatUint(uint64(*i.DistLAttr), 10)})
+	if i.DistL != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distL"}, Value: strconv.FormatUint(uint64(*i.DistL), 10)})
 	}
 
-	if i.DistRAttr != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distR"}, Value: strconv.FormatUint(uint64(*i.DistRAttr), 10)})
+	if i.DistR != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distR"}, Value: strconv.FormatUint(uint64(*i.DistR), 10)})
 	}
 
 	err := e.EncodeToken(start)
