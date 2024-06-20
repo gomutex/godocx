@@ -1,10 +1,15 @@
-package dml
+package dmlpic
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/dmlprops"
+)
 
 // Non-Visual Picture Drawing Properties
 type CNvPicPr struct {
-	PicLocks *PicLocks
+	PicLocks *dmlprops.PicLocks
 }
 
 func (c *CNvPicPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -35,7 +40,7 @@ func (c *CNvPicPr) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) er
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "picLocks":
-				c.PicLocks = &PicLocks{}
+				c.PicLocks = &dmlprops.PicLocks{}
 				if err = decoder.DecodeElement(c.PicLocks, &elem); err != nil {
 					return err
 				}
@@ -54,8 +59,8 @@ func (c *CNvPicPr) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) er
 
 // Non-Visual Picture Properties
 type NonVisualPicProp struct {
-	CNvPr    *CNvPr    `xml:"cNvPr,omitempty"`
-	CNvPicPr *CNvPicPr `xml:"cNvPicPr,omitempty"`
+	CNvPr    *dmlct.CNvPr `xml:"cNvPr,omitempty"`
+	CNvPicPr *CNvPicPr    `xml:"cNvPicPr,omitempty"`
 }
 
 func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -73,7 +78,9 @@ func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) er
 	}
 
 	if n.CNvPicPr != nil {
-		if err := e.EncodeElement(n.CNvPicPr, xml.StartElement{Name: xml.Name{Local: "pic:nvPicPr"}}); err != nil {
+		if err := e.EncodeElement(n.CNvPicPr, xml.StartElement{
+			Name: xml.Name{Local: "pic:nvPicPr"},
+		}); err != nil {
 			return err
 		}
 	}

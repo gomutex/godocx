@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gomutex/godocx/common/constants"
+	"github.com/gomutex/godocx/dml/dmlpic"
 )
 
 func TestMarshalGraphic(t *testing.T) {
@@ -14,7 +15,7 @@ func TestMarshalGraphic(t *testing.T) {
 		xmlName     string
 	}{
 		{
-			graphic:     NewPicGraphic(&Pic{}),
+			graphic:     NewPicGraphic(&dmlpic.Pic{}),
 			expectedXML: `<a:graphic xmlns:a="` + constants.DrawingMLMainNS + `"><a:graphicData uri="` + constants.DrawingMLPicNS + `"><pic:pic xmlns:pic="` + constants.DrawingMLPicNS + `"></pic:pic></a:graphicData></a:graphic>`,
 			xmlName:     "a:graphic",
 		},
@@ -49,7 +50,7 @@ func TestUnmarshalGraphic(t *testing.T) {
 			expectedGraphic: Graphic{
 				Data: &GraphicData{
 					URI: constants.DrawingMLPicNS,
-					Pic: &Pic{},
+					Pic: &dmlpic.Pic{},
 				},
 			},
 		},

@@ -1,4 +1,4 @@
-package dml
+package dmlprops
 
 import (
 	"encoding/xml"
@@ -6,6 +6,7 @@ import (
 	"github.com/gomutex/godocx/types"
 )
 
+// Picture Locks
 type PicLocks struct {
 	DisallowShadowGrouping types.OptBool `xml:"noGrp,attr,omitempty"`
 	NoSelect               types.OptBool `xml:"noSelect,attr,omitempty"`

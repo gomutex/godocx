@@ -3,6 +3,8 @@ package dml
 import (
 	"encoding/xml"
 	"testing"
+
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestMarshalPoistionH(t *testing.T) {
@@ -12,7 +14,7 @@ func TestMarshalPoistionH(t *testing.T) {
 	}{
 		{
 			positionH: &PoistionH{
-				RelativeFrom: "margin",
+				RelativeFrom: dmlst.RelFromHMargin,
 				PosOffset:    100,
 			},
 			expectedXML: `<wp:positionH relativeFrom="margin"><wp:posOffset>100</wp:posOffset></wp:positionH>`,
@@ -41,7 +43,7 @@ func TestUnmarshalPoistionH(t *testing.T) {
 		{
 			inputXML: `<wp:positionH relativeFrom="margin"><wp:posOffset>100</wp:posOffset></wp:positionH>`,
 			expectedPos: PoistionH{
-				RelativeFrom: "margin",
+				RelativeFrom: dmlst.RelFromHMargin,
 				PosOffset:    100,
 			},
 		},
@@ -73,7 +75,7 @@ func TestMarshalPoistionV(t *testing.T) {
 	}{
 		{
 			positionV: &PoistionV{
-				RelativeFrom: "paragraph",
+				RelativeFrom: dmlst.RelFromVParagraph,
 				PosOffset:    200,
 			},
 			expectedXML: `<wp:positionV relativeFrom="paragraph"><wp:posOffset>200</wp:posOffset></wp:positionV>`,
@@ -102,7 +104,7 @@ func TestUnmarshalPoistionV(t *testing.T) {
 		{
 			inputXML: `<wp:positionV relativeFrom="paragraph"><wp:posOffset>200</wp:posOffset></wp:positionV>`,
 			expectedPos: PoistionV{
-				RelativeFrom: "paragraph",
+				RelativeFrom: dmlst.RelFromVParagraph,
 				PosOffset:    200,
 			},
 		},

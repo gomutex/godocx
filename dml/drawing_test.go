@@ -4,21 +4,22 @@ import (
 	"encoding/xml"
 	"testing"
 
-	"github.com/gomutex/godocx/common/constants"
+	"github.com/gomutex/godocx/dml/dmlct"
+	"github.com/gomutex/godocx/dml/dmlst"
 	"github.com/gomutex/godocx/types"
 )
 
 func TestMarshalDrawing(t *testing.T) {
-	simplePosAttr := 1
-	var distTAttr uint = 2
-	var distBAttr uint = 3
-	var distLAttr uint = 4
-	var distRAttr uint = 5
-	layoutInCellAttr := 6
-	allowOverlapAttr := 7
-	relativeHeightAttr := 8
-	behindDocAttr := 9
-	lockedAttr := 10
+	simplePos := 1
+	var distT uint = 2
+	var distB uint = 3
+	var distL uint = 4
+	var distR uint = 5
+	layoutInCell := 6
+	allowOverlap := 7
+	relativeHeight := 8
+	behindDoc := 9
+	locked := 10
 
 	tests := []struct {
 		drawing     *Drawing
@@ -29,11 +30,11 @@ func TestMarshalDrawing(t *testing.T) {
 			drawing: &Drawing{
 				Inline: []*Inline{
 					{
-						DistTAttr: &distTAttr,
-						DistBAttr: &distBAttr,
-						DistLAttr: &distLAttr,
-						DistRAttr: &distRAttr,
-						Extent: &Extent{
+						DistT: &distT,
+						DistB: &distB,
+						DistL: &distL,
+						DistR: &distR,
+						Extent: &dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
 						},
@@ -52,17 +53,17 @@ func TestMarshalDrawing(t *testing.T) {
 				},
 				Anchor: []*Anchor{
 					{
-						SimplePosAttr:      &simplePosAttr,
-						DistTAttr:          &distTAttr,
-						DistBAttr:          &distBAttr,
-						DistLAttr:          &distLAttr,
-						DistRAttr:          &distRAttr,
-						LayoutInCellAttr:   &layoutInCellAttr,
-						AllowOverlapAttr:   &allowOverlapAttr,
-						RelativeHeightAttr: &relativeHeightAttr,
-						BehindDocAttr:      &behindDocAttr,
-						LockedAttr:         &lockedAttr,
-						Extent: &Extent{
+						SimplePosAttr:  &simplePos,
+						DistT:          &distT,
+						DistB:          &distB,
+						DistL:          &distL,
+						DistR:          &distR,
+						LayoutInCell:   layoutInCell,
+						AllowOverlap:   allowOverlap,
+						RelativeHeight: relativeHeight,
+						BehindDoc:      behindDoc,
+						Locked:         locked,
+						Extent: dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
 						},
@@ -72,11 +73,17 @@ func TestMarshalDrawing(t *testing.T) {
 							RightEdge:  3,
 							BottomEdge: 4,
 						},
-						WrapNone: &WrapNone{},
+						Wrap: WrapNone{},
+						PositionH: PoistionH{
+							RelativeFrom: dmlst.RelFromHColumn,
+						},
+						PositionV: PoistionV{
+							RelativeFrom: dmlst.RelFromVLine,
+						},
 					},
 				},
 			},
-			expectedXML: `<w:drawing><wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone></wp:anchor><wp:inline distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="` + constants.DrawingMLMainNS + `" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="` + constants.DrawingMLMainNS + `"></a:graphic></wp:inline></w:drawing>`,
+			expectedXML: `<w:drawing><wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr></wp:docPr><a:graphic></a:graphic></wp:anchor><wp:inline distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:inline></w:drawing>`,
 			xmlName:     "w:drawing",
 		},
 	}
@@ -96,16 +103,16 @@ func TestMarshalDrawing(t *testing.T) {
 }
 
 func TestUnmarshalDrawing(t *testing.T) {
-	var distTAttr uint = 2
-	var distBAttr uint = 3
-	var distLAttr uint = 4
-	var distRAttr uint = 5
-	var simplePosAttr int = 1
-	var layoutInCellAttr int = 6
-	var allowOverlapAttr int = 7
-	var relativeHeightAttr int = 8
-	var behindDocAttr int = 9
-	var lockedAttr int = 10
+	var distT uint = 2
+	var distB uint = 3
+	var distL uint = 4
+	var distR uint = 5
+	var simplePos int = 1
+	var layoutInCell int = 6
+	var allowOverlap int = 7
+	var relativeHeight int = 8
+	var behindDoc int = 9
+	var locked int = 10
 
 	tests := []struct {
 		inputXML        string
@@ -116,11 +123,11 @@ func TestUnmarshalDrawing(t *testing.T) {
 			expectedDrawing: Drawing{
 				Inline: []*Inline{
 					{
-						DistTAttr: &distTAttr,
-						DistBAttr: &distBAttr,
-						DistLAttr: &distLAttr,
-						DistRAttr: &distRAttr,
-						Extent: &Extent{
+						DistT: &distT,
+						DistB: &distB,
+						DistL: &distL,
+						DistR: &distR,
+						Extent: &dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
 						},
@@ -139,17 +146,17 @@ func TestUnmarshalDrawing(t *testing.T) {
 				},
 				Anchor: []*Anchor{
 					{
-						SimplePosAttr:      &simplePosAttr,
-						DistTAttr:          &distTAttr,
-						DistBAttr:          &distBAttr,
-						DistLAttr:          &distLAttr,
-						DistRAttr:          &distRAttr,
-						LayoutInCellAttr:   &layoutInCellAttr,
-						AllowOverlapAttr:   &allowOverlapAttr,
-						RelativeHeightAttr: &relativeHeightAttr,
-						BehindDocAttr:      &behindDocAttr,
-						LockedAttr:         &lockedAttr,
-						Extent: &Extent{
+						SimplePosAttr:  &simplePos,
+						DistT:          &distT,
+						DistB:          &distB,
+						DistL:          &distL,
+						DistR:          &distR,
+						LayoutInCell:   layoutInCell,
+						AllowOverlap:   allowOverlap,
+						RelativeHeight: relativeHeight,
+						BehindDoc:      behindDoc,
+						Locked:         locked,
+						Extent: dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
 						},
@@ -159,7 +166,7 @@ func TestUnmarshalDrawing(t *testing.T) {
 							RightEdge:  3,
 							BottomEdge: 4,
 						},
-						WrapNone: &WrapNone{},
+						Wrap: WrapNone{},
 					},
 				},
 			},
@@ -179,17 +186,17 @@ func TestUnmarshalDrawing(t *testing.T) {
 				t.Errorf("Expected %d Inline elements, but got %d", len(tt.expectedDrawing.Inline), len(drawing.Inline))
 			} else {
 				for i := range drawing.Inline {
-					if drawing.Inline[i].DistTAttr == nil || *drawing.Inline[i].DistTAttr != *tt.expectedDrawing.Inline[i].DistTAttr {
-						t.Errorf("Expected Inline DistTAttr %d, but got %v", *tt.expectedDrawing.Inline[i].DistTAttr, drawing.Inline[i].DistTAttr)
+					if drawing.Inline[i].DistT == nil || *drawing.Inline[i].DistT != *tt.expectedDrawing.Inline[i].DistT {
+						t.Errorf("Expected Inline DistT %d, but got %v", *tt.expectedDrawing.Inline[i].DistT, drawing.Inline[i].DistT)
 					}
-					if drawing.Inline[i].DistBAttr == nil || *drawing.Inline[i].DistBAttr != *tt.expectedDrawing.Inline[i].DistBAttr {
-						t.Errorf("Expected Inline DistBAttr %d, but got %v", *tt.expectedDrawing.Inline[i].DistBAttr, drawing.Inline[i].DistBAttr)
+					if drawing.Inline[i].DistB == nil || *drawing.Inline[i].DistB != *tt.expectedDrawing.Inline[i].DistB {
+						t.Errorf("Expected Inline DistB %d, but got %v", *tt.expectedDrawing.Inline[i].DistB, drawing.Inline[i].DistB)
 					}
-					if drawing.Inline[i].DistLAttr == nil || *drawing.Inline[i].DistLAttr != *tt.expectedDrawing.Inline[i].DistLAttr {
-						t.Errorf("Expected Inline DistLAttr %d, but got %v", *tt.expectedDrawing.Inline[i].DistLAttr, drawing.Inline[i].DistLAttr)
+					if drawing.Inline[i].DistL == nil || *drawing.Inline[i].DistL != *tt.expectedDrawing.Inline[i].DistL {
+						t.Errorf("Expected Inline DistL %d, but got %v", *tt.expectedDrawing.Inline[i].DistL, drawing.Inline[i].DistL)
 					}
-					if drawing.Inline[i].DistRAttr == nil || *drawing.Inline[i].DistRAttr != *tt.expectedDrawing.Inline[i].DistRAttr {
-						t.Errorf("Expected Inline DistRAttr %d, but got %v", *tt.expectedDrawing.Inline[i].DistRAttr, drawing.Inline[i].DistRAttr)
+					if drawing.Inline[i].DistR == nil || *drawing.Inline[i].DistR != *tt.expectedDrawing.Inline[i].DistR {
+						t.Errorf("Expected Inline DistR %d, but got %v", *tt.expectedDrawing.Inline[i].DistR, drawing.Inline[i].DistR)
 					}
 					if drawing.Inline[i].Extent.Width != tt.expectedDrawing.Inline[i].Extent.Width {
 						t.Errorf("Expected Inline Extent Width %d, but got %d", tt.expectedDrawing.Inline[i].Extent.Width, drawing.Inline[i].Extent.Width)
@@ -219,32 +226,32 @@ func TestUnmarshalDrawing(t *testing.T) {
 					if drawing.Anchor[i].SimplePosAttr == nil || *drawing.Anchor[i].SimplePosAttr != *tt.expectedDrawing.Anchor[i].SimplePosAttr {
 						t.Errorf("Expected Anchor SimplePosAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].SimplePosAttr, drawing.Anchor[i].SimplePosAttr)
 					}
-					if drawing.Anchor[i].DistTAttr == nil || *drawing.Anchor[i].DistTAttr != *tt.expectedDrawing.Anchor[i].DistTAttr {
-						t.Errorf("Expected Anchor DistTAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].DistTAttr, drawing.Anchor[i].DistTAttr)
+					if drawing.Anchor[i].DistT == nil || *drawing.Anchor[i].DistT != *tt.expectedDrawing.Anchor[i].DistT {
+						t.Errorf("Expected Anchor DistT %d, but got %v", *tt.expectedDrawing.Anchor[i].DistT, drawing.Anchor[i].DistT)
 					}
-					if drawing.Anchor[i].DistBAttr == nil || *drawing.Anchor[i].DistBAttr != *tt.expectedDrawing.Anchor[i].DistBAttr {
-						t.Errorf("Expected Anchor DistBAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].DistBAttr, drawing.Anchor[i].DistBAttr)
+					if drawing.Anchor[i].DistB == nil || *drawing.Anchor[i].DistB != *tt.expectedDrawing.Anchor[i].DistB {
+						t.Errorf("Expected Anchor DistB %d, but got %v", *tt.expectedDrawing.Anchor[i].DistB, drawing.Anchor[i].DistB)
 					}
-					if drawing.Anchor[i].DistLAttr == nil || *drawing.Anchor[i].DistLAttr != *tt.expectedDrawing.Anchor[i].DistLAttr {
-						t.Errorf("Expected Anchor DistLAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].DistLAttr, drawing.Anchor[i].DistLAttr)
+					if drawing.Anchor[i].DistL == nil || *drawing.Anchor[i].DistL != *tt.expectedDrawing.Anchor[i].DistL {
+						t.Errorf("Expected Anchor DistL %d, but got %v", *tt.expectedDrawing.Anchor[i].DistL, drawing.Anchor[i].DistL)
 					}
-					if drawing.Anchor[i].DistRAttr == nil || *drawing.Anchor[i].DistRAttr != *tt.expectedDrawing.Anchor[i].DistRAttr {
-						t.Errorf("Expected Anchor DistRAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].DistRAttr, drawing.Anchor[i].DistRAttr)
+					if drawing.Anchor[i].DistR == nil || *drawing.Anchor[i].DistR != *tt.expectedDrawing.Anchor[i].DistR {
+						t.Errorf("Expected Anchor DistR %d, but got %v", *tt.expectedDrawing.Anchor[i].DistR, drawing.Anchor[i].DistR)
 					}
-					if drawing.Anchor[i].LayoutInCellAttr == nil || *drawing.Anchor[i].LayoutInCellAttr != *tt.expectedDrawing.Anchor[i].LayoutInCellAttr {
-						t.Errorf("Expected Anchor LayoutInCellAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].LayoutInCellAttr, drawing.Anchor[i].LayoutInCellAttr)
+					if drawing.Anchor[i].LayoutInCell != tt.expectedDrawing.Anchor[i].LayoutInCell {
+						t.Errorf("Expected Anchor LayoutInCell %d, but got %v", tt.expectedDrawing.Anchor[i].LayoutInCell, drawing.Anchor[i].LayoutInCell)
 					}
-					if drawing.Anchor[i].AllowOverlapAttr == nil || *drawing.Anchor[i].AllowOverlapAttr != *tt.expectedDrawing.Anchor[i].AllowOverlapAttr {
-						t.Errorf("Expected Anchor AllowOverlapAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].AllowOverlapAttr, drawing.Anchor[i].AllowOverlapAttr)
+					if drawing.Anchor[i].AllowOverlap != tt.expectedDrawing.Anchor[i].AllowOverlap {
+						t.Errorf("Expected Anchor AllowOverlap %d, but got %v", tt.expectedDrawing.Anchor[i].AllowOverlap, drawing.Anchor[i].AllowOverlap)
 					}
-					if drawing.Anchor[i].RelativeHeightAttr == nil || *drawing.Anchor[i].RelativeHeightAttr != *tt.expectedDrawing.Anchor[i].RelativeHeightAttr {
-						t.Errorf("Expected Anchor RelativeHeightAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].RelativeHeightAttr, drawing.Anchor[i].RelativeHeightAttr)
+					if drawing.Anchor[i].RelativeHeight != tt.expectedDrawing.Anchor[i].RelativeHeight {
+						t.Errorf("Expected Anchor RelativeHeight %d, but got %v", tt.expectedDrawing.Anchor[i].RelativeHeight, drawing.Anchor[i].RelativeHeight)
 					}
-					if drawing.Anchor[i].BehindDocAttr == nil || *drawing.Anchor[i].BehindDocAttr != *tt.expectedDrawing.Anchor[i].BehindDocAttr {
-						t.Errorf("Expected Anchor BehindDocAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].BehindDocAttr, drawing.Anchor[i].BehindDocAttr)
+					if drawing.Anchor[i].BehindDoc != tt.expectedDrawing.Anchor[i].BehindDoc {
+						t.Errorf("Expected Anchor BehindDoc %d, but got %v", tt.expectedDrawing.Anchor[i].BehindDoc, drawing.Anchor[i].BehindDoc)
 					}
-					if drawing.Anchor[i].LockedAttr == nil || *drawing.Anchor[i].LockedAttr != *tt.expectedDrawing.Anchor[i].LockedAttr {
-						t.Errorf("Expected Anchor LockedAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].LockedAttr, drawing.Anchor[i].LockedAttr)
+					if drawing.Anchor[i].Locked != tt.expectedDrawing.Anchor[i].Locked {
+						t.Errorf("Expected Anchor Locked %d, but got %v", tt.expectedDrawing.Anchor[i].Locked, drawing.Anchor[i].Locked)
 					}
 					if drawing.Anchor[i].Extent.Width != tt.expectedDrawing.Anchor[i].Extent.Width {
 						t.Errorf("Expected Anchor Extent Width %d, but got %d", tt.expectedDrawing.Anchor[i].Extent.Width, drawing.Anchor[i].Extent.Width)

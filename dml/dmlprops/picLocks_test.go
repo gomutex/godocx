@@ -1,4 +1,4 @@
-package dml
+package dmlprops
 
 import (
 	"encoding/xml"
