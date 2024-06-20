@@ -1,6 +1,8 @@
 package doc
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 // Relationship represents a relationship between elements in an Office Open XML (OOXML) document.
 // It includes essential information such as ID, type, target, and target mode.
@@ -19,4 +21,27 @@ type Relationships struct {
 	XMLName       xml.Name        `xml:"Relationships"`
 	Xmlns         string          `xml:"xmlns,attr"`
 	Relationships []*Relationship `xml:"Relationship"`
+}
+
+func (r *Relationship) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Name.Local = "Relationship"
+	start.Attr = []xml.Attr{}
+
+	if r.ID != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "Id"}, Value: r.ID})
+	}
+
+	if r.Type != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "Type"}, Value: r.Type})
+	}
+
+	if r.Target != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "Target"}, Value: r.Target})
+	}
+
+	if r.TargetMode != "" {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "TargetMode"}, Value: r.TargetMode})
+	}
+
+	return e.EncodeElement("", start)
 }

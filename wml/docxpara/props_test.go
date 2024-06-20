@@ -137,7 +137,7 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 			ID:     1,
 			Author: "authortest",
 		},
-		SectPr: sections.SectionProp{
+		SectPr: &sections.SectionProp{
 			TitlePg: &hdrftr.TitlePg{},
 		},
 	}
