@@ -47,15 +47,21 @@ func TestMarshalAnchor(t *testing.T) {
 					RightEdge:  3,
 					BottomEdge: 4,
 				},
-				Wrap: WrapNone{},
+				Wrap: WrapType{
+					None: &WrapNone{},
+				},
 				PositionH: PoistionH{
 					RelativeFrom: dmlst.RelFromHColumn,
 				},
 				PositionV: PoistionV{
 					RelativeFrom: dmlst.RelFromVLine,
 				},
+				DocProp: DocProp{
+					ID:   1,
+					Name: "test",
+				},
 			},
-			expectedXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr></wp:docPr><a:graphic></a:graphic></wp:anchor>`,
+			expectedXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr id="1" name="test"></wp:docPr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:anchor>`,
 			xmlName:     "wp:anchor",
 		},
 	}
@@ -114,7 +120,9 @@ func TestUnmarshalAnchor(t *testing.T) {
 					RightEdge:  3,
 					BottomEdge: 4,
 				},
-				Wrap: WrapNone{},
+				Wrap: WrapType{
+					None: &WrapNone{},
+				},
 			},
 		},
 	}

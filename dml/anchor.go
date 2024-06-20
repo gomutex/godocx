@@ -47,7 +47,7 @@ type Anchor struct {
 
 	// Child elements:
 	// 1. Simple Positioning Coordinates
-	SimplePos PositionType `xml:"simplePos"`
+	SimplePos dmlct.Point2D `xml:"simplePos"`
 
 	// 2. Horizontal Positioning
 	PositionH PoistionH `xml:"positionH"`
@@ -119,8 +119,10 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	// The sequence (order) of these element is important
 
 	// 1. SimplePos
-	if err := e.EncodeElement(a.SimplePos, xml.StartElement{Name: xml.Name{Local: "wp:simplePos"}}); err != nil {
-		return fmt.Errorf("SimplePos: %v", err)
+	if err := a.SimplePos.MarshalXML(e, xml.StartElement{
+		Name: xml.Name{Local: "wp:simplePos"},
+	}); err != nil {
+		return fmt.Errorf("simplePos: %v", err)
 	}
 
 	// 2. PositionH
@@ -147,19 +149,19 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	a.Wrap.MarshalXML(e, xml.StartElement{})
 
 	// 7. DocProp
-	if err := e.EncodeElement(a.DocProp, xml.StartElement{Name: xml.Name{Local: "wp:docPr"}}); err != nil {
+	if err := a.DocProp.MarshalXML(e, xml.StartElement{}); err != nil {
 		return err
 	}
 
 	// 8. CNvGraphicFramePr
 	if a.CNvGraphicFramePr != nil {
-		if err := e.EncodeElement(a.CNvGraphicFramePr, xml.StartElement{Name: xml.Name{Local: "wp:cNvGraphicFramePr"}}); err != nil {
+		if err := a.CNvGraphicFramePr.MarshalXML(e, xml.StartElement{}); err != nil {
 			return err
 		}
 	}
 
 	// 9. Graphic
-	if err := e.EncodeElement(a.Graphic, xml.StartElement{Name: xml.Name{Local: "a:graphic"}}); err != nil {
+	if err := a.Graphic.MarshalXML(e, xml.StartElement{}); err != nil {
 		return err
 	}
 

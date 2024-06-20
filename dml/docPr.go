@@ -9,6 +9,8 @@ type DocProp struct {
 	ID          uint64 `xml:"id,attr,omitempty"`
 	Name        string `xml:"name,attr,omitempty"`
 	Description string `xml:"descr,attr,omitempty"`
+
+	//TODO: Remaining attrs & child elements
 }
 
 func (d *DocProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

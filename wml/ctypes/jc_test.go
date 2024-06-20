@@ -1,4 +1,4 @@
-package formatting
+package ctypes
 
 import (
 	"encoding/xml"
@@ -7,7 +7,10 @@ import (
 )
 
 func TestJustification(t *testing.T) {
-	testJustification := NewJustification("left")
+	testJustification, err := NewJustification("left")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	xmlData, err := xml.Marshal(testJustification)
 	if err != nil {
@@ -24,7 +27,7 @@ func TestJustification(t *testing.T) {
 		t.Errorf("Expected justification value %s, got %s", testJustification.Val, unmarshaledJustification.Val)
 	}
 
-	expectedXMLString := `<w:jc w:val="left">`
+	expectedXMLString := `<Justification w:val="left">`
 	if !strings.Contains(string(xmlData), expectedXMLString) {
 		t.Errorf("Expected XML string %s, got %s", expectedXMLString, string(xmlData))
 	}

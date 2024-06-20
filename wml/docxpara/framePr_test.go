@@ -29,8 +29,8 @@ func TestFrameProp_MarshalXML(t *testing.T) {
 				VAnchor:    internal.ToPtr(stypes.AnchorPage),
 				AbsHPos:    internal.ToPtr(100),
 				AbsVPos:    internal.ToPtr(200),
-				XAlign:     internal.ToPtr(stypes.AlignLeft),
-				YAlign:     internal.ToPtr(stypes.AlignCenter),
+				XAlign:     internal.ToPtr(stypes.XAlignLeft),
+				YAlign:     internal.ToPtr(stypes.YAlignCenter),
 				HRule:      internal.ToPtr(stypes.HeightRuleExact),
 				AnchorLock: internal.ToPtr(stypes.BinFlagTrue),
 			},
@@ -89,8 +89,8 @@ func TestFrameProp_UnmarshalXML(t *testing.T) {
 				VAnchor:    internal.ToPtr(stypes.AnchorPage),
 				AbsHPos:    internal.ToPtr(100),
 				AbsVPos:    internal.ToPtr(200),
-				XAlign:     internal.ToPtr(stypes.AlignLeft),
-				YAlign:     internal.ToPtr(stypes.AlignCenter),
+				XAlign:     internal.ToPtr(stypes.XAlignLeft),
+				YAlign:     internal.ToPtr(stypes.YAlignCenter),
 				HRule:      internal.ToPtr(stypes.HeightRuleExact),
 				AnchorLock: internal.ToPtr(stypes.BinFlagTrue),
 			},
@@ -115,30 +115,59 @@ func TestFrameProp_UnmarshalXML(t *testing.T) {
 			}
 
 			// Compare each field individually due to pointer comparisons
-			if !compareFrameProps(result, tt.expected) {
-				t.Errorf("Expected:\n%+v\nGot:\n%+v", tt.expected, result)
+			if err := compareFrameProps(result, tt.expected); err != nil {
+				t.Error(err)
 			}
 		})
 	}
 }
 
 // Helper function to compare FrameProp structs
-// Helper function to compare FrameProp structs
-func compareFrameProps(a, b FrameProp) bool {
-	// Check each pointer for nil before comparing their dereferenced values
-	return (a.Width == nil && b.Width == nil || (a.Width != nil && b.Width != nil && *a.Width == *b.Width)) &&
-		(a.Height == nil && b.Height == nil || (a.Height != nil && b.Height != nil && *a.Height == *b.Height)) &&
-		(a.DropCap == nil && b.DropCap == nil || (a.DropCap != nil && b.DropCap != nil && *a.DropCap == *b.DropCap)) &&
-		(a.Lines == nil && b.Lines == nil || (a.Lines != nil && b.Lines != nil && *a.Lines == *b.Lines)) &&
-		(a.VSpace == nil && b.VSpace == nil || (a.VSpace != nil && b.VSpace != nil && *a.VSpace == *b.VSpace)) &&
-		(a.HSpace == nil && b.HSpace == nil || (a.HSpace != nil && b.HSpace != nil && *a.HSpace == *b.HSpace)) &&
-		(a.Wrap == nil && b.Wrap == nil || (a.Wrap != nil && b.Wrap != nil && *a.Wrap == *b.Wrap)) &&
-		(a.HAnchor == nil && b.HAnchor == nil || (a.HAnchor != nil && b.HAnchor != nil && *a.HAnchor == *b.HAnchor)) &&
-		(a.VAnchor == nil && b.VAnchor == nil || (a.VAnchor != nil && b.VAnchor != nil && *a.VAnchor == *b.VAnchor)) &&
-		(a.AbsHPos == nil && b.AbsHPos == nil || (a.AbsHPos != nil && b.AbsHPos != nil && *a.AbsHPos == *b.AbsHPos)) &&
-		(a.AbsVPos == nil && b.AbsVPos == nil || (a.AbsVPos != nil && b.AbsVPos != nil && *a.AbsVPos == *b.AbsVPos)) &&
-		(a.XAlign == nil && b.XAlign == nil || (a.XAlign != nil && b.XAlign != nil && *a.XAlign == *b.XAlign)) &&
-		(a.YAlign == nil && b.YAlign == nil || (a.YAlign != nil && b.YAlign != nil && *a.YAlign == *b.YAlign)) &&
-		(a.HRule == nil && b.HRule == nil || (a.HRule != nil && b.HRule != nil && *a.HRule == *b.HRule)) &&
-		(a.AnchorLock == nil && b.AnchorLock == nil || (a.AnchorLock != nil && b.AnchorLock != nil && *a.AnchorLock == *b.AnchorLock))
+func compareFrameProps(a, b FrameProp) error {
+	if err := internal.ComparePtr("Width", a.Width, b.Width); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("Height", a.Height, b.Height); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("DropCap", a.DropCap, b.DropCap); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("Lines", a.Lines, b.Lines); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("VSpace", a.VSpace, b.VSpace); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("HSpace", a.HSpace, b.HSpace); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("Wrap", a.Wrap, b.Wrap); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("HAnchor", a.HAnchor, b.HAnchor); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("VAnchor", a.VAnchor, b.VAnchor); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("AbsHPos", a.AbsHPos, b.AbsHPos); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("AbsVPos", a.AbsVPos, b.AbsVPos); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("XAlign", a.XAlign, b.XAlign); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("YAlign", a.YAlign, b.YAlign); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("HRule", a.HRule, b.HRule); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("AnchorLock", a.AnchorLock, b.AnchorLock); err != nil {
+		return err
+	}
+	return nil
 }

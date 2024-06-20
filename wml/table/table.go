@@ -1,6 +1,11 @@
 package table
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+
+	"github.com/gomutex/godocx/wml/ctypes"
+	"github.com/gomutex/godocx/wml/stypes"
+)
 
 type Table struct {
 	Rows         []TableChild
@@ -29,7 +34,7 @@ func (t *Table) Indent(indent int) {
 	if t.Property == nil {
 		t.Property = DefaultTableProperty()
 	}
-	t.Property.Indent = NewTableIndent(indent, WidthTypeAuto)
+	t.Property.Indent = ctypes.NewTableWidth(indent, stypes.TableWidthAuto)
 }
 
 func (t *Table) Style(value string) {

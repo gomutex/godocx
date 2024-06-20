@@ -5,6 +5,9 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/gomutex/godocx/wml/ctypes"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestTableCellMarginsMarshalXML(t *testing.T) {
@@ -14,10 +17,10 @@ func TestTableCellMarginsMarshalXML(t *testing.T) {
 	}{
 		{
 			input: TableCellMargins{
-				Top:    NewCellMargin(0, WidthTypeDxa),
-				Left:   NewCellMargin(55, WidthTypeDxa),
-				Bottom: NewCellMargin(0, WidthTypeDxa),
-				Right:  NewCellMargin(55, WidthTypeDxa),
+				Top:    ctypes.NewTableWidth(0, stypes.TableWidthDxa),
+				Left:   ctypes.NewTableWidth(55, stypes.TableWidthDxa),
+				Bottom: ctypes.NewTableWidth(0, stypes.TableWidthDxa),
+				Right:  ctypes.NewTableWidth(55, stypes.TableWidthDxa),
 			},
 			expected: `<w:tblCellMar><w:top w:w="0" w:type="dxa"></w:top><w:left w:w="55" w:type="dxa"></w:left><w:bottom w:w="0" w:type="dxa"></w:bottom><w:right w:w="55" w:type="dxa"></w:right></w:tblCellMar>`,
 		},
@@ -57,26 +60,20 @@ func TestTableCellMarginsUnmarshalXML(t *testing.T) {
 		{
 			input: `<w:tblCellMar xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:top w:w="0" w:type="dxa"></w:top><w:left w:w="55" w:type="dxa"></w:left><w:bottom w:w="0" w:type="dxa"></w:bottom><w:right w:w="55" w:type="dxa"></w:right></w:tblCellMar>`,
 			expected: TableCellMargins{
-				Top:    NewCellMargin(0, WidthTypeDxa),
-				Left:   NewCellMargin(55, WidthTypeDxa),
-				Bottom: NewCellMargin(0, WidthTypeDxa),
-				Right:  NewCellMargin(55, WidthTypeDxa),
+				Top:    ctypes.NewTableWidth(0, stypes.TableWidthDxa),
+				Left:   ctypes.NewTableWidth(55, stypes.TableWidthDxa),
+				Bottom: ctypes.NewTableWidth(0, stypes.TableWidthDxa),
+				Right:  ctypes.NewTableWidth(55, stypes.TableWidthDxa),
 			},
 		},
 	}
 
 	for _, tc := range testCases {
-		decoder := xml.NewDecoder(strings.NewReader(tc.input))
 		var result TableCellMargins
 
-		startToken, err := decoder.Token()
+		err := xml.Unmarshal([]byte(tc.input), &result)
 		if err != nil {
-			t.Errorf("Error getting start token: %v", err)
-		}
-
-		err = result.UnmarshalXML(decoder, startToken.(xml.StartElement))
-		if err != nil {
-			t.Errorf("Error during UnmarshalXML: %v", err)
+			t.Fatalf("Error unmarshaling XML: %v", err)
 		}
 
 		if result.Top == nil {
