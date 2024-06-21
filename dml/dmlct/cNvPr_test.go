@@ -13,7 +13,7 @@ func TestMarshalCNvPr(t *testing.T) {
 	}{
 		{
 			cnvpr: &CNvPr{
-				ID:          "1",
+				ID:          1,
 				Name:        "Drawing1",
 				Description: "Description of Drawing1",
 			},
@@ -21,10 +21,10 @@ func TestMarshalCNvPr(t *testing.T) {
 		},
 		{
 			cnvpr: &CNvPr{
-				ID:   "2",
+				ID:   2,
 				Name: "Drawing2",
 			},
-			expectedXML: `<pic:cNvPr id="2" name="Drawing2"></pic:cNvPr>`,
+			expectedXML: `<pic:cNvPr id="2" name="Drawing2" descr=""></pic:cNvPr>`,
 		},
 	}
 
@@ -59,7 +59,7 @@ func TestUnmarshalCNvPr(t *testing.T) {
 		{
 			inputXML: `<pic:cNvPr id="1" name="Drawing1" descr="Description of Drawing1"></pic:cNvPr>`,
 			expectedCNvPr: CNvPr{
-				ID:          "1",
+				ID:          1,
 				Name:        "Drawing1",
 				Description: "Description of Drawing1",
 			},
@@ -67,7 +67,7 @@ func TestUnmarshalCNvPr(t *testing.T) {
 		{
 			inputXML: `<pic:cNvPr id="2" name="Drawing2"></pic:cNvPr>`,
 			expectedCNvPr: CNvPr{
-				ID:   "2",
+				ID:   2,
 				Name: "Drawing2",
 			},
 		},
@@ -83,7 +83,7 @@ func TestUnmarshalCNvPr(t *testing.T) {
 			}
 
 			if cnvpr.ID != tt.expectedCNvPr.ID {
-				t.Errorf("Expected ID %s, but got %s", tt.expectedCNvPr.ID, cnvpr.ID)
+				t.Errorf("Expected ID %d, but got %d", tt.expectedCNvPr.ID, cnvpr.ID)
 			}
 			if cnvpr.Name != tt.expectedCNvPr.Name {
 				t.Errorf("Expected Name %s, but got %s", tt.expectedCNvPr.Name, cnvpr.Name)

@@ -51,7 +51,7 @@ func (rd *RootDoc) AddPicture(path string, width units.Inch, height units.Inch) 
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
-	inline := p.AddDrawing(rID, width, height)
+	inline := p.AddDrawing(rID, rd.ImageCount, width, height)
 
 	return &PicMeta{
 		Para:   p,

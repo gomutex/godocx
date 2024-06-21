@@ -34,11 +34,11 @@ func TestMarshalDrawing(t *testing.T) {
 						DistB: &distB,
 						DistL: &distL,
 						DistR: &distR,
-						Extent: &dmlct.PSize2D{
+						Extent: dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
 						},
-						DocProp: &DocProp{
+						DocProp: DocProp{
 							ID:          1,
 							Name:        "Document Property",
 							Description: "This is a document property",
@@ -48,7 +48,7 @@ func TestMarshalDrawing(t *testing.T) {
 								NoChangeAspect: types.NewOptBool(true),
 							},
 						},
-						Graphic: DefaultGraphic(),
+						Graphic: *DefaultGraphic(),
 					},
 				},
 				Anchor: []*Anchor{
@@ -133,11 +133,11 @@ func TestUnmarshalDrawing(t *testing.T) {
 						DistB: &distB,
 						DistL: &distL,
 						DistR: &distR,
-						Extent: &dmlct.PSize2D{
+						Extent: dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
 						},
-						DocProp: &DocProp{
+						DocProp: DocProp{
 							ID:          1,
 							Name:        "Document Property",
 							Description: "This is a document property",
@@ -147,7 +147,7 @@ func TestUnmarshalDrawing(t *testing.T) {
 								NoChangeAspect: types.NewOptBool(true),
 							},
 						},
-						Graphic: DefaultGraphic(),
+						Graphic: *DefaultGraphic(),
 					},
 				},
 				Anchor: []*Anchor{

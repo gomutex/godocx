@@ -1,6 +1,9 @@
 package dmlpic
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"fmt"
+)
 
 const (
 	BlackWhiteModeClr        = "clr"
@@ -17,9 +20,19 @@ const (
 )
 
 type PicShapeProp struct {
-	BwMode         *string         `xml:"bwMode,attr,omitempty"`
+	// -- Attributes --
+	//Black and White Mode
+	BwMode *string `xml:"bwMode,attr,omitempty"`
+
+	// -- Child Elements --
+	//1.2D Transform for Individual Objects
 	TransformGroup *TransformGroup `xml:"xfrm,omitempty"`
+
+	// 2. Choice
+	//TODO: Modify it as Geometry choice
 	PresetGeometry *PresetGeometry `xml:"prstGeom,omitempty"`
+
+	//TODO: Remaining sequcence of elements
 }
 
 type PicShapePropOption func(*PicShapeProp)
@@ -52,15 +65,22 @@ func (p *PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 		return err
 	}
 
+	//1. Transform
 	if p.TransformGroup != nil {
-		if err := e.EncodeElement(p.TransformGroup, xml.StartElement{Name: xml.Name{Local: "a:xfrm"}}); err != nil {
-			return err
+		if err = p.TransformGroup.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "a:xfrm"},
+		}); err != nil {
+			return fmt.Errorf("marshalling TransformGroup: %w", err)
 		}
 	}
 
+	//2. Geometry
 	if p.PresetGeometry != nil {
-		if err := e.EncodeElement(p.PresetGeometry, xml.StartElement{Name: xml.Name{Local: "a:prstGeom"}}); err != nil {
-			return err
+
+		if err = p.PresetGeometry.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "a:prstGeom"},
+		}); err != nil {
+			return fmt.Errorf("marshalling PresetGeometry: %w", err)
 		}
 	}
 

@@ -5,7 +5,11 @@ import (
 	"testing"
 
 	"github.com/gomutex/godocx/common/constants"
+	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlpic"
+	"github.com/gomutex/godocx/dml/dmlprops"
+	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/types"
 )
 
 func TestMarshalGraphic(t *testing.T) {
@@ -15,8 +19,45 @@ func TestMarshalGraphic(t *testing.T) {
 		xmlName     string
 	}{
 		{
-			graphic:     NewPicGraphic(&dmlpic.Pic{}),
-			expectedXML: `<a:graphic xmlns:a="` + constants.DrawingMLMainNS + `"><a:graphicData uri="` + constants.DrawingMLPicNS + `"><pic:pic xmlns:pic="` + constants.DrawingMLPicNS + `"></pic:pic></a:graphicData></a:graphic>`,
+			graphic: NewPicGraphic(&dmlpic.Pic{
+				NonVisualPicProp: dmlpic.NonVisualPicProp{
+					CNvPr: dmlct.CNvPr{
+						ID:          1,
+						Name:        "Pic 1",
+						Description: "Description",
+					},
+					CNvPicPr: dmlpic.CNvPicPr{
+						PicLocks: &dmlprops.PicLocks{
+							NoChangeAspect:     types.NewOptBool(true),
+							NoChangeArrowheads: types.NewOptBool(true),
+						},
+					},
+				},
+				BlipFill: dmlpic.BlipFill{
+					Blip: &dmlpic.Blip{
+						EmbedID: "rId1",
+					},
+					Stretch: &dmlpic.Stretch{
+						FillRect: &dmlpic.FillRect{},
+					},
+				},
+				PicShapeProp: dmlpic.PicShapeProp{
+					TransformGroup: &dmlpic.TransformGroup{
+						Offset: &dmlpic.Offset{
+							X: 0,
+							Y: 0,
+						},
+						Extent: &dmlct.PSize2D{
+							Width:  100000,
+							Height: 100000,
+						},
+					},
+					PresetGeometry: &dmlpic.PresetGeometry{
+						Preset: internal.ToPtr("rect"),
+					},
+				},
+			}),
+			expectedXML: `<a:graphic xmlns:a="` + constants.DrawingMLMainNS + `"><a:graphicData uri="` + constants.DrawingMLPicNS + `"><pic:pic xmlns:pic="` + constants.DrawingMLPicNS + `"><pic:nvPicPr><pic:cNvPr id="1" name="Pic 1" descr="Description"></pic:cNvPr><pic:cNvPicPr><a:picLocks noChangeAspect="1" noChangeArrowheads="1"></a:picLocks></pic:cNvPicPr></pic:nvPicPr><pic:blipFill><a:blip r:embed="rId1"></a:blip><a:stretch><a:fillRect></a:fillRect></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"></a:off><a:ext cx="100000" cy="100000"></a:ext></a:xfrm><a:prstGeom prst="rect"></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic>`,
 			xmlName:     "a:graphic",
 		},
 		{

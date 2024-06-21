@@ -243,13 +243,13 @@ func AddParagraph(text string) *Paragraph {
 	return p
 }
 
-func (p *Paragraph) AddDrawing(rID string, width units.Inch, height units.Inch) *dml.Inline {
+func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, height units.Inch) *dml.Inline {
 	eWidth := width.ToEmu()
 	eHeight := height.ToEmu()
 
 	inline := dml.Inline{
-		Extent:  dmlct.NewPostvSz2D(eWidth, eHeight),
-		Graphic: dml.NewPicGraphic(dmlpic.NewPic(rID, eWidth, eHeight)),
+		Extent:  *dmlct.NewPostvSz2D(eWidth, eHeight),
+		Graphic: *dml.NewPicGraphic(dmlpic.NewPic(rID, imgCount, eWidth, eHeight)),
 	}
 
 	runChildren := []*docxrun.RunChild{}

@@ -2,6 +2,7 @@ package dmlpic
 
 import (
 	"encoding/xml"
+	"fmt"
 	"strconv"
 
 	"github.com/gomutex/godocx/common/constants"
@@ -11,22 +12,29 @@ import (
 )
 
 type Pic struct {
-	// ID string
-	NonVisualPicProp *NonVisualPicProp `xml:"nvPicPr,omitempty"`
-	BlipFill         *BlipFill         `xml:"blipFill,omitempty"`
-	PicShapeProp     *PicShapeProp     `xml:"spPr,omitempty"`
+	// 1. Non-Visual Picture Properties
+	NonVisualPicProp NonVisualPicProp `xml:"nvPicPr,omitempty"`
+
+	// 2.Picture Fill
+	BlipFill BlipFill `xml:"blipFill,omitempty"`
+
+	// 3.Shape Properties
+	PicShapeProp PicShapeProp `xml:"spPr,omitempty"`
 }
 
-func NewPic(rID string, width units.Emu, height units.Emu) *Pic {
+func NewPic(rID string, imgCount uint, width units.Emu, height units.Emu) *Pic {
 	shapeProp := NewPicShapeProp(
 		WithTransformGroup(
 			WithTFExtent(width, height),
 		),
 	)
 
+	nvPicProp := DefaultNVPicProp(imgCount, fmt.Sprintf("image%s", rID))
+
 	return &Pic{
-		BlipFill:     NewBlipFill(rID),
-		PicShapeProp: shapeProp,
+		BlipFill:         NewBlipFill(rID),
+		NonVisualPicProp: nvPicProp,
+		PicShapeProp:     *shapeProp,
 	}
 }
 
@@ -42,101 +50,25 @@ func (p *Pic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		return err
 	}
 
-	if p.NonVisualPicProp != nil {
-		if err := e.EncodeElement(p.NonVisualPicProp, xml.StartElement{Name: xml.Name{Local: "pic:nvPicPr"}}); err != nil {
-			return err
-		}
+	// 1. nvPicPr
+	if err = p.NonVisualPicProp.MarshalXML(e, xml.StartElement{
+		Name: xml.Name{Local: "pic:nvPicPr"},
+	}); err != nil {
+		return fmt.Errorf("marshalling NonVisualPicProp: %w", err)
 	}
 
-	if p.BlipFill != nil {
-		if err := e.EncodeElement(p.BlipFill, xml.StartElement{Name: xml.Name{Local: "pic:blipFill"}}); err != nil {
-			return err
-		}
+	// 2. BlipFill
+	if err = p.BlipFill.MarshalXML(e, xml.StartElement{
+		Name: xml.Name{Local: "pic:blipFill"},
+	}); err != nil {
+		return fmt.Errorf("marshalling BlipFill: %w", err)
 	}
 
-	if p.PicShapeProp != nil {
-		if err := e.EncodeElement(p.PicShapeProp, xml.StartElement{Name: xml.Name{Local: "pic:spPr"}}); err != nil {
-			return err
-		}
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-type BlipFill struct {
-	Blip    *Blip    `xml:"blip,omitempty"`
-	Stretch *Stretch `xml:"stretch,omitempty"`
-}
-
-// NewBlipFill creates a new BlipFill with the given relationship ID (rID)
-// The rID is used to reference the image in the presentation.
-func NewBlipFill(rID string) *BlipFill {
-	return &BlipFill{
-		Blip: &Blip{
-			EmbedID: rID,
-		},
-	}
-}
-
-func (b *BlipFill) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "pic:blipFill"
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	if b.Blip != nil {
-		if err := e.EncodeElement(b.Blip, xml.StartElement{Name: xml.Name{Local: "a:blip"}}); err != nil {
-			return err
-		}
-	}
-
-	if b.Stretch != nil {
-		if err := e.EncodeElement(b.Stretch, xml.StartElement{Name: xml.Name{Local: "a:stretch"}}); err != nil {
-			return err
-		}
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-// Binary large image or picture
-type Blip struct {
-	EmbedID string `xml:"embed,attr,omitempty"`
-}
-
-func (b *Blip) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "a:blip"
-
-	start.Attr = []xml.Attr{
-		{Name: xml.Name{Local: "r:embed"}, Value: b.EmbedID},
-	}
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-type Stretch struct {
-	FillRect *FillRect `xml:"fillRect,omitempty"`
-}
-
-func (s *Stretch) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "a:stretch"
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
-	}
-
-	if s.FillRect != nil {
-		if err := e.EncodeElement(s.FillRect, xml.StartElement{Name: xml.Name{Local: "a:fillRect"}}); err != nil {
-			return err
-		}
+	// 3. spPr
+	if err = p.PicShapeProp.MarshalXML(e, xml.StartElement{
+		Name: xml.Name{Local: "pic:spPr"},
+	}); err != nil {
+		return fmt.Errorf("marshalling PicShapeProp: %w", err)
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})

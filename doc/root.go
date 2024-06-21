@@ -17,7 +17,7 @@ type RootDoc struct {
 	RootRels Relationships // RootRels represents relationships at the root level.
 
 	rID        int // rId is used to generate unique relationship IDs.
-	ImageCount int
+	ImageCount uint
 }
 
 // NewRootDoc creates a new instance of the RootDoc structure.
