@@ -9,7 +9,6 @@ import (
 	"github.com/gomutex/godocx/dml/dmlpic"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
-	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/runcontent"
 )
 
@@ -78,12 +77,18 @@ func (p *Paragraph) Style(value string) *Paragraph {
 // Returns:
 //   - *Paragraph: A pointer to the modified Paragraph instance with the updated justification.
 
-func (p *Paragraph) Justification(value string) *Paragraph {
+func (p *Paragraph) Justification(value string) (*Paragraph, error) {
 	if p.Property == nil {
 		p.Property = DefaultParaProperty()
 	}
-	p.Property.Justification = formatting.NewJustification(value)
-	return p
+
+	jc, err := ctypes.NewJustification(value)
+	if err != nil {
+		return nil, err
+	}
+
+	p.Property.Justification = jc
+	return p, nil
 }
 
 func (p *Paragraph) Numbering(id int, level int) {
@@ -238,13 +243,13 @@ func AddParagraph(text string) *Paragraph {
 	return p
 }
 
-func (p *Paragraph) AddDrawing(rID string, width units.Inch, height units.Inch) *dml.Inline {
+func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, height units.Inch) *dml.Inline {
 	eWidth := width.ToEmu()
 	eHeight := height.ToEmu()
 
 	inline := dml.Inline{
-		Extent:  dmlct.NewPostvSz2D(eWidth, eHeight),
-		Graphic: dml.NewPicGraphic(dmlpic.NewPic(rID, eWidth, eHeight)),
+		Extent:  *dmlct.NewPostvSz2D(eWidth, eHeight),
+		Graphic: *dml.NewPicGraphic(dmlpic.NewPic(rID, imgCount, eWidth, eHeight)),
 	}
 
 	runChildren := []*docxrun.RunChild{}

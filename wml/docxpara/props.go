@@ -7,7 +7,6 @@ import (
 	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
-	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/sections"
 )
 
@@ -92,7 +91,7 @@ type ParagraphProp struct {
 	SuppressOverlap *elemtypes.OptBinFlagElem `xml:"suppressOverlap,omitempty"`
 
 	// 27. Paragraph Alignment
-	Justification *formatting.Justification `xml:"jc,omitempty"`
+	Justification *ctypes.Justification `xml:"jc,omitempty"`
 
 	// 28. Paragraph Text Flow Direction
 	TextDirection *ctypes.TextDirection `xml:"textDirection,omitempty"`
@@ -271,7 +270,9 @@ func (pp *ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err
 
 	// 27. Justification
 	if pp.Justification != nil {
-		if err = pp.Justification.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.Justification.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:jc"},
+		}); err != nil {
 			return fmt.Errorf("Justification: %w", err)
 		}
 	}

@@ -2,6 +2,7 @@ package dmlpic
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlprops"
@@ -9,17 +10,38 @@ import (
 
 // Non-Visual Picture Drawing Properties
 type CNvPicPr struct {
-	PicLocks *dmlprops.PicLocks
+	//Relative Resize Preferred	- Default value is "true"(i.e when attr not specified).
+	PreferRelativeResize *bool `xml:"preferRelativeResize,attr,omitempty"`
+
+	//1. Picture Locks
+	PicLocks *dmlprops.PicLocks `xml:"picLocks,omitempty"`
+
+	//TODO:
+	// 2. Extension List
+
+}
+
+func NewCNvPicPr() CNvPicPr {
+	return CNvPicPr{}
 }
 
 func (c *CNvPicPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:cNvPicPr"
+
+	if c.PreferRelativeResize != nil {
+		if *c.PreferRelativeResize {
+			start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "preferRelativeResize"}, Value: "true"})
+		} else {
+			start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "preferRelativeResize"}, Value: "false"})
+		}
+	}
 
 	err := e.EncodeToken(start)
 	if err != nil {
 		return err
 	}
 
+	// 1. PicLocks
 	if c.PicLocks != nil {
 		if err := e.EncodeElement(c.PicLocks, xml.StartElement{Name: xml.Name{Local: "a:picLocks"}}); err != nil {
 			return err
@@ -29,38 +51,27 @@ func (c *CNvPicPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (c *CNvPicPr) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) error {
-	for {
-		token, err := decoder.Token()
-		if err != nil {
-			return err
-		}
+// Non-Visual Picture Properties
+type NonVisualPicProp struct {
+	// 1. Non-Visual Drawing Properties
+	CNvPr dmlct.CNvPr `xml:"cNvPr,omitempty"`
 
-		switch elem := token.(type) {
-		case xml.StartElement:
-			switch elem.Name.Local {
-			case "picLocks":
-				c.PicLocks = &dmlprops.PicLocks{}
-				if err = decoder.DecodeElement(c.PicLocks, &elem); err != nil {
-					return err
-				}
-			default:
-				if err = decoder.Skip(); err != nil {
-					return err
-				}
-			}
-		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
-		}
+	// 2.Non-Visual Picture Drawing Properties
+	CNvPicPr CNvPicPr `xml:"cNvPicPr,omitempty"`
+}
+
+func NewNVPicProp(cNvPr dmlct.CNvPr, cNvPicPr CNvPicPr) NonVisualPicProp {
+	return NonVisualPicProp{
+		CNvPr:    cNvPr,
+		CNvPicPr: cNvPicPr,
 	}
 }
 
-// Non-Visual Picture Properties
-type NonVisualPicProp struct {
-	CNvPr    *dmlct.CNvPr `xml:"cNvPr,omitempty"`
-	CNvPicPr *CNvPicPr    `xml:"cNvPicPr,omitempty"`
+func DefaultNVPicProp(id uint, name string) NonVisualPicProp {
+	return NonVisualPicProp{
+		CNvPr:    *dmlct.NewNonVisProp(id, name),
+		CNvPicPr: NewCNvPicPr(),
+	}
 }
 
 func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -71,18 +82,18 @@ func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) er
 		return err
 	}
 
-	if n.CNvPr != nil {
-		if err := e.EncodeElement(n.CNvPr, xml.StartElement{Name: xml.Name{Local: "pic:cNvPr"}}); err != nil {
-			return err
-		}
+	// 1. cNvPr
+	if err = n.CNvPr.MarshalXML(e, xml.StartElement{
+		Name: xml.Name{Local: "pic:cNvPr"},
+	}); err != nil {
+		return fmt.Errorf("marshalling cNvPr: %w", err)
 	}
 
-	if n.CNvPicPr != nil {
-		if err := e.EncodeElement(n.CNvPicPr, xml.StartElement{
-			Name: xml.Name{Local: "pic:nvPicPr"},
-		}); err != nil {
-			return err
-		}
+	// 2. cNvPicPr
+	if err = n.CNvPicPr.MarshalXML(e, xml.StartElement{
+		Name: xml.Name{Local: "pic:cNvPicPr"},
+	}); err != nil {
+		return fmt.Errorf("marshalling cNvPicPr: %w", err)
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})

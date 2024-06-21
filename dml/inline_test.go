@@ -26,11 +26,11 @@ func TestMarshalInline(t *testing.T) {
 				DistB: &distB,
 				DistL: &distL,
 				DistR: &distR,
-				Extent: &dmlct.PSize2D{
+				Extent: dmlct.PSize2D{
 					Width:  100,
 					Height: 200,
 				},
-				DocProp: &DocProp{
+				DocProp: DocProp{
 					ID:          1,
 					Name:        "Document Property",
 					Description: "This is a document property",
@@ -40,7 +40,7 @@ func TestMarshalInline(t *testing.T) {
 						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
-				Graphic: DefaultGraphic(),
+				Graphic: *DefaultGraphic(),
 			},
 			expectedXML: `<wp:inline distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="` + constants.DrawingMLMainNS + `" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="` + constants.DrawingMLMainNS + `"></a:graphic></wp:inline>`,
 			xmlName:     "wp:inline",
@@ -78,11 +78,11 @@ func TestUnmarshalInline(t *testing.T) {
 				DistB: &distB,
 				DistL: &distL,
 				DistR: &distR,
-				Extent: &dmlct.PSize2D{
+				Extent: dmlct.PSize2D{
 					Width:  100,
 					Height: 200,
 				},
-				DocProp: &DocProp{
+				DocProp: DocProp{
 					ID:          1,
 					Name:        "Document Property",
 					Description: "This is a document property",
@@ -92,7 +92,7 @@ func TestUnmarshalInline(t *testing.T) {
 						NoChangeAspect: types.NewOptBool(true),
 					},
 				},
-				Graphic: DefaultGraphic(),
+				Graphic: *DefaultGraphic(),
 			},
 		},
 	}
@@ -119,11 +119,11 @@ func TestUnmarshalInline(t *testing.T) {
 				t.Errorf("Expected DistR %d, but got %v", *tt.expected.DistR, inline.DistR)
 			}
 
-			if inline.Extent == nil || *inline.Extent != *tt.expected.Extent {
+			if inline.Extent != tt.expected.Extent {
 				t.Errorf("Expected Extent %+v, but got %+v", tt.expected.Extent, inline.Extent)
 			}
 
-			if inline.DocProp == nil || *inline.DocProp != *tt.expected.DocProp {
+			if inline.DocProp != tt.expected.DocProp {
 				t.Errorf("Expected DocProp %+v, but got %+v", tt.expected.DocProp, inline.DocProp)
 			}
 
@@ -134,7 +134,7 @@ func TestUnmarshalInline(t *testing.T) {
 					inline.CNvGraphicFramePr.GraphicFrameLocks.NoChangeAspect)
 			}
 
-			if inline.Graphic == nil || *inline.Graphic != *tt.expected.Graphic {
+			if inline.Graphic != tt.expected.Graphic {
 				t.Errorf("Expected Graphic %+v, but got %+v", tt.expected.Graphic, inline.Graphic)
 			}
 		})

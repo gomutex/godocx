@@ -37,10 +37,10 @@ type FrameProp struct {
 	AbsVPos *int `xml:"y,attr,omitempty"`
 
 	//Relative Horizontal Position
-	XAlign *stypes.Align `xml:"xAlign,attr,omitempty"`
+	XAlign *stypes.XAlign `xml:"xAlign,attr,omitempty"`
 
 	//Relative Vertical Position
-	YAlign *stypes.Align `xml:"yAlign,attr,omitempty"`
+	YAlign *stypes.YAlign `xml:"yAlign,attr,omitempty"`
 
 	//Frame Height Type
 	HRule *stypes.HeightRule `xml:"hRule,attr,omitempty"`

@@ -27,22 +27,22 @@ func FormatPtr[T any](ptr *T) string {
 // 	return nil
 // }
 
-func ComparePtr[T comparable](fieldName string, a, b *T) error {
+func ComparePtr[T comparable](fieldName string, expected, result *T) error {
 	// Check if T is a struct
 	if reflect.TypeOf(*new(T)).Kind() == reflect.Struct {
-		if a == nil || b == nil {
-			if a != b {
-				return fmt.Errorf("%s: expected %v but got %v", fieldName, FormatPtr(a), FormatPtr(b))
+		if expected == nil || result == nil {
+			if expected != result {
+				return fmt.Errorf("%s: expected %v but got %v", fieldName, FormatPtr(expected), FormatPtr(result))
 			}
 		}
 	} else {
 		// For non-struct types, perform value comparison
-		if a == nil || b == nil {
-			if a != b {
-				return fmt.Errorf("%s: expected %v but got %v", fieldName, FormatPtr(a), FormatPtr(b))
+		if expected == nil || result == nil {
+			if expected != result {
+				return fmt.Errorf("%s: expected %v but got %v", fieldName, FormatPtr(expected), FormatPtr(result))
 			}
-		} else if *a != *b {
-			return fmt.Errorf("%s: expected %v but got %v", fieldName, *a, *b)
+		} else if *expected != *result {
+			return fmt.Errorf("%s: expected %v but got %v", fieldName, *expected, *result)
 		}
 	}
 	return nil

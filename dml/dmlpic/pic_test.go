@@ -13,20 +13,20 @@ import (
 func TestPicMarshalXML(t *testing.T) {
 	rect := "rect"
 	p := &Pic{
-		NonVisualPicProp: &NonVisualPicProp{
-			CNvPr: &dmlct.CNvPr{
-				ID:          "1",
+		NonVisualPicProp: NonVisualPicProp{
+			CNvPr: dmlct.CNvPr{
+				ID:          1,
 				Name:        "Pic 1",
 				Description: "Description",
 			},
-			CNvPicPr: &CNvPicPr{
+			CNvPicPr: CNvPicPr{
 				PicLocks: &dmlprops.PicLocks{
 					NoChangeAspect:     types.NewOptBool(true),
 					NoChangeArrowheads: types.NewOptBool(true),
 				},
 			},
 		},
-		BlipFill: &BlipFill{
+		BlipFill: BlipFill{
 			Blip: &Blip{
 				EmbedID: "rId1",
 			},
@@ -34,7 +34,7 @@ func TestPicMarshalXML(t *testing.T) {
 				FillRect: &FillRect{},
 			},
 		},
-		PicShapeProp: &PicShapeProp{
+		PicShapeProp: PicShapeProp{
 			TransformGroup: &TransformGroup{
 				Offset: &Offset{
 					X: 0,

@@ -7,11 +7,6 @@ import (
 	"github.com/gomutex/godocx/dml/dmlst"
 )
 
-type PositionType struct {
-	XAttr int `xml:"x,attr"`
-	YAttr int `xml:"y,attr"`
-}
-
 type PoistionH struct {
 	RelativeFrom dmlst.RelFromH `xml:"relativeFrom,attr"`
 	PosOffset    int            `xml:"posOffset"`

@@ -9,7 +9,6 @@ import (
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
-	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/hdrftr"
 	"github.com/gomutex/godocx/wml/sections"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -32,9 +31,14 @@ func TestParagraphProp(t *testing.T) {
 		t.Fatalf("Error unmarshaling XML to ParagraphProp: %v", err)
 	}
 
+	jc, err := ctypes.NewJustification("center")
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	expectedParagraphProp := ParagraphProp{
 		Style:         NewParagraphStyle("Heading1"),
-		Justification: formatting.NewJustification("center"),
+		Justification: jc,
 	}
 
 	if !areParagraphPropertiesEqual(expectedParagraphProp, parsedParagraphProp) {
@@ -130,7 +134,7 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 		RunProperty: &docxrun.RunProperty{
 			Shading: ctypes.DefaultShading(),
 		},
-		Justification: &formatting.Justification{
+		Justification: &ctypes.Justification{
 			Val: "center",
 		},
 		PPrChange: &PPrChange{
