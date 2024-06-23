@@ -43,6 +43,15 @@ func Unpack(content *[]byte) (*doc.RootDoc, error) {
 		return nil, err
 	}
 
+	// Load content type details
+	ctBytes := fileIndex[constants.ConentTypeFileIdx]
+	ct, err := LoadContentTypes(ctBytes)
+	if err != nil {
+		return nil, err
+	}
+	delete(fileIndex, constants.ConentTypeFileIdx)
+	rd.ContentType = *ct
+
 	rd.ImageCount = 0
 	for fileName, fileContent := range fileIndex {
 		if strings.HasPrefix(fileName, constants.MediaPath) {
@@ -91,6 +100,7 @@ func Unpack(content *[]byte) (*doc.RootDoc, error) {
 
 	rd.Document = doc
 
+	// Load Relationship details
 	docRelFile := fileIndex[*docRelURI]
 	docRelations, err := LoadRelationShips(*docRelURI, docRelFile)
 	if err != nil {

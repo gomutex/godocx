@@ -3,6 +3,7 @@ package doc
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/common/units"
@@ -37,6 +38,23 @@ func (rd *RootDoc) AddPicture(path string, width units.Inch, height units.Inch) 
 	rd.ImageCount += 1
 	fileName := fmt.Sprintf("image%d%s", rd.ImageCount, imgExt)
 	fileIdxPath := fmt.Sprintf("%s%s", constants.MediaPath, fileName)
+
+	imgExtStripDot := strings.TrimPrefix(imgExt, ".")
+	imgMIME, err := MIMEFromExt(imgExtStripDot)
+	if err != nil {
+		return nil, err
+	}
+
+	err = rd.ContentType.AddExtension(imgExtStripDot, imgMIME)
+	if err != nil {
+		return nil, err
+	}
+
+	overridePart := fmt.Sprintf("/%s%s", constants.MediaPath, fileName)
+	err = rd.ContentType.AddOverride(overridePart, imgMIME)
+	if err != nil {
+		return nil, err
+	}
 
 	rd.FileMap.Store(fileIdxPath, imgBytes)
 

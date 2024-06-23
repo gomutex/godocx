@@ -68,9 +68,11 @@ func NewNVPicProp(cNvPr dmlct.CNvPr, cNvPicPr CNvPicPr) NonVisualPicProp {
 }
 
 func DefaultNVPicProp(id uint, name string) NonVisualPicProp {
+	cnvPicPr := NewCNvPicPr()
+	cnvPicPr.PicLocks = dmlprops.DefaultPicLocks()
 	return NonVisualPicProp{
 		CNvPr:    *dmlct.NewNonVisProp(id, name),
-		CNvPicPr: NewCNvPicPr(),
+		CNvPicPr: cnvPicPr,
 	}
 }
 

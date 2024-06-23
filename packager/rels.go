@@ -17,3 +17,13 @@ func LoadRelationShips(fileName string, fileBytes []byte) (*doc.Relationships, e
 	rels.RelativePath = fileName
 	return &rels, nil
 }
+
+// LoadContentTypes loads the content type from the content types file
+func LoadContentTypes(fileBytes []byte) (*doc.ContentTypes, error) {
+	ct := doc.ContentTypes{}
+	err := xml.Unmarshal(fileBytes, &ct)
+	if err != nil {
+		return nil, err
+	}
+	return &ct, nil
+}

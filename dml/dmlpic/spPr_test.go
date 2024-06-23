@@ -16,9 +16,11 @@ func TestMarshalPicShapeProp(t *testing.T) {
 			picShapeProp: &PicShapeProp{
 				BwMode:         &bwMode,
 				TransformGroup: &TransformGroup{},
-				PresetGeometry: &PresetGeometry{},
+				PresetGeometry: &PresetGeometry{
+					Preset: "rect",
+				},
 			},
-			expectedXML: `<pic:spPr bwMode="gray"><a:xfrm></a:xfrm><a:prstGeom></a:prstGeom></pic:spPr>`,
+			expectedXML: `<pic:spPr bwMode="gray"><a:xfrm></a:xfrm><a:prstGeom prst="rect"></a:prstGeom></pic:spPr>`,
 		},
 		{
 			picShapeProp: &PicShapeProp{},

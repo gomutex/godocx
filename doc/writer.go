@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+
+	"github.com/gomutex/godocx/common/constants"
 )
 
 // Close method is used to close the RootDoc. Currently, it does not perform any specific actions.
@@ -48,6 +50,12 @@ func (rd *RootDoc) writeToZip(zw *zip.Writer) error {
 		err   error
 		files []string
 	)
+
+	ct, err := marshal(rd.ContentType)
+	if err != nil {
+		return err
+	}
+	rd.FileMap.Store(constants.ConentTypeFileIdx, []byte(ct))
 
 	docRelContent, err := marshal(rd.Document.DocRels)
 	if err != nil {

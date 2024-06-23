@@ -13,11 +13,15 @@ import (
 
 // A Run is part of a paragraph that has its own style. It could be
 type Run struct {
+	//1. Run Properties
 	RunProperty *RunProperty
-	Children    []*RunChild
+
+	// 2. Choice - Run Inner content
+	Children []*RunChild
 }
 
 type RunChild struct {
+	//TODO: Maintain sequenec and rest of the elements
 	InstrText *string
 	Text      *runcontent.Text
 	Drawing   *dml.Drawing

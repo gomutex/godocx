@@ -2,6 +2,7 @@ package docxpara
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml"
@@ -18,22 +19,21 @@ type ParagraphChild struct {
 }
 
 type Paragraph struct {
-	id       string
-	Property *ParagraphProp
+	id string
 
+	// 1. Paragraph Properties
+	Property *ParagraphProp `xml:"pPr,omitempty"`
+
+	// 2. Choices (Slice of Child elements)
 	Children []*ParagraphChild
 }
 
 func NewParagraph() *Paragraph {
-	return &Paragraph{
-		Property: DefaultParaProperty(),
-	}
+	return &Paragraph{}
 }
 
 func DefaultParagraph() *Paragraph {
-	return &Paragraph{
-		Property: DefaultParaProperty(),
-	}
+	return &Paragraph{}
 }
 
 func NewParagraphChild() *ParagraphChild {
@@ -247,23 +247,26 @@ func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, heig
 	eWidth := width.ToEmu()
 	eHeight := height.ToEmu()
 
-	inline := dml.Inline{
-		Extent:  *dmlct.NewPostvSz2D(eWidth, eHeight),
-		Graphic: *dml.NewPicGraphic(dmlpic.NewPic(rID, imgCount, eWidth, eHeight)),
-	}
+	inline := dml.NewInline(
+		*dmlct.NewPostvSz2D(eWidth, eHeight),
+		dml.DocProp{
+			ID:   uint64(imgCount),
+			Name: fmt.Sprintf("Image%d", imgCount),
+		},
+		*dml.NewPicGraphic(dmlpic.NewPic(rID, imgCount, eWidth, eHeight)),
+	)
 
 	runChildren := []*docxrun.RunChild{}
 	drawing := &dml.Drawing{}
 
-	drawing.Inline = append(drawing.Inline, &inline)
+	drawing.Inline = append(drawing.Inline, inline)
 
 	runChildren = append(runChildren, &docxrun.RunChild{
 		Drawing: drawing,
 	})
 
 	run := &docxrun.Run{
-		Children:    runChildren,
-		RunProperty: &docxrun.RunProperty{},
+		Children: runChildren,
 	}
 
 	p.Children = append(p.Children, &ParagraphChild{Run: run})

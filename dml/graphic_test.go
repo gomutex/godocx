@@ -8,7 +8,7 @@ import (
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlpic"
 	"github.com/gomutex/godocx/dml/dmlprops"
-	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/dml/shapes"
 	"github.com/gomutex/godocx/types"
 )
 
@@ -37,8 +37,10 @@ func TestMarshalGraphic(t *testing.T) {
 					Blip: &dmlpic.Blip{
 						EmbedID: "rId1",
 					},
-					Stretch: &dmlpic.Stretch{
-						FillRect: &dmlpic.FillRect{},
+					FillModeProps: dmlpic.FillModeProps{
+						Stretch: &shapes.Stretch{
+							FillRect: &dmlct.RelativeRect{},
+						},
 					},
 				},
 				PicShapeProp: dmlpic.PicShapeProp{
@@ -53,7 +55,7 @@ func TestMarshalGraphic(t *testing.T) {
 						},
 					},
 					PresetGeometry: &dmlpic.PresetGeometry{
-						Preset: internal.ToPtr("rect"),
+						Preset: "rect",
 					},
 				},
 			}),

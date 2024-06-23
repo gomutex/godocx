@@ -20,13 +20,13 @@ type Anchor struct {
 	/// Specifies the minimum distance which shall be maintained between the top edge of this drawing object and any subsequent text within the document when this graphical object is displayed within the document's contents.,
 	/// The distance shall be measured in EMUs (English Mektric Units).,
 	//Distance From Text on Top Edge
-	DistT *uint `xml:"distT,attr,omitempty"`
+	DistT uint `xml:"distT,attr,omitempty"`
 	//Distance From Text on Bottom Edge
-	DistB *uint `xml:"distB,attr,omitempty"`
+	DistB uint `xml:"distB,attr,omitempty"`
 	//Distance From Text on Left Edge
-	DistL *uint `xml:"distL,attr,omitempty"`
+	DistL uint `xml:"distL,attr,omitempty"`
 	//Distance From Text on Right Edge
-	DistR *uint `xml:"distR,attr,omitempty"`
+	DistR uint `xml:"distR,attr,omitempty"`
 
 	//Relative Z-Ordering Position
 	RelativeHeight int `xml:"relativeHeight,attr"`
@@ -83,21 +83,10 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "behindDoc"}, Value: strconv.Itoa(a.BehindDoc)})
 
-	if a.DistT != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distT"}, Value: strconv.FormatUint(uint64(*a.DistT), 10)})
-	}
-
-	if a.DistB != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distB"}, Value: strconv.FormatUint(uint64(*a.DistB), 10)})
-	}
-
-	if a.DistL != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distL"}, Value: strconv.FormatUint(uint64(*a.DistL), 10)})
-	}
-
-	if a.DistR != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distR"}, Value: strconv.FormatUint(uint64(*a.DistR), 10)})
-	}
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distT"}, Value: strconv.FormatUint(uint64(a.DistT), 10)})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distB"}, Value: strconv.FormatUint(uint64(a.DistB), 10)})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distL"}, Value: strconv.FormatUint(uint64(a.DistL), 10)})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "distR"}, Value: strconv.FormatUint(uint64(a.DistR), 10)})
 
 	if a.SimplePosAttr != nil {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "simplePos"}, Value: strconv.Itoa(*a.SimplePosAttr)})

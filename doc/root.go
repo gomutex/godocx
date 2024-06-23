@@ -11,10 +11,11 @@ import (
 // It contains information about the document path, file map, the document structure,
 // and relationships with other parts of the document.
 type RootDoc struct {
-	Path     string        // Path represents the path of the document.
-	FileMap  sync.Map      // FileMap is a synchronized map for managing files related to the document.
-	Document *Document     // Document is the main document structure.
-	RootRels Relationships // RootRels represents relationships at the root level.
+	Path        string        // Path represents the path of the document.
+	FileMap     sync.Map      // FileMap is a synchronized map for managing files related to the document.
+	Document    *Document     // Document is the main document structure.
+	RootRels    Relationships // RootRels represents relationships at the root level.
+	ContentType ContentTypes
 
 	rID        int // rId is used to generate unique relationship IDs.
 	ImageCount uint

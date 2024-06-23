@@ -43,6 +43,12 @@ func WithTransformGroup(options ...TFGroupOption) PicShapePropOption {
 	}
 }
 
+func WithPrstGeom(preset string) PicShapePropOption {
+	return func(p *PicShapeProp) {
+		p.PresetGeometry = NewPresetGeom(preset)
+	}
+}
+
 func NewPicShapeProp(options ...PicShapePropOption) *PicShapeProp {
 	p := &PicShapeProp{}
 

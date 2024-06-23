@@ -9,6 +9,7 @@ import (
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/geom"
+	"github.com/gomutex/godocx/dml/shapes"
 )
 
 type Pic struct {
@@ -27,12 +28,21 @@ func NewPic(rID string, imgCount uint, width units.Emu, height units.Emu) *Pic {
 		WithTransformGroup(
 			WithTFExtent(width, height),
 		),
+		WithPrstGeom("rect"),
 	)
 
-	nvPicProp := DefaultNVPicProp(imgCount, fmt.Sprintf("image%s", rID))
+	nvPicProp := DefaultNVPicProp(imgCount, fmt.Sprintf("Image%v", imgCount))
+
+	blipFill := NewBlipFill(rID)
+
+	blipFill.FillModeProps = FillModeProps{
+		Stretch: &shapes.Stretch{
+			FillRect: &dmlct.RelativeRect{},
+		},
+	}
 
 	return &Pic{
-		BlipFill:         NewBlipFill(rID),
+		BlipFill:         blipFill,
 		NonVisualPicProp: nvPicProp,
 		PicShapeProp:     *shapeProp,
 	}
@@ -69,19 +79,6 @@ func (p *Pic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		Name: xml.Name{Local: "pic:spPr"},
 	}); err != nil {
 		return fmt.Errorf("marshalling PicShapeProp: %w", err)
-	}
-
-	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-type FillRect struct{}
-
-func (f *FillRect) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "a:fillRect"
-
-	err := e.EncodeToken(start)
-	if err != nil {
-		return err
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
@@ -154,17 +151,21 @@ func (o *Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 type PresetGeometry struct {
-	Preset       *string            `xml:"prst,attr,omitempty"`
+	Preset       string             `xml:"prst,attr,omitempty"`
 	AdjustValues *geom.AdjustValues `xml:"avLst,omitempty"`
+}
+
+func NewPresetGeom(preset string) *PresetGeometry {
+	return &PresetGeometry{
+		Preset: preset,
+	}
 }
 
 func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:prstGeom"
 	start.Attr = []xml.Attr{}
 
-	if p.Preset != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "prst"}, Value: *p.Preset})
-	}
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "prst"}, Value: p.Preset})
 
 	err := e.EncodeToken(start)
 	if err != nil {
