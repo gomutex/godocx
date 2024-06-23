@@ -7,11 +7,11 @@ import (
 
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlprops"
+	"github.com/gomutex/godocx/dml/shapes"
 	"github.com/gomutex/godocx/types"
 )
 
 func TestPicMarshalXML(t *testing.T) {
-	rect := "rect"
 	p := &Pic{
 		NonVisualPicProp: NonVisualPicProp{
 			CNvPr: dmlct.CNvPr{
@@ -30,8 +30,10 @@ func TestPicMarshalXML(t *testing.T) {
 			Blip: &Blip{
 				EmbedID: "rId1",
 			},
-			Stretch: &Stretch{
-				FillRect: &FillRect{},
+			FillModeProps: FillModeProps{
+				Stretch: &shapes.Stretch{
+					FillRect: &dmlct.RelativeRect{},
+				},
 			},
 		},
 		PicShapeProp: PicShapeProp{
@@ -46,7 +48,7 @@ func TestPicMarshalXML(t *testing.T) {
 				},
 			},
 			PresetGeometry: &PresetGeometry{
-				Preset: &rect,
+				Preset: "rect",
 			},
 		},
 	}

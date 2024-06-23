@@ -11,10 +11,7 @@ import (
 
 func TestMarshalDrawing(t *testing.T) {
 	simplePos := 1
-	var distT uint = 2
-	var distB uint = 3
-	var distL uint = 4
-	var distR uint = 5
+
 	layoutInCell := 6
 	allowOverlap := 7
 	relativeHeight := 8
@@ -28,12 +25,12 @@ func TestMarshalDrawing(t *testing.T) {
 	}{
 		{
 			drawing: &Drawing{
-				Inline: []*Inline{
+				Inline: []Inline{
 					{
-						DistT: &distT,
-						DistB: &distB,
-						DistL: &distL,
-						DistR: &distR,
+						DistT: 2,
+						DistB: 3,
+						DistL: 4,
+						DistR: 5,
 						Extent: dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
@@ -54,10 +51,10 @@ func TestMarshalDrawing(t *testing.T) {
 				Anchor: []*Anchor{
 					{
 						SimplePosAttr:  &simplePos,
-						DistT:          &distT,
-						DistB:          &distB,
-						DistL:          &distL,
-						DistR:          &distR,
+						DistT:          2,
+						DistB:          3,
+						DistL:          4,
+						DistR:          5,
 						LayoutInCell:   layoutInCell,
 						AllowOverlap:   allowOverlap,
 						RelativeHeight: relativeHeight,
@@ -89,7 +86,7 @@ func TestMarshalDrawing(t *testing.T) {
 					},
 				},
 			},
-			expectedXML: `<w:drawing><wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr id="1" name="test"></wp:docPr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:anchor><wp:inline distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:inline></w:drawing>`,
+			expectedXML: `<w:drawing><wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr id="1" name="test"></wp:docPr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:anchor><wp:inline xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture" distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:inline></w:drawing>`,
 			xmlName:     "w:drawing",
 		},
 	}
@@ -109,10 +106,6 @@ func TestMarshalDrawing(t *testing.T) {
 }
 
 func TestUnmarshalDrawing(t *testing.T) {
-	var distT uint = 2
-	var distB uint = 3
-	var distL uint = 4
-	var distR uint = 5
 	var simplePos int = 1
 	var layoutInCell int = 6
 	var allowOverlap int = 7
@@ -125,14 +118,14 @@ func TestUnmarshalDrawing(t *testing.T) {
 		expectedDrawing Drawing
 	}{
 		{
-			inputXML: `<w:drawing xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><wp:inline distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:inline><wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone></wp:anchor></w:drawing>`,
+			inputXML: `<w:drawing xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><wp:inline distT="2" distB="3" distL="4" distR="5"><wp:extent cx="100" cy="200"></wp:extent><wp:docPr id="1" name="Document Property" descr="This is a document property"></wp:docPr><wp:cNvGraphicFramePr><a:graphicFrameLocks  noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"></a:graphic></wp:inline><wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone></wp:anchor></w:drawing>`,
 			expectedDrawing: Drawing{
-				Inline: []*Inline{
+				Inline: []Inline{
 					{
-						DistT: &distT,
-						DistB: &distB,
-						DistL: &distL,
-						DistR: &distR,
+						DistT: 2,
+						DistB: 3,
+						DistL: 4,
+						DistR: 5,
 						Extent: dmlct.PSize2D{
 							Width:  100,
 							Height: 200,
@@ -153,10 +146,10 @@ func TestUnmarshalDrawing(t *testing.T) {
 				Anchor: []*Anchor{
 					{
 						SimplePosAttr:  &simplePos,
-						DistT:          &distT,
-						DistB:          &distB,
-						DistL:          &distL,
-						DistR:          &distR,
+						DistT:          2,
+						DistB:          3,
+						DistL:          4,
+						DistR:          5,
 						LayoutInCell:   layoutInCell,
 						AllowOverlap:   allowOverlap,
 						RelativeHeight: relativeHeight,
@@ -194,17 +187,17 @@ func TestUnmarshalDrawing(t *testing.T) {
 				t.Errorf("Expected %d Inline elements, but got %d", len(tt.expectedDrawing.Inline), len(drawing.Inline))
 			} else {
 				for i := range drawing.Inline {
-					if drawing.Inline[i].DistT == nil || *drawing.Inline[i].DistT != *tt.expectedDrawing.Inline[i].DistT {
-						t.Errorf("Expected Inline DistT %d, but got %v", *tt.expectedDrawing.Inline[i].DistT, drawing.Inline[i].DistT)
+					if drawing.Inline[i].DistT != tt.expectedDrawing.Inline[i].DistT {
+						t.Errorf("Expected Inline DistT %d, but got %v", tt.expectedDrawing.Inline[i].DistT, drawing.Inline[i].DistT)
 					}
-					if drawing.Inline[i].DistB == nil || *drawing.Inline[i].DistB != *tt.expectedDrawing.Inline[i].DistB {
-						t.Errorf("Expected Inline DistB %d, but got %v", *tt.expectedDrawing.Inline[i].DistB, drawing.Inline[i].DistB)
+					if drawing.Inline[i].DistB != tt.expectedDrawing.Inline[i].DistB {
+						t.Errorf("Expected Inline DistB %d, but got %v", tt.expectedDrawing.Inline[i].DistB, drawing.Inline[i].DistB)
 					}
-					if drawing.Inline[i].DistL == nil || *drawing.Inline[i].DistL != *tt.expectedDrawing.Inline[i].DistL {
-						t.Errorf("Expected Inline DistL %d, but got %v", *tt.expectedDrawing.Inline[i].DistL, drawing.Inline[i].DistL)
+					if drawing.Inline[i].DistL != tt.expectedDrawing.Inline[i].DistL {
+						t.Errorf("Expected Inline DistL %d, but got %v", tt.expectedDrawing.Inline[i].DistL, drawing.Inline[i].DistL)
 					}
-					if drawing.Inline[i].DistR == nil || *drawing.Inline[i].DistR != *tt.expectedDrawing.Inline[i].DistR {
-						t.Errorf("Expected Inline DistR %d, but got %v", *tt.expectedDrawing.Inline[i].DistR, drawing.Inline[i].DistR)
+					if drawing.Inline[i].DistR != tt.expectedDrawing.Inline[i].DistR {
+						t.Errorf("Expected Inline DistR %d, but got %v", tt.expectedDrawing.Inline[i].DistR, drawing.Inline[i].DistR)
 					}
 					if drawing.Inline[i].Extent.Width != tt.expectedDrawing.Inline[i].Extent.Width {
 						t.Errorf("Expected Inline Extent Width %d, but got %d", tt.expectedDrawing.Inline[i].Extent.Width, drawing.Inline[i].Extent.Width)
@@ -234,17 +227,17 @@ func TestUnmarshalDrawing(t *testing.T) {
 					if drawing.Anchor[i].SimplePosAttr == nil || *drawing.Anchor[i].SimplePosAttr != *tt.expectedDrawing.Anchor[i].SimplePosAttr {
 						t.Errorf("Expected Anchor SimplePosAttr %d, but got %v", *tt.expectedDrawing.Anchor[i].SimplePosAttr, drawing.Anchor[i].SimplePosAttr)
 					}
-					if drawing.Anchor[i].DistT == nil || *drawing.Anchor[i].DistT != *tt.expectedDrawing.Anchor[i].DistT {
-						t.Errorf("Expected Anchor DistT %d, but got %v", *tt.expectedDrawing.Anchor[i].DistT, drawing.Anchor[i].DistT)
+					if drawing.Anchor[i].DistT != tt.expectedDrawing.Anchor[i].DistT {
+						t.Errorf("Expected Anchor DistT %d, but got %v", tt.expectedDrawing.Anchor[i].DistT, drawing.Anchor[i].DistT)
 					}
-					if drawing.Anchor[i].DistB == nil || *drawing.Anchor[i].DistB != *tt.expectedDrawing.Anchor[i].DistB {
-						t.Errorf("Expected Anchor DistB %d, but got %v", *tt.expectedDrawing.Anchor[i].DistB, drawing.Anchor[i].DistB)
+					if drawing.Anchor[i].DistB != tt.expectedDrawing.Anchor[i].DistB {
+						t.Errorf("Expected Anchor DistB %d, but got %v", tt.expectedDrawing.Anchor[i].DistB, drawing.Anchor[i].DistB)
 					}
-					if drawing.Anchor[i].DistL == nil || *drawing.Anchor[i].DistL != *tt.expectedDrawing.Anchor[i].DistL {
-						t.Errorf("Expected Anchor DistL %d, but got %v", *tt.expectedDrawing.Anchor[i].DistL, drawing.Anchor[i].DistL)
+					if drawing.Anchor[i].DistL != tt.expectedDrawing.Anchor[i].DistL {
+						t.Errorf("Expected Anchor DistL %d, but got %v", tt.expectedDrawing.Anchor[i].DistL, drawing.Anchor[i].DistL)
 					}
-					if drawing.Anchor[i].DistR == nil || *drawing.Anchor[i].DistR != *tt.expectedDrawing.Anchor[i].DistR {
-						t.Errorf("Expected Anchor DistR %d, but got %v", *tt.expectedDrawing.Anchor[i].DistR, drawing.Anchor[i].DistR)
+					if drawing.Anchor[i].DistR != tt.expectedDrawing.Anchor[i].DistR {
+						t.Errorf("Expected Anchor DistR %d, but got %v", tt.expectedDrawing.Anchor[i].DistR, drawing.Anchor[i].DistR)
 					}
 					if drawing.Anchor[i].LayoutInCell != tt.expectedDrawing.Anchor[i].LayoutInCell {
 						t.Errorf("Expected Anchor LayoutInCell %d, but got %v", tt.expectedDrawing.Anchor[i].LayoutInCell, drawing.Anchor[i].LayoutInCell)

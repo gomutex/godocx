@@ -14,7 +14,7 @@ const (
 )
 
 type Drawing struct {
-	Inline []*Inline `xml:"inline,omitempty"`
+	Inline []Inline  `xml:"inline,omitempty"`
 	Anchor []*Anchor `xml:"anchor,omitempty"`
 }
 
@@ -37,8 +37,8 @@ loop:
 
 				dr.Anchor = append(dr.Anchor, ar)
 			case xml.Name{Space: constants.WMLDrawingNS, Local: "inline"}:
-				il := NewInline()
-				if err = d.DecodeElement(il, &elem); err != nil {
+				il := Inline{}
+				if err = d.DecodeElement(&il, &elem); err != nil {
 					return err
 				}
 

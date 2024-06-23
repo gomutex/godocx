@@ -10,10 +10,6 @@ import (
 
 func TestMarshalAnchor(t *testing.T) {
 	simplePos := 1
-	var distT uint = 2
-	var distB uint = 3
-	var distL uint = 4
-	var distR uint = 5
 	layoutInCell := 6
 	allowOverlap := 7
 	relativeHeight := 8
@@ -28,10 +24,10 @@ func TestMarshalAnchor(t *testing.T) {
 		{
 			anchor: &Anchor{
 				SimplePosAttr:  &simplePos,
-				DistT:          &distT,
-				DistB:          &distB,
-				DistL:          &distL,
-				DistR:          &distR,
+				DistT:          2,
+				DistB:          3,
+				DistL:          4,
+				DistR:          5,
 				LayoutInCell:   layoutInCell,
 				AllowOverlap:   allowOverlap,
 				RelativeHeight: relativeHeight,
@@ -83,10 +79,6 @@ func TestMarshalAnchor(t *testing.T) {
 func TestUnmarshalAnchor(t *testing.T) {
 
 	simplePos := 1
-	var distT uint = 2
-	var distB uint = 3
-	var distL uint = 4
-	var distR uint = 5
 	layoutInCell := 6
 	allowOverlap := 7
 	relativeHeight := 8
@@ -101,10 +93,10 @@ func TestUnmarshalAnchor(t *testing.T) {
 			inputXML: `<wp:anchor behindDoc="9" distT="2" distB="3" distL="4" distR="5" simplePos="1" locked="10" layoutInCell="6" allowOverlap="7" relativeHeight="8"><wp:simplePos x="0" y="0"></wp:simplePos><wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH><wp:positionV relativeFrom="line"><wp:posOffset>0</wp:posOffset></wp:positionV><wp:extent cx="100" cy="200"></wp:extent><wp:effectExtent l="1" t="2" r="3" b="4"></wp:effectExtent><wp:wrapNone></wp:wrapNone><wp:docPr></wp:docPr><a:graphic></a:graphic></wp:anchor>`,
 			expected: Anchor{
 				SimplePosAttr:  &simplePos,
-				DistT:          &distT,
-				DistB:          &distB,
-				DistL:          &distL,
-				DistR:          &distR,
+				DistT:          2,
+				DistB:          3,
+				DistL:          4,
+				DistR:          5,
 				LayoutInCell:   layoutInCell,
 				AllowOverlap:   allowOverlap,
 				RelativeHeight: relativeHeight,
@@ -139,17 +131,17 @@ func TestUnmarshalAnchor(t *testing.T) {
 			if *anchor.SimplePosAttr != *tt.expected.SimplePosAttr {
 				t.Errorf("Expected SimplePos %d, but got %d", *tt.expected.SimplePosAttr, *anchor.SimplePosAttr)
 			}
-			if *anchor.DistT != *tt.expected.DistT {
-				t.Errorf("Expected DistT %d, but got %d", *tt.expected.DistT, *anchor.DistT)
+			if anchor.DistT != tt.expected.DistT {
+				t.Errorf("Expected DistT %d, but got %d", tt.expected.DistT, anchor.DistT)
 			}
-			if *anchor.DistB != *tt.expected.DistB {
-				t.Errorf("Expected DistB %d, but got %d", *tt.expected.DistB, *anchor.DistB)
+			if anchor.DistB != tt.expected.DistB {
+				t.Errorf("Expected DistB %d, but got %d", tt.expected.DistB, anchor.DistB)
 			}
-			if *anchor.DistL != *tt.expected.DistL {
-				t.Errorf("Expected DistL %d, but got %d", *tt.expected.DistL, *anchor.DistL)
+			if anchor.DistL != tt.expected.DistL {
+				t.Errorf("Expected DistL %d, but got %d", tt.expected.DistL, anchor.DistL)
 			}
-			if *anchor.DistR != *tt.expected.DistR {
-				t.Errorf("Expected DistR %d, but got %d", *tt.expected.DistR, *anchor.DistR)
+			if anchor.DistR != tt.expected.DistR {
+				t.Errorf("Expected DistR %d, but got %d", tt.expected.DistR, anchor.DistR)
 			}
 			if anchor.LayoutInCell != tt.expected.LayoutInCell {
 				t.Errorf("Expected LayoutInCell %d, but got %d", tt.expected.LayoutInCell, anchor.LayoutInCell)

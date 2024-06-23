@@ -21,6 +21,12 @@ type PicLocks struct {
 	NoCrop                 types.OptBool `xml:"noCrop,attr,omitempty"`
 }
 
+func DefaultPicLocks() *PicLocks {
+	return &PicLocks{
+		NoChangeAspect:     types.NewOptBool(true),
+		NoChangeArrowheads: types.NewOptBool(true),
+	}
+}
 func (p *PicLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:picLocks"
 	start.Attr = []xml.Attr{}
