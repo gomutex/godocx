@@ -123,8 +123,7 @@ func (p *Paragraph) AddText(text string) *docxrun.Run {
 		Text: t,
 	})
 	run := &docxrun.Run{
-		Children:    runChildren,
-		RunProperty: &docxrun.RunProperty{},
+		Children: runChildren,
 	}
 
 	p.Children = append(p.Children, &ParagraphChild{Run: run})

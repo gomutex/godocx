@@ -24,7 +24,7 @@ func (rd *RootDoc) AddHeading(text string, level uint) (*docxpara.Paragraph, err
 
 	style := "Title"
 	if level != 0 {
-		style = fmt.Sprintf("Heading %d", level)
+		style = fmt.Sprintf("Heading%d", level)
 	}
 
 	p.Property.Style = docxpara.NewParagraphStyle(style)
