@@ -3,6 +3,7 @@ package dml
 import (
 	"encoding/xml"
 
+	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/types"
 )
 
@@ -15,7 +16,7 @@ func (g *GraphicFrameLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) e
 	start.Name.Local = "a:graphicFrameLocks"
 
 	start.Attr = []xml.Attr{
-		// {Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
+		{Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
 	}
 
 	if g.NoChangeAspect.Valid {
