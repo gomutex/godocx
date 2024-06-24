@@ -3,7 +3,6 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: gomutex
 
 ---
 
@@ -34,6 +33,7 @@ Include code snippets if possible.
 
 <!-- Please provide details about your environment. -->
 
+- **GoDocx Library Version:** 
 - **Go Version:** 
 - **Operating System:**
   - [ ] Windows
@@ -54,3 +54,9 @@ If applicable, add sample code that can help in reproducing the issue.
 
 ```go
 // Your sample code here
+```
+
+## Additional Information
+<!--
+If applicable, add the sample docx files(generated.docx or input.docx or expected.docx)
+-->
