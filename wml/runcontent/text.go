@@ -20,8 +20,7 @@ func NewText() *Text {
 }
 
 func TextFromString(text string) *Text {
-	var space string = TextSpacePreserve
-	return &Text{text: text, space: &space}
+	return &Text{text: text}
 }
 
 func (t *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
