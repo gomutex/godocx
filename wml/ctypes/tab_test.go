@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
@@ -18,24 +19,24 @@ func TestTab_MarshalXML(t *testing.T) {
 		{
 			name: "With all attributes",
 			input: Tab{
-				Val:        CTabStopPtr(stypes.CustTabStopCenter),
-				Position:   IntPtr(720),
-				LeaderChar: LeadCharPtr(stypes.CustLeadCharDot),
+				Val:        stypes.CustTabStopCenter,
+				Position:   720,
+				LeaderChar: internal.ToPtr(stypes.CustLeadCharDot),
 			},
-			expected: `<w:tab val="center" pos="720" leader="dot"></w:tab>`,
+			expected: `<w:tab w:val="center" w:pos="720" w:leader="dot"></w:tab>`,
 		},
 		{
 			name: "Without optional attributes",
 			input: Tab{
-				Val:      CTabStopPtr(stypes.CustTabStopRight),
-				Position: IntPtr(1440),
+				Val:      stypes.CustTabStopRight,
+				Position: 1440,
 			},
-			expected: `<w:tab val="right" pos="1440"></w:tab>`,
+			expected: `<w:tab w:val="right" w:pos="1440"></w:tab>`,
 		},
 		{
 			name:     "Empty struct",
 			input:    Tab{},
-			expected: `<w:tab></w:tab>`,
+			expected: `<w:tab w:val="" w:pos="0"></w:tab>`,
 		},
 	}
 
@@ -66,19 +67,19 @@ func TestTab_UnmarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "With all attributes",
-			inputXML: `<w:tab val="center" pos="720" leader="dot"></w:tab>`,
+			inputXML: `<w:tab w:val="center" w:pos="720" w:leader="dot"></w:tab>`,
 			expected: Tab{
-				Val:        CTabStopPtr(stypes.CustTabStopCenter),
-				Position:   IntPtr(720),
-				LeaderChar: LeadCharPtr(stypes.CustLeadCharDot),
+				Val:        stypes.CustTabStopCenter,
+				Position:   720,
+				LeaderChar: internal.ToPtr(stypes.CustLeadCharDot),
 			},
 		},
 		{
 			name:     "Without optional attributes",
-			inputXML: `<w:tab val="right" pos="1440"></w:tab>`,
+			inputXML: `<w:tab w:val="right" w:pos="1440"></w:tab>`,
 			expected: Tab{
-				Val:      CTabStopPtr(stypes.CustTabStopRight),
-				Position: IntPtr(1440),
+				Val:      stypes.CustTabStopRight,
+				Position: 1440,
 			},
 		},
 		{
@@ -98,21 +99,13 @@ func TestTab_UnmarshalXML(t *testing.T) {
 			}
 
 			// Compare Val
-			if tt.expected.Val != nil {
-				if result.Val == nil || *result.Val != *tt.expected.Val {
-					t.Errorf("Expected Val %s but got %v", *tt.expected.Val, *result.Val)
-				}
-			} else if result.Val != nil {
-				t.Errorf("Expected Val nil but got %v", *result.Val)
+			if result.Val != tt.expected.Val {
+				t.Errorf("Expected Val %s but got %v", tt.expected.Val, result.Val)
 			}
 
 			// Compare Position
-			if tt.expected.Position != nil {
-				if result.Position == nil || *result.Position != *tt.expected.Position {
-					t.Errorf("Expected Position %d but got %v", *tt.expected.Position, *result.Position)
-				}
-			} else if result.Position != nil {
-				t.Errorf("Expected Position nil but got %v", *result.Position)
+			if result.Position != tt.expected.Position {
+				t.Errorf("Expected Position %d but got %v", tt.expected.Position, result.Position)
 			}
 
 			// Compare LeaderChar
@@ -141,11 +134,11 @@ func TestTabs_MarshalXML(t *testing.T) {
 			name: "Tabs with Multiple Tab elements",
 			tabs: Tabs{
 				Tab: []Tab{
-					{Val: CTabStopPtr(stypes.CustTabStopCenter), Position: IntPtr(100), LeaderChar: LeadCharPtr(stypes.CustLeadCharDot)},
-					{Val: CTabStopPtr(stypes.CustTabStopLeft), Position: IntPtr(200), LeaderChar: LeadCharPtr(stypes.CustLeadCharHyphen)},
+					{Val: stypes.CustTabStopCenter, Position: 100, LeaderChar: internal.ToPtr(stypes.CustLeadCharDot)},
+					{Val: stypes.CustTabStopLeft, Position: 200, LeaderChar: internal.ToPtr(stypes.CustLeadCharHyphen)},
 				},
 			},
-			expected: `<w:tabs><w:tab val="center" pos="100" leader="dot"></w:tab><w:tab val="left" pos="200" leader="hyphen"></w:tab></w:tabs>`,
+			expected: `<w:tabs><w:tab w:val="center" w:pos="100" w:leader="dot"></w:tab><w:tab w:val="left" w:pos="200" w:leader="hyphen"></w:tab></w:tabs>`,
 		},
 	}
 
@@ -182,8 +175,8 @@ func TestTabs_UnmarshalXML(t *testing.T) {
             </tabs>`,
 			expected: Tabs{
 				Tab: []Tab{
-					{Val: CTabStopPtr(stypes.CustTabStopCenter), Position: IntPtr(100), LeaderChar: LeadCharPtr(stypes.CustLeadCharDot)},
-					{Val: CTabStopPtr(stypes.CustTabStopLeft), Position: IntPtr(200), LeaderChar: LeadCharPtr(stypes.CustLeadCharHyphen)},
+					{Val: stypes.CustTabStopCenter, Position: 100, LeaderChar: internal.ToPtr(stypes.CustLeadCharDot)},
+					{Val: stypes.CustTabStopLeft, Position: 200, LeaderChar: internal.ToPtr(stypes.CustLeadCharHyphen)},
 				},
 			},
 		},
@@ -203,16 +196,4 @@ func TestTabs_UnmarshalXML(t *testing.T) {
 			}
 		})
 	}
-}
-
-func IntPtr(v int) *int {
-	return &v
-}
-
-func LeadCharPtr(lc stypes.CustLeadChar) *stypes.CustLeadChar {
-	return &lc
-}
-
-func CTabStopPtr(v stypes.CustTabStop) *stypes.CustTabStop {
-	return &v
 }

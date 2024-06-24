@@ -118,7 +118,7 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 		Tabs: ctypes.Tabs{
 			Tab: []ctypes.Tab{
 				{
-					Val: internal.ToPtr(stypes.CustTabStopBar),
+					Val: stypes.CustTabStopBar,
 				},
 			},
 		},

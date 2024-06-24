@@ -11,10 +11,10 @@ import (
 // Custom Tab Stop
 type Tab struct {
 	// Tab Stop Type
-	Val *stypes.CustTabStop `xml:"val,attr,omitempty"`
+	Val stypes.CustTabStop `xml:"val,attr,omitempty"`
 
 	//Tab Stop Position
-	Position *int `xml:"pos,attr,omitempty"`
+	Position int `xml:"pos,attr,omitempty"`
 
 	//Custom Tab Stop Leader Character
 	LeaderChar *stypes.CustLeadChar `xml:"leader,attr,omitempty"`
@@ -24,16 +24,11 @@ func (t *Tab) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:tab"
 	start.Attr = []xml.Attr{}
 
-	if t.Val != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "val"}, Value: string(*t.Val)})
-	}
-
-	if t.Position != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "pos"}, Value: strconv.Itoa(*t.Position)})
-	}
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(t.Val)})
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:pos"}, Value: strconv.Itoa(t.Position)})
 
 	if t.LeaderChar != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "leader"}, Value: string(*t.LeaderChar)})
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:leader"}, Value: string(*t.LeaderChar)})
 	}
 
 	err := e.EncodeToken(start)

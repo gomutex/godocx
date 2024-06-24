@@ -61,7 +61,7 @@ func TestRunProperty_MarshalXML(t *testing.T) {
 				Style:        singleStrValPtr(elemtypes.SingleStrVal{Val: "Heading1"}),
 				Position:     singleIntValPtr(ctypes.DecimalNum{Val: 10}),
 			},
-			expected: `<w:rPr><w:b></w:b><w:bCs></w:bCs><w:rtl></w:rtl><w:specVanish></w:specVanish><w:oMath></w:oMath><w:cs></w:cs><w:i></w:i><w:iCs></w:iCs><w:strike></w:strike><w:dstrike></w:dstrike><w:outline></w:outline><w:shadow></w:shadow><w:caps></w:caps><w:smallCaps></w:smallCaps><w:snapToGrid></w:snapToGrid><w:emboss></w:emboss><w:imprint></w:imprint><w:vanish></w:vanish><w:webHidden></w:webHidden><w:noProof></w:noProof><w:rStyle w:val="Heading1"></w:rStyle><w:spacing w:val="100"></w:spacing><w:kern w:val="20"></w:kern><w:position w:val="10"></w:position></w:rPr>`,
+			expected: `<w:rPr><w:rStyle w:val="Heading1"></w:rStyle><w:b></w:b><w:bCs></w:bCs><w:i></w:i><w:iCs></w:iCs><w:caps></w:caps><w:smallCaps></w:smallCaps><w:strike></w:strike><w:dstrike></w:dstrike><w:outline></w:outline><w:shadow></w:shadow><w:emboss></w:emboss><w:imprint></w:imprint><w:noProof></w:noProof><w:snapToGrid></w:snapToGrid><w:vanish></w:vanish><w:webHidden></w:webHidden><w:spacing w:val="100"></w:spacing><w:kern w:val="20"></w:kern><w:position w:val="10"></w:position><w:rtl></w:rtl><w:cs></w:cs><w:specVanish></w:specVanish><w:oMath></w:oMath></w:rPr>`,
 		},
 		{
 			name: "Only Bold set",
@@ -103,7 +103,7 @@ func TestRunProperty_UnmarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "All attributes set",
-			inputXML: `<w:rPr><w:b/><w:bCs/><w:i/><w:iCs/><w:strike/><w:dstrike/><w:outline/><w:shadow/><w:caps/><w:smallCaps/><w:emboss/><w:imprint/><w:noProof/><w:snapToGrid/><w:vanish/><w:webHidden/><w:rtl/><w:cs/><w:specVanish/><w:oMath/><w:kern w:val="20"/><w:spacing w:val="100"/><w:rStyle w:val="Heading1"/><w:position w:val="10"/></w:rPr>`,
+			inputXML: `<w:rPr><w:rStyle w:val="Heading1"></w:rStyle><w:b></w:b><w:bCs></w:bCs><w:i></w:i><w:iCs></w:iCs><w:caps></w:caps><w:smallCaps></w:smallCaps><w:strike></w:strike><w:dstrike></w:dstrike><w:outline></w:outline><w:shadow></w:shadow><w:emboss></w:emboss><w:imprint></w:imprint><w:noProof></w:noProof><w:snapToGrid></w:snapToGrid><w:vanish></w:vanish><w:webHidden></w:webHidden><w:spacing w:val="100"></w:spacing><w:kern w:val="20"></w:kern><w:position w:val="10"></w:position><w:rtl></w:rtl><w:cs></w:cs><w:specVanish></w:specVanish><w:oMath></w:oMath></w:rPr>`,
 			expectedProp: RunProperty{
 				Bold:         optBoolElemPtr(elemtypes.OptBoolElem{}),
 				BoldCS:       optBoolElemPtr(elemtypes.OptBoolElem{}),
