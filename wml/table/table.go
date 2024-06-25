@@ -7,44 +7,44 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
+// Table
 type Table struct {
-	Rows         []TableChild
-	Grid         *TableGrid
-	Property     *TableProperty
-	HasNumbering bool
-}
+	//1.Choice: RangeMarkupElements
+	RngMarkupElems []RngMarkupElem
 
-type TableChild struct {
-	TableRow *TableRow
+	//2. Table Properties
+	Property Property `xml:"tblPr,omitempty"`
+
+	//3. Table Grid
+	Grid Grid `xml:"tblGrid,omitempty"`
+
+	//4.1 Choice:
+	RowContents []RowContent
+
+	//4.2 TODO: Remaining choices
 }
 
 func DefaultTable() *Table {
 	return &Table{}
 }
 
-func (t *Table) AddRow() *TableRow {
-	row := DefaultTableRow()
-	t.Rows = append(t.Rows, TableChild{
-		TableRow: row,
+func (t *Table) AddRow() *Row {
+	row := DefaultRow()
+	t.RowContents = append(t.RowContents, RowContent{
+		Row: row,
 	})
 	return row
 }
 
 func (t *Table) Indent(indent int) {
-	if t.Property == nil {
-		t.Property = DefaultTableProperty()
-	}
+	t.Property = *DefaultProperty()
 	t.Property.Indent = ctypes.NewTableWidth(indent, stypes.TableWidthAuto)
 }
 
 func (t *Table) Style(value string) {
-	if t.Property == nil {
-		t.Property = DefaultTableProperty()
-	}
+	t.Property = *DefaultProperty()
 	t.Property.Style = NewTableStyle(value)
 }
-
-// TODO  Implement Marshal and Unmarshal properly for all fields
 
 func (t *Table) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:tbl"
@@ -54,64 +54,79 @@ func (t *Table) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 		return err
 	}
 
-	if t.Property != nil {
-		err := t.Property.MarshalXML(e, xml.StartElement{})
+	//1.Choice: RangeMarkupElements
+	for _, rme := range t.RngMarkupElems {
+		err := rme.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}
 	}
 
-	for _, row := range t.Rows {
-		err := row.TableRow.MarshalXML(e, xml.StartElement{})
-		if err != nil {
-			return err
-		}
+	//2. Table Properties
+	if err = t.Property.MarshalXML(e, xml.StartElement{}); err != nil {
+		return err
 	}
 
-	if t.Grid != nil {
-		err := t.Grid.MarshalXML(e, xml.StartElement{})
+	//3. Table Grid
+	if err = t.Grid.MarshalXML(e, xml.StartElement{}); err != nil {
+		return err
+	}
+
+	// 4. Choice: RowContents
+	for _, rc := range t.RowContents {
+		err := rc.MarshalXML(e, xml.StartElement{})
 		if err != nil {
 			return err
 		}
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-
 }
 
-func (t *Table) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+func (t *Table) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+loop:
 	for {
-		token, err := d.Token()
+		currentToken, err := d.Token()
 		if err != nil {
 			return err
 		}
 
-		switch elem := token.(type) {
+		switch elem := currentToken.(type) {
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "tblPr":
-				t.Property = &TableProperty{}
-				if err := d.DecodeElement(t.Property, &elem); err != nil {
+				prop := Property{}
+				if err = d.DecodeElement(&prop, &elem); err != nil {
 					return err
 				}
-			case "tr":
-				row := TableRow{}
-				if err := d.DecodeElement(&row, &elem); err != nil {
-					return err
-				}
-				t.Rows = append(t.Rows, TableChild{
-					TableRow: &row,
-				})
+
+				t.Property = prop
 			case "tblGrid":
-				t.Grid = &TableGrid{}
-				if err := d.DecodeElement(t.Grid, &elem); err != nil {
+				grid := Grid{}
+				if err = d.DecodeElement(&grid, &elem); err != nil {
+					return err
+				}
+
+				t.Grid = grid
+			case "tr":
+				row := Row{}
+				if err = d.DecodeElement(&row, &elem); err != nil {
+					return err
+				}
+
+				t.RowContents = append(t.RowContents, RowContent{
+					Row: &row,
+				})
+
+			default:
+				if err = d.Skip(); err != nil {
 					return err
 				}
 			}
 		case xml.EndElement:
-			if elem == start.End() {
-				return nil
-			}
+			break loop
 		}
 	}
+
+	return nil
 }

@@ -8,7 +8,7 @@ import (
 )
 
 // This element specifies the set of table-wide properties applied to the current table. These properties affect the appearance of all rows and cells within the parent table, but may be overridden by individual table-level exception, row, and cell level properties as defined by each property.
-type TableProperty struct {
+type Property struct {
 	// 1. Referenced Table Style
 	Style *TableStyle `xml:"tblStyle,omitempty"`
 
@@ -49,17 +49,17 @@ type TableProperty struct {
 	Layout *TableLayout `xml:"tblLayout,omitempty"`
 
 	// 14. Table Cell Margin Defaults
-	CellMargin *TableCellMargins `xml:"tblCellMar,omitempty"`
+	CellMargin *CellMargins `xml:"tblCellMar,omitempty"`
 
 	// 15. Table Style Conditional Formatting Settings
 	TableLook *elemtypes.SingleStrVal `xml:"tblLook,omitempty"`
 }
 
-func DefaultTableProperty() *TableProperty {
-	return &TableProperty{}
+func DefaultProperty() *Property {
+	return &Property{}
 }
 
-func (t *TableProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+func (t *Property) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:tblPr"
 
 	err = e.EncodeToken(start)

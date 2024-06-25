@@ -72,8 +72,7 @@ func TestEALayout_MarshalXML(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var result strings.Builder
 			e := xml.NewEncoder(&result)
-			start := xml.StartElement{Name: xml.Name{Local: "w:eastAsianLayout"}}
-			err := tt.layout.MarshalXML(e, start)
+			err := tt.layout.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:eastAsianLayout"}})
 			if err != nil {
 				t.Fatalf("Error marshaling XML: %v", err)
 			}

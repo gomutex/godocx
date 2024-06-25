@@ -8,7 +8,7 @@ import (
 )
 
 // Table Cell Margin Defaults
-type TableCellMargins struct {
+type CellMargins struct {
 	// 1. Table Cell Top Margin Default
 	Top *ctypes.TableWidth `xml:"top,omitempty"`
 
@@ -22,11 +22,11 @@ type TableCellMargins struct {
 	Right *ctypes.TableWidth `xml:"right,omitempty"`
 }
 
-func DefaultTableCellMargins() TableCellMargins {
-	return TableCellMargins{}
+func DefaultCellMargins() CellMargins {
+	return CellMargins{}
 }
 
-func (tcm TableCellMargins) Margin(top, left, bottom, right int) TableCellMargins {
+func (tcm CellMargins) Margin(top, left, bottom, right int) CellMargins {
 	tcm.Top = ctypes.NewTableWidth(top, stypes.TableWidthDxa)
 	tcm.Left = ctypes.NewTableWidth(left, stypes.TableWidthDxa)
 	tcm.Bottom = ctypes.NewTableWidth(bottom, stypes.TableWidthDxa)
@@ -34,30 +34,29 @@ func (tcm TableCellMargins) Margin(top, left, bottom, right int) TableCellMargin
 	return tcm
 }
 
-func (tcm TableCellMargins) MarginTop(v int, t stypes.TableWidth) TableCellMargins {
+func (tcm CellMargins) MarginTop(v int, t stypes.TableWidth) CellMargins {
 	tcm.Top = ctypes.NewTableWidth(v, t)
 	return tcm
 }
 
-func (tcm TableCellMargins) MarginRight(v int, t stypes.TableWidth) TableCellMargins {
+func (tcm CellMargins) MarginRight(v int, t stypes.TableWidth) CellMargins {
 	tcm.Right = ctypes.NewTableWidth(v, t)
 	return tcm
 }
 
-func (tcm TableCellMargins) MarginLeft(v int, t stypes.TableWidth) TableCellMargins {
+func (tcm CellMargins) MarginLeft(v int, t stypes.TableWidth) CellMargins {
 	tcm.Left = ctypes.NewTableWidth(v, t)
 	return tcm
 }
 
-func (tcm TableCellMargins) MarginBottom(v int, t stypes.TableWidth) TableCellMargins {
+func (tcm CellMargins) MarginBottom(v int, t stypes.TableWidth) CellMargins {
 	tcm.Bottom = ctypes.NewTableWidth(v, t)
 	return tcm
 }
 
-func (tcm *TableCellMargins) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
-	elem := xml.StartElement{Name: xml.Name{Local: "w:tblCellMar"}}
+func (tcm *CellMargins) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
-	if err = e.EncodeToken(elem); err != nil {
+	if err = e.EncodeToken(start); err != nil {
 		return err
 	}
 
@@ -89,5 +88,5 @@ func (tcm *TableCellMargins) MarshalXML(e *xml.Encoder, start xml.StartElement) 
 		}
 	}
 
-	return e.EncodeToken(elem.End())
+	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }

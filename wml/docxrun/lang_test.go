@@ -43,8 +43,7 @@ func TestLang_MarshalXML(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var result strings.Builder
 			e := xml.NewEncoder(&result)
-			start := xml.StartElement{Name: xml.Name{Local: "w:lang"}}
-			err := tt.lang.MarshalXML(e, start)
+			err := tt.lang.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:lang"}})
 			if err != nil {
 				t.Fatalf("Error marshaling XML: %v", err)
 			}

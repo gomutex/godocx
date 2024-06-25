@@ -10,13 +10,13 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
-func TestTableCellMarginsMarshalXML(t *testing.T) {
+func TestCellMarginsMarshalXML(t *testing.T) {
 	testCases := []struct {
-		input    TableCellMargins
+		input    CellMargins
 		expected string
 	}{
 		{
-			input: TableCellMargins{
+			input: CellMargins{
 				Top:    ctypes.NewTableWidth(0, stypes.TableWidthDxa),
 				Left:   ctypes.NewTableWidth(55, stypes.TableWidthDxa),
 				Bottom: ctypes.NewTableWidth(0, stypes.TableWidthDxa),
@@ -25,7 +25,7 @@ func TestTableCellMarginsMarshalXML(t *testing.T) {
 			expected: `<w:tblCellMar><w:top w:w="0" w:type="dxa"></w:top><w:left w:w="55" w:type="dxa"></w:left><w:bottom w:w="0" w:type="dxa"></w:bottom><w:right w:w="55" w:type="dxa"></w:right></w:tblCellMar>`,
 		},
 		{
-			input:    DefaultTableCellMargins(),
+			input:    DefaultCellMargins(),
 			expected: `<w:tblCellMar></w:tblCellMar>`,
 		},
 	}
@@ -34,7 +34,7 @@ func TestTableCellMarginsMarshalXML(t *testing.T) {
 		var result strings.Builder
 		encoder := xml.NewEncoder(&result)
 
-		start := xml.StartElement{Name: xml.Name{Local: "fake"}}
+		start := xml.StartElement{Name: xml.Name{Local: "w:tblCellMar"}}
 		err := tc.input.MarshalXML(encoder, start)
 
 		if err != nil {
@@ -52,14 +52,14 @@ func TestTableCellMarginsMarshalXML(t *testing.T) {
 	}
 }
 
-func TestTableCellMarginsUnmarshalXML(t *testing.T) {
+func TestCellMarginsUnmarshalXML(t *testing.T) {
 	testCases := []struct {
 		input    string
-		expected TableCellMargins
+		expected CellMargins
 	}{
 		{
 			input: `<w:tblCellMar xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:top w:w="0" w:type="dxa"></w:top><w:left w:w="55" w:type="dxa"></w:left><w:bottom w:w="0" w:type="dxa"></w:bottom><w:right w:w="55" w:type="dxa"></w:right></w:tblCellMar>`,
-			expected: TableCellMargins{
+			expected: CellMargins{
 				Top:    ctypes.NewTableWidth(0, stypes.TableWidthDxa),
 				Left:   ctypes.NewTableWidth(55, stypes.TableWidthDxa),
 				Bottom: ctypes.NewTableWidth(0, stypes.TableWidthDxa),
@@ -69,7 +69,7 @@ func TestTableCellMarginsUnmarshalXML(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		var result TableCellMargins
+		var result CellMargins
 
 		err := xml.Unmarshal([]byte(tc.input), &result)
 		if err != nil {
