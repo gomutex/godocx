@@ -14,14 +14,14 @@ import (
 // A Run is part of a paragraph that has its own style. It could be
 type Run struct {
 	//1. Run Properties
-	RunProperty *RunProperty
+	Property *RunProperty
 
 	// 2. Choice - Run Inner content
 	Children []*RunChild
 }
 
 type RunChild struct {
-	//TODO: Maintain sequenec and rest of the elements
+	//TODO: Maintain sequence and rest of the elements
 	InstrText *string
 	Text      *runcontent.Text
 	Drawing   *dml.Drawing
@@ -31,6 +31,14 @@ type RunChild struct {
 
 func NewRun() *Run {
 	return &Run{}
+}
+
+// Get the Run property. If it is not initialized, create one and return it.
+func (r *Run) getProp() *RunProperty {
+	if r.Property == nil {
+		r.Property = &RunProperty{}
+	}
+	return r.Property
 }
 
 // Sets the color of the Run.
@@ -46,7 +54,7 @@ func NewRun() *Run {
 // Returns:
 //   - *Run: The modified Run instance with the updated color.
 func (r *Run) Color(colorCode string) *Run {
-	r.RunProperty.Color = formatting.NewColor(colorCode)
+	r.getProp().Color = formatting.NewColor(colorCode)
 	return r
 }
 
@@ -65,41 +73,41 @@ func (r *Run) Color(colorCode string) *Run {
 // Returns:
 //   - *Run: The modified Run instance with the updated size.
 func (r *Run) Size(size uint64) *Run {
-	r.RunProperty.Size = NewFontSize(size * 2)
+	r.getProp().Size = NewFontSize(size * 2)
 	return r
 }
 
 func (r *Run) Shading(shdType stypes.Shading, color, fill string) *Run {
-	r.RunProperty.Shading = ctypes.NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
+	r.getProp().Shading = ctypes.NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
 	return r
 }
 
 // AddHighlight sets the highlight color for the run.
 func (r *Run) Highlight(color string) *Run {
-	r.RunProperty.Highlight = formatting.NewHighlight(color)
+	r.getProp().Highlight = formatting.NewHighlight(color)
 	return r
 }
 
 // AddBold enables bold formatting for the run.
 func (r *Run) Bold(value bool) *Run {
-	r.RunProperty.Bold = elemtypes.NewOptBoolElem(value)
+	r.getProp().Bold = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Italic(value bool) *Run {
-	r.RunProperty.Italic = elemtypes.NewOptBoolElem(value)
+	r.getProp().Italic = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 // Specifies that the contents of this run shall be displayed with a single horizontal line through the center of the line.
 func (r *Run) Strike(value bool) *Run {
-	r.RunProperty.Strike = elemtypes.NewOptBoolElem(value)
+	r.getProp().Strike = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 // Specifies that the contents of this run shall be displayed with two horizontal lines through each character displayed on the line
 func (r *Run) DoubleStrike(value bool) *Run {
-	r.RunProperty.DoubleStrike = elemtypes.NewOptBoolElem(value)
+	r.getProp().DoubleStrike = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
@@ -107,66 +115,66 @@ func (r *Run) DoubleStrike(value bool) *Run {
 //
 // Any lowercase characters in this text run shall be formatted for display only as their capital letter character equivalents
 func (r *Run) Caps(value bool) *Run {
-	r.RunProperty.Caps = elemtypes.NewOptBoolElem(value)
+	r.getProp().Caps = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 // Specifies that all small letter characters in this text run shall be formatted for display only as their capital letter character equivalents
 func (r *Run) SmallCaps(value bool) *Run {
-	r.RunProperty.Caps = elemtypes.NewOptBoolElem(value)
+	r.getProp().Caps = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Outline(value bool) *Run {
-	r.RunProperty.Outline = elemtypes.NewOptBoolElem(value)
+	r.getProp().Outline = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Shadow(value bool) *Run {
-	r.RunProperty.Shadow = elemtypes.NewOptBoolElem(value)
+	r.getProp().Shadow = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Emboss(value bool) *Run {
-	r.RunProperty.Emboss = elemtypes.NewOptBoolElem(value)
+	r.getProp().Emboss = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Imprint(value bool) *Run {
-	r.RunProperty.Imprint = elemtypes.NewOptBoolElem(value)
+	r.getProp().Imprint = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 // Do Not Check Spelling or Grammar
 func (r *Run) NoGrammer(value bool) *Run {
-	r.RunProperty.NoGrammar = elemtypes.NewOptBoolElem(value)
+	r.getProp().NoGrammar = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 // Use Document Grid Settings For Inter-Character Spacing
 func (r *Run) SnapToGrid(value bool) *Run {
-	r.RunProperty.SnapToGrid = elemtypes.NewOptBoolElem(value)
+	r.getProp().SnapToGrid = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 // Hidden Text
 func (r *Run) HideText(value bool) *Run {
-	r.RunProperty.Vanish = elemtypes.NewOptBoolElem(value)
+	r.getProp().Vanish = elemtypes.NewOptBoolElem(value)
 	return r
 }
 
 func (r *Run) Spacing(value int) *Run {
-	r.RunProperty.Spacing = ctypes.NewDecimalNum(value)
+	r.getProp().Spacing = ctypes.NewDecimalNum(value)
 	return r
 }
 
 func (r *Run) Underline(value formatting.UnderlineStyle) *Run {
-	r.RunProperty.Underline = formatting.NewUnderline(value)
+	r.getProp().Underline = formatting.NewUnderline(value)
 	return r
 }
 
 func (r *Run) Style(value string) *Run {
-	r.RunProperty.Style = NewRunStyle(value)
+	r.getProp().Style = NewRunStyle(value)
 	return r
 }
 
@@ -178,9 +186,9 @@ func (r *Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 		return err
 	}
 
-	if r.RunProperty != nil {
+	if r.Property != nil {
 		propsElement := xml.StartElement{Name: xml.Name{Local: "w:rPr"}}
-		if err = e.EncodeElement(r.RunProperty, propsElement); err != nil {
+		if err = e.EncodeElement(r.Property, propsElement); err != nil {
 			return err
 		}
 	}
@@ -237,8 +245,8 @@ loop:
 
 				r.Children = append(r.Children, &RunChild{Text: txt})
 			case "rPr":
-				r.RunProperty = &RunProperty{}
-				if err = d.DecodeElement(r.RunProperty, &elem); err != nil {
+				r.Property = &RunProperty{}
+				if err = d.DecodeElement(r.Property, &elem); err != nil {
 					return err
 				}
 			case "tab":
