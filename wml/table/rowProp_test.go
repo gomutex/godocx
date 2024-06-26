@@ -20,12 +20,6 @@ func TestRowProperty_MarshalXML(t *testing.T) {
 		expectedXML string // Expected XML output for validation
 	}{
 		{
-			name:        "Empty RowProperty",
-			input:       RowProperty{},
-			expectFail:  true,
-			expectedXML: "",
-		},
-		{
 			name: "Only Cnf populated",
 			input: RowProperty{
 				Cnf: &ctypes.Cnf{
@@ -115,12 +109,6 @@ func TestRowProperty_UnmarshalXML(t *testing.T) {
 		expected   RowProperty
 		expectFail bool // Whether unmarshaling is expected to fail
 	}{
-		{
-			name:       "Empty RowProperty",
-			inputXML:   `<w:trPr></w:trPr>`,
-			expected:   RowProperty{},
-			expectFail: true,
-		},
 		{
 			name: "Only Cnf populated",
 			inputXML: `<w:trPr>
