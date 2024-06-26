@@ -5,6 +5,27 @@ import (
 	"strconv"
 )
 
+type DecimalNum struct {
+	Val int `xml:"val,attr"`
+}
+
+func NewDecimalNum(value int) *DecimalNum {
+	return &DecimalNum{
+		Val: value,
+	}
+}
+
+func (s *DecimalNum) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: strconv.Itoa(s.Val)})
+	err := e.EncodeElement("", start)
+
+	return err
+}
+
+// !--- DecimalNum ends here---!
+
+// !--- Uint64Elem starts---!
+
 // Uint64Elem - Gomplex type that contains single val attribute which is type of uint64
 // can be used where w:ST_UnsignedDecimalNumber is applicable
 // example: ST_HpsMeasure
@@ -26,3 +47,5 @@ func (s *Uint64Elem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	return err
 }
+
+// !--- Uint64Elem ends here---!

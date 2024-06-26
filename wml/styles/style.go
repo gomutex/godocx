@@ -30,4 +30,28 @@ type Style struct {
 
 	//8.Optional User Interface Sorting Order
 	UIPriority *ctypes.DecimalNum `xml:"uiPriority,omitempty"`
+
+	// 9. Hide Style From Main User Interface
+	SemiHidden *ctypes.OnOff `xml:"semiHidden,omitempty"`
+
+	// 10. Remove Semi-Hidden Property When Style Is Used
+	UnhideWhenUsed *ctypes.OnOff `xml:"unhideWhenUsed,omitempty"`
+
+	// 11. Primary Style
+	QFormat *ctypes.OnOff `xml:"qFormat,omitempty"`
+
+	// 12. Style Cannot Be Applied
+	Locked *ctypes.OnOff `xml:"locked,omitempty"`
+
+	// 13. E-Mail Message Text Style
+	Personal *ctypes.OnOff `xml:"personal,omitempty"`
+
+	// 14. E-Mail Message Composition Style
+	PersonalCompose *ctypes.OnOff `xml:"personalCompose,omitempty"`
+
+	// 15. E-Mail Message Reply Style
+	PersonalReply *ctypes.OnOff `xml:"personalReply,omitempty"`
+
+	//16. Revision Identifier for Style Definition
+	RevID *ctypes.LongHexNum `xml:"rsid,omitempty"`
 }
