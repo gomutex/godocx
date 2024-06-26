@@ -2,6 +2,7 @@ package table
 
 import (
 	"encoding/xml"
+	"errors"
 	"strconv"
 
 	"github.com/gomutex/godocx/elemtypes"
@@ -49,8 +50,12 @@ type CellProperty struct {
 	//13.Ignore End Of Cell Marker In Row Height Calculation
 	HideMark *elemtypes.OptBinFlagElem `xml:"hideMark,omitempty"`
 
-	//14. Choice
-	CMElems CellMarkupElements `xml:",any"`
+	//14. Choice - ZeroOrOne
+	// At max only one of these element should exist
+	CellInsertion *ctypes.TrackChange `xml:"cellIns,omitempty"`
+	CellDeletion  *ctypes.TrackChange `xml:"cellDel,omitempty"`
+	//Vertically Merged/Split Table Cells
+	CellMerge *CellMerge `xml:"cellMerge,omitempty"`
 
 	//15.Revision Information for Table Cell Properties
 	PrChange *TCPrChange `xml:"tcPrChange,omitempty"`
@@ -155,9 +160,37 @@ func (t *CellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		}
 	}
 
+	var nMarkupElems uint8
 	//14. Choice: Cell Markup Elements
-	if err = t.CMElems.MarshalXML(e, xml.StartElement{}); err != nil {
-		return err
+	if t.CellInsertion != nil {
+		if err = t.CellInsertion.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:cellIns"},
+		}); err != nil {
+			return err
+		}
+		nMarkupElems += 1
+	}
+
+	if t.CellDeletion != nil {
+		if err = t.CellDeletion.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:cellDel"},
+		}); err != nil {
+			return err
+		}
+		nMarkupElems += 1
+	}
+
+	if t.CellMerge != nil {
+		if err = t.CellMerge.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:cellMerge"},
+		}); err != nil {
+			return err
+		}
+		nMarkupElems += 1
+	}
+
+	if nMarkupElems > 1 {
+		return errors.New("more than 1 element found in EG_CellMarkupElements when marshaling table's cell property")
 	}
 
 	//15. Revision Information for Table Cell Properties
@@ -168,31 +201,6 @@ func (t *CellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
-}
-
-// Cell Markup Elements
-type CellMarkupElements struct {
-	CellInsertion *ctypes.TrackChange `xml:"cellIns,omitempty"`
-	CellDeletion  *ctypes.TrackChange `xml:"cellDel,omitempty"`
-
-	//Vertically Merged/Split Table Cells
-	CellMerge *CellMerge `xml:"cellMerge,omitempty"`
-}
-
-func (t CellMarkupElements) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	if t.CellInsertion != nil {
-		return t.CellInsertion.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:cellIns"}})
-	}
-
-	if t.CellDeletion != nil {
-		return t.CellDeletion.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:cellDel"}})
-	}
-
-	if t.CellMerge != nil {
-		return t.CellMerge.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:cellMerge"}})
-	}
-
-	return nil
 }
 
 type TCPrChange struct {

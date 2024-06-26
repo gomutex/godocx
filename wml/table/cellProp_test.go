@@ -52,7 +52,6 @@ func TestCellProperty_MarshalXML(t *testing.T) {
 				FitText:       &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
 				VertAlign:     &VertAlign{Val: "center"},
 				HideMark:      &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
-				CMElems:       CellMarkupElements{},
 				PrChange:      &TCPrChange{ID: 1, Author: "Author", Date: nil},
 			},
 			expected: `<w:tcPr>` +
@@ -141,6 +140,7 @@ func TestCellProperty_UnmarshalXML(t *testing.T) {
 				`<w:tcFitText w:val="1"></w:tcFitText>` +
 				`<w:vAlign w:val="center"></w:vAlign>` +
 				`<w:hideMark w:val="1"></w:hideMark>` +
+				`<w:cellIns w:id="1" w:author="Author"></w:cellIns>` +
 				`<w:tcPrChange w:id="1" w:author="Author"><w:tcPr></w:tcPr></w:tcPrChange>` +
 				`</w:tcPr>`,
 			expected: CellProperty{
@@ -157,8 +157,11 @@ func TestCellProperty_UnmarshalXML(t *testing.T) {
 				FitText:       &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
 				VertAlign:     &VertAlign{Val: "center"},
 				HideMark:      &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
-				CMElems:       CellMarkupElements{},
-				PrChange:      &TCPrChange{ID: 1, Author: "Author", Date: nil},
+				CellInsertion: &ctypes.TrackChange{
+					ID:     1,
+					Author: "Author",
+				},
+				PrChange: &TCPrChange{ID: 1, Author: "Author", Date: nil},
 			},
 		},
 	}
@@ -181,7 +184,7 @@ func TestCellProperty_UnmarshalXML(t *testing.T) {
 				t.Fatalf("Error unmarshaling XML: %v", err)
 			}
 
-			if err := compareCellProperties(result, tt.expected); err != nil {
+			if err := compareCellProperties(tt.expected, result); err != nil {
 				t.Errorf("Unmarshaled CellProperty struct does not match expected: %v", err)
 			}
 		})
@@ -230,16 +233,6 @@ func compareCellProperties(a, b CellProperty) error {
 	if err := internal.ComparePtr("HideMark", a.HideMark, b.HideMark); err != nil {
 		return err
 	}
-	if err := compareCellMarkupElements(a.CMElems, b.CMElems); err != nil {
-		return err
-	}
-	if err := internal.ComparePtr("PrChange", a.PrChange, b.PrChange); err != nil {
-		return err
-	}
-	return nil
-}
-
-func compareCellMarkupElements(a, b CellMarkupElements) error {
 	if err := internal.ComparePtr("CellInsertion", a.CellInsertion, b.CellInsertion); err != nil {
 		return err
 	}
@@ -247,6 +240,9 @@ func compareCellMarkupElements(a, b CellMarkupElements) error {
 		return err
 	}
 	if err := internal.ComparePtr("CellMerge", a.CellMerge, b.CellMerge); err != nil {
+		return err
+	}
+	if err := internal.ComparePtr("PrChange", a.PrChange, b.PrChange); err != nil {
 		return err
 	}
 	return nil

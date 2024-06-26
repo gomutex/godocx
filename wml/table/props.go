@@ -2,6 +2,7 @@ package table
 
 import (
 	"encoding/xml"
+	"strconv"
 
 	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
@@ -53,6 +54,9 @@ type Property struct {
 
 	// 15. Table Style Conditional Formatting Settings
 	TableLook *elemtypes.SingleStrVal `xml:"tblLook,omitempty"`
+
+	//16. Revision Information for Table Properties
+	PrChange *TblPrChange `xml:"tblPrChange,omitempty"`
 }
 
 func DefaultProperty() *Property {
@@ -200,6 +204,45 @@ func (t *Property) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error
 		}); err != nil {
 			return err
 		}
+	}
+
+	// 16. tblPrChange
+	if t.PrChange != nil {
+		if err = t.PrChange.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:tblPrChange"},
+		}); err != nil {
+			return err
+		}
+	}
+
+	return e.EncodeToken(xml.EndElement{Name: start.Name})
+}
+
+type TblPrChange struct {
+	ID     int      `xml:"id,attr"`
+	Author string   `xml:"author,attr"`
+	Date   *string  `xml:"date,attr,omitempty"`
+	Prop   Property `xml:"tblPr"`
+}
+
+func (t TblPrChange) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Name.Local = "w:tblPrChange"
+
+	start.Attr = []xml.Attr{
+		{Name: xml.Name{Local: "w:id"}, Value: strconv.Itoa(t.ID)},
+		{Name: xml.Name{Local: "w:author"}, Value: t.Author},
+	}
+
+	if t.Date != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:date"}, Value: *t.Date})
+	}
+
+	if err := e.EncodeToken(start); err != nil {
+		return err
+	}
+
+	if err := t.Prop.MarshalXML(e, xml.StartElement{}); err != nil {
+		return err
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})

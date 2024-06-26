@@ -10,7 +10,8 @@ type Cell struct {
 	// 1.Table Cell Properties
 	Property *CellProperty
 
-	// 2.1 Choice:
+	// 2.1 Choice: ZeroOrMore
+	// Any number of elements can exists within this choice group
 	Contents []TCBlockContent
 
 	//TODO: Remaining choices
@@ -106,8 +107,12 @@ loop:
 
 // Table Cell - ContentBlockContent
 type TCBlockContent struct {
+	//Paragraph
+	//	- ZeroOrMore: Any number of times Paragraph can repeat within cell
 	Paragraph *docxpara.Paragraph
-	Table     *Table
+	//Table
+	//	- ZeroOrMore: Any number of times Table can repeat within cell
+	Table *Table
 }
 
 func (t TCBlockContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

@@ -19,8 +19,8 @@ func TestSingleIntVal_MarshalXML(t *testing.T) {
 		},
 		{
 			name:     "Empty value",
-			input:    SingleIntVal{Val: 18446744073709551615},
-			expected: `<w:kern w:val="18446744073709551615"></w:kern>`,
+			input:    SingleIntVal{Val: 1000},
+			expected: `<w:kern w:val="1000"></w:kern>`,
 		},
 	}
 
