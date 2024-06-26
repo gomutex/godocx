@@ -2,7 +2,6 @@ package table
 
 import (
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"strconv"
 
@@ -12,30 +11,41 @@ import (
 
 // Table Row Properties
 type RowProperty struct {
-	//1. Choice - OneOrMore: One or more of the elements should exist
-	// However the invidiual elements within the choice has maxoccurs ZeroOrOne
+	//1. Choice - ZeroOrMore
+
 	//Table Row Conditional Formatting
 	Cnf *ctypes.Cnf
+
 	// Associated HTML div ID
 	DivId *elemtypes.SingleIntVal
+
 	//Grid Columns Before First Cell
 	GridBefore *elemtypes.SingleIntVal
+
 	//Grid Columns After Last Cell
 	GridAfter *elemtypes.SingleIntVal
+
 	//Preferred Width Before Table Row
 	WidthBefore *ctypes.TableWidth
+
 	//Preferred Width After Table Row
 	WidthAfter *ctypes.TableWidth
+
 	//Table Row Cannot Break Across Pages
 	CantSplit *elemtypes.OptBinFlagElem
+
 	//Table Row Height
 	Height *ctypes.TableRowHeight
+
 	//Repeat Table Row on Every New Page
 	Header *elemtypes.OptBinFlagElem
+
 	//Table Row Cell Spacing
 	CellSpacing *ctypes.TableWidth
+
 	// Table Row Alignment
 	JC *ctypes.Justification
+
 	//Hidden Table Row Marker
 	Hidden *elemtypes.OptBinFlagElem
 
@@ -87,7 +97,6 @@ func (r *RowProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 func (r *RowProperty) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var numBaseElems uint8 = 0
 
 loop:
 	for {
@@ -104,73 +113,73 @@ loop:
 				if err = d.DecodeElement(r.Cnf, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "divId":
 				r.DivId = &elemtypes.SingleIntVal{}
 				if err = d.DecodeElement(r.DivId, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "gridBefore":
 				r.GridBefore = &elemtypes.SingleIntVal{}
 				if err := d.DecodeElement(r.GridBefore, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "gridAfter":
 				r.GridAfter = &elemtypes.SingleIntVal{}
 				if err := d.DecodeElement(r.GridAfter, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "tblWBefore":
 				r.WidthBefore = &ctypes.TableWidth{}
 				if err := d.DecodeElement(r.WidthBefore, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "tblWAfter":
 				r.WidthAfter = &ctypes.TableWidth{}
 				if err := d.DecodeElement(r.WidthAfter, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "cantSplit":
 				r.CantSplit = &elemtypes.OptBinFlagElem{}
 				if err := d.DecodeElement(r.CantSplit, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "trHeight":
 				r.Height = &ctypes.TableRowHeight{}
 				if err := d.DecodeElement(r.Height, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "tblHeader":
 				r.Header = &elemtypes.OptBinFlagElem{}
 				if err := d.DecodeElement(r.Header, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "tblCellSpacing":
 				r.CellSpacing = &ctypes.TableWidth{}
 				if err := d.DecodeElement(r.CellSpacing, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "jc":
 				r.JC = &ctypes.Justification{}
 				if err := d.DecodeElement(r.JC, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "hidden":
 				r.Hidden = &elemtypes.OptBinFlagElem{}
 				if err := d.DecodeElement(r.Hidden, &elem); err != nil {
 					return err
 				}
-				numBaseElems += 1
+
 			case "ins":
 				r.Ins = &ctypes.TrackChange{}
 				if err := d.DecodeElement(r.Ins, &elem); err != nil {
@@ -198,16 +207,10 @@ loop:
 		}
 	}
 
-	if numBaseElems < 1 {
-		// Minimum 1 Base Choice element should be there
-		return errors.New("incomplete table row property, missing choice elements")
-	}
-
 	return nil
 }
 
 func (r *RowProperty) MarshalChoice(e *xml.Encoder, start xml.StartElement) error {
-	var numElems uint8 = 0
 	var err error
 
 	if r.Cnf != nil {
@@ -215,8 +218,6 @@ func (r *RowProperty) MarshalChoice(e *xml.Encoder, start xml.StartElement) erro
 			Name: xml.Name{Local: "w:cnfStyle"},
 		}); err != nil {
 			return fmt.Errorf("marshaling cnfstyle failed in table row property: %w", err)
-		} else {
-			numElems += 1
 		}
 	}
 
@@ -225,8 +226,6 @@ func (r *RowProperty) MarshalChoice(e *xml.Encoder, start xml.StartElement) erro
 			Name: xml.Name{Local: "w:divId"},
 		}); err != nil {
 			return fmt.Errorf("marshaling divid failed in table row property: %w", err)
-		} else {
-			numElems += 1
 		}
 	}
 
@@ -234,75 +233,61 @@ func (r *RowProperty) MarshalChoice(e *xml.Encoder, start xml.StartElement) erro
 		if err = r.GridBefore.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:gridBefore"}}); err != nil {
 			return fmt.Errorf("marshaling gridBefore failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.GridAfter != nil {
 		if err = r.GridAfter.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:gridAfter"}}); err != nil {
 			return fmt.Errorf("marshaling gridAfter failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.WidthBefore != nil {
 		if err = r.WidthBefore.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tblWBefore"}}); err != nil {
 			return fmt.Errorf("marshaling tblWBefore failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.WidthAfter != nil {
 		if err = r.WidthAfter.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tblWAfter"}}); err != nil {
 			return fmt.Errorf("marshaling tblWAfter failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.CantSplit != nil {
 		if err = r.CantSplit.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:cantSplit"}}); err != nil {
 			return fmt.Errorf("marshaling cantSplit failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.Height != nil {
 		if err = r.Height.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:trHeight"}}); err != nil {
 			return fmt.Errorf("marshaling trHeight failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.Header != nil {
 		if err = r.Header.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tblHeader"}}); err != nil {
 			return fmt.Errorf("marshaling tblHeader failed in table row property: %w", err)
 		}
-		numElems += 1
+
 	}
 
 	if r.CellSpacing != nil {
 		if err = r.CellSpacing.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tblCellSpacing"}}); err != nil {
 			return fmt.Errorf("marshaling tblCellSpacing failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.JC != nil {
 		if err = r.JC.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:jc"}}); err != nil {
 			return fmt.Errorf("marshaling jc failed in table row property: %w", err)
 		}
-		numElems += 1
 	}
 
 	if r.Hidden != nil {
 		if err = r.Hidden.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:hidden"}}); err != nil {
 			return fmt.Errorf("marshaling hidden failed in table row property: %w", err)
 		}
-		numElems += 1
-	}
-
-	if numElems < 1 {
-		// Minimum 1 element should be there
-		return errors.New("incomplete table row property, missing choice elements")
 	}
 
 	return nil

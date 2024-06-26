@@ -2,7 +2,6 @@ package table
 
 import (
 	"encoding/xml"
-	"errors"
 	"strconv"
 
 	"github.com/gomutex/godocx/elemtypes"
@@ -10,6 +9,8 @@ import (
 )
 
 type CellProperty struct {
+
+	// Sequnce:
 
 	// 1. Table Cell Conditional Formatting
 	CnfStyle *ctypes.Cnf `xml:"cnfStyle,omitempty"`
@@ -52,8 +53,13 @@ type CellProperty struct {
 
 	//14. Choice - ZeroOrOne
 	// At max only one of these element should exist
+
+	//Table Cell Insertion
 	CellInsertion *ctypes.TrackChange `xml:"cellIns,omitempty"`
-	CellDeletion  *ctypes.TrackChange `xml:"cellDel,omitempty"`
+
+	//Table Cell Deletion
+	CellDeletion *ctypes.TrackChange `xml:"cellDel,omitempty"`
+
 	//Vertically Merged/Split Table Cells
 	CellMerge *CellMerge `xml:"cellMerge,omitempty"`
 
@@ -160,7 +166,6 @@ func (t *CellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		}
 	}
 
-	var nMarkupElems uint8
 	//14. Choice: Cell Markup Elements
 	if t.CellInsertion != nil {
 		if err = t.CellInsertion.MarshalXML(e, xml.StartElement{
@@ -168,7 +173,6 @@ func (t *CellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		}); err != nil {
 			return err
 		}
-		nMarkupElems += 1
 	}
 
 	if t.CellDeletion != nil {
@@ -177,7 +181,6 @@ func (t *CellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		}); err != nil {
 			return err
 		}
-		nMarkupElems += 1
 	}
 
 	if t.CellMerge != nil {
@@ -186,11 +189,6 @@ func (t *CellProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) (err e
 		}); err != nil {
 			return err
 		}
-		nMarkupElems += 1
-	}
-
-	if nMarkupElems > 1 {
-		return errors.New("more than 1 element found in EG_CellMarkupElements when marshaling table's cell property")
 	}
 
 	//15. Revision Information for Table Cell Properties
