@@ -1,26 +1,30 @@
-package elemtypes
+package ctypes
 
 import (
 	"encoding/xml"
 	"strings"
 	"testing"
+
+	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
-func TestSingleStrVal_MarshalXML(t *testing.T) {
+func TestOnOff_MarshalXML(t *testing.T) {
+
 	tests := []struct {
 		name     string
-		input    SingleStrVal
+		input    OnOff
 		expected string
 	}{
 		{
 			name:     "With value",
-			input:    SingleStrVal{Val: "example"},
-			expected: `<w:rStyle w:val="example"></w:rStyle>`,
+			input:    OnOff{Val: internal.ToPtr(stypes.OnOffFalse)},
+			expected: `<w:rStyle w:val="false"></w:rStyle>`,
 		},
 		{
 			name:     "Empty value",
-			input:    SingleStrVal{Val: ""},
-			expected: `<w:rStyle w:val=""></w:rStyle>`,
+			input:    OnOff{Val: nil},
+			expected: `<w:rStyle></w:rStyle>`,
 		},
 	}
 
@@ -45,35 +49,35 @@ func TestSingleStrVal_MarshalXML(t *testing.T) {
 	}
 }
 
-func TestSingleStrVal_UnmarshalXML(t *testing.T) {
+func TestOnOff_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
 		inputXML string
-		expected SingleStrVal
+		expected OnOff
 	}{
 		{
 			name:     "With value",
-			inputXML: `<w:rStyle w:val="example"></w:rStyle>`,
-			expected: SingleStrVal{Val: "example"},
+			inputXML: `<w:rStyle w:val="true"></w:rStyle>`,
+			expected: OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 		},
 		{
 			name:     "Empty value",
-			inputXML: `<w:rStyle w:val=""></w:rStyle>`,
-			expected: SingleStrVal{Val: ""},
+			inputXML: `<w:rStyle></w:rStyle>`,
+			expected: OnOff{Val: nil},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var result SingleStrVal
+			var result OnOff
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &result)
 			if err != nil {
 				t.Fatalf("Error unmarshaling XML: %v", err)
 			}
 
-			if result.Val != tt.expected.Val {
-				t.Errorf("Expected Val %s but got %s", tt.expected.Val, result.Val)
+			if err = internal.ComparePtr("Val", tt.expected.Val, result.Val); err != nil {
+				t.Error(err)
 			}
 		})
 	}

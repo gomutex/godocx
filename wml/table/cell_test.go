@@ -5,7 +5,8 @@ import (
 	"encoding/xml"
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
+	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxpara"
 	"github.com/gomutex/godocx/wml/stypes"
 )
@@ -25,7 +26,7 @@ func TestCell_MarshalXML(t *testing.T) {
 			name: "Cell with Property and Paragraph Content",
 			input: Cell{
 				Property: &CellProperty{
-					NoWrap: &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+					NoWrap: &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				},
 				Contents: []TCBlockContent{
 					{

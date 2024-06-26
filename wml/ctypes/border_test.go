@@ -23,8 +23,8 @@ func TestBorder_MarshalXML(t *testing.T) {
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
-				Shadow:     BinFlagPtr(stypes.BinFlagTrue),
-				Frame:      BinFlagPtr(stypes.BinFlagTrue),
+				Shadow:     OnOffPtr(stypes.OnOffTrue),
+				Frame:      OnOffPtr(stypes.OnOffTrue),
 			},
 			expected: `<w:bdr w:val="single" w:color="FF0000" w:themeColor="accent1" w:themeTint="500" w:themeShade="200" w:space="0" w:shadow="true" w:frame="true"></w:bdr>`,
 		},
@@ -74,8 +74,8 @@ func TestBorder_UnmarshalXML(t *testing.T) {
 				ThemeTint:  StringPtr("500"),
 				ThemeShade: StringPtr("200"),
 				Space:      StringPtr("0"),
-				Shadow:     BinFlagPtr(stypes.BinFlagTrue),
-				Frame:      BinFlagPtr(stypes.BinFlagTrue),
+				Shadow:     OnOffPtr(stypes.OnOffTrue),
+				Frame:      OnOffPtr(stypes.OnOffTrue),
 			},
 		},
 		{
@@ -171,7 +171,7 @@ func StringPtr(s string) *string {
 	return &s
 }
 
-func BinFlagPtr(o stypes.BinFlag) *stypes.BinFlag {
+func OnOffPtr(o stypes.OnOff) *stypes.OnOff {
 	return &o
 }
 

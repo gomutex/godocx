@@ -19,10 +19,10 @@ type Spacing struct {
 	After *uint64 `xml:"after,attr,omitempty"`
 
 	// Automatically Determine Spacing Above Paragraph
-	BeforeAutospacing *stypes.BinFlag `xml:"beforeAutospacing,attr,omitempty"`
+	BeforeAutospacing *stypes.OnOff `xml:"beforeAutospacing,attr,omitempty"`
 
 	// Automatically Determine Spacing Below Paragraph
-	AfterAutospacing *stypes.BinFlag `xml:"afterAutospacing,attr,omitempty"`
+	AfterAutospacing *stypes.OnOff `xml:"afterAutospacing,attr,omitempty"`
 
 	//Spacing Between Lines in Paragraph
 	Line *int `xml:"line,omitempty"`

@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -45,8 +44,8 @@ func TestProperty_MarshalXML(t *testing.T) {
 					LeftFromText: internal.ToPtr(uint64(10)),
 				},
 				Overlap: &Overlap{Val: stypes.TblOverlapNever},
-				BidiVisual: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagOne,
+				BidiVisual: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffOne),
 				},
 				RowCountInRowBand: &ctypes.DecimalNum{Val: 1},
 				RowCountInColBand: &ctypes.DecimalNum{Val: 2},
@@ -60,7 +59,7 @@ func TestProperty_MarshalXML(t *testing.T) {
 				Shading:    &ctypes.Shading{Val: "clear"},
 				Layout:     &TableLayout{LayoutType: internal.ToPtr(stypes.TableLayoutAutoFit)},
 				CellMargin: &CellMargins{Top: ctypes.NewTableWidth(40, stypes.TableWidthDxa)},
-				TableLook:  &elemtypes.SingleStrVal{Val: "001"},
+				TableLook:  &ctypes.CTString{Val: "001"},
 			},
 			expected: `<w:tblPr>` +
 				`<w:tblStyle w:val="TestStyle"></w:tblStyle>` +
@@ -157,8 +156,8 @@ func TestProperty_UnmarshalXML(t *testing.T) {
 					LeftFromText: internal.ToPtr(uint64(10)),
 				},
 				Overlap: &Overlap{Val: stypes.TblOverlapNever},
-				BidiVisual: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagOne,
+				BidiVisual: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffOne),
 				},
 				RowCountInRowBand: &ctypes.DecimalNum{Val: 1},
 				RowCountInColBand: &ctypes.DecimalNum{Val: 2},
@@ -172,7 +171,7 @@ func TestProperty_UnmarshalXML(t *testing.T) {
 				Shading:    &ctypes.Shading{Val: "clear"},
 				Layout:     &TableLayout{LayoutType: internal.ToPtr(stypes.TableLayoutAutoFit)},
 				CellMargin: &CellMargins{Top: ctypes.NewTableWidth(40, stypes.TableWidthDxa)},
-				TableLook:  &elemtypes.SingleStrVal{Val: "001"},
+				TableLook:  &ctypes.CTString{Val: "001"},
 			},
 		},
 	}

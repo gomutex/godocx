@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"strconv"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 )
 
@@ -19,7 +18,7 @@ type CellProperty struct {
 	Width *ctypes.TableWidth `xml:"tcW,omitempty"`
 
 	// 3.Grid Columns Spanned by Current Table Cell
-	GridSpan *elemtypes.SingleIntVal `xml:"gridSpan,omitempty"`
+	GridSpan *ctypes.DecimalNum `xml:"gridSpan,omitempty"`
 
 	// 4.Horizontally Merged Cell
 	HMerge *ctypes.Merge `xml:"hMerge,omitempty"`
@@ -34,7 +33,7 @@ type CellProperty struct {
 	Shading *ctypes.Shading `xml:"shd,omitempty"`
 
 	//8.Don't Wrap Cell Content
-	NoWrap *elemtypes.OptBinFlagElem `xml:"noWrap,omitempty"`
+	NoWrap *ctypes.OnOff `xml:"noWrap,omitempty"`
 
 	//9.Single Table Cell Margins
 	Margins *CellMargins `xml:"tcMar,omitempty"`
@@ -43,13 +42,13 @@ type CellProperty struct {
 	TextDirection *ctypes.TextDirection `xml:"textDirection,omitempty"`
 
 	//11.Fit Text Within Cell
-	FitText *elemtypes.OptBinFlagElem `xml:"tcFitText,omitempty"`
+	FitText *ctypes.OnOff `xml:"tcFitText,omitempty"`
 
 	//12. Table Cell Vertical Alignment
 	VertAlign *VertAlign `xml:"vAlign,omitempty"`
 
 	//13.Ignore End Of Cell Marker In Row Height Calculation
-	HideMark *elemtypes.OptBinFlagElem `xml:"hideMark,omitempty"`
+	HideMark *ctypes.OnOff `xml:"hideMark,omitempty"`
 
 	//14. Choice - ZeroOrOne
 	// At max only one of these element should exist

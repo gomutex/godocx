@@ -16,8 +16,8 @@ func TestTableBorders_MarshalXML(t *testing.T) {
 	themeTint := "80"
 	themeShade := "20"
 	space := "4"
-	shadow := stypes.BinFlag("true")
-	frame := stypes.BinFlag("false")
+	shadow := stypes.OnOff("true")
+	frame := stypes.OnOff("false")
 
 	borders := &TableBorders{
 		Top:     &ctypes.Border{Val: stypes.BorderStyleSingle, Color: &colorRed, ThemeColor: &themeColorAccent1, ThemeTint: &themeTint, ThemeShade: &themeShade, Space: &space, Shadow: &shadow, Frame: &frame},

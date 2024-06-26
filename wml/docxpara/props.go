@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
 	"github.com/gomutex/godocx/wml/sections"
@@ -13,28 +12,28 @@ import (
 // Numbering Level Associated Paragraph Properties
 type ParagraphProp struct {
 	// 1. This element specifies the style ID of the paragraph style which shall be used to format the contents of this paragraph.
-	Style *elemtypes.SingleStrVal `xml:"pStyle,omitempty"`
+	Style *ctypes.CTString `xml:"pStyle,omitempty"`
 
 	// 2. Keep Paragraph With Next Paragraph
-	KeepNext *elemtypes.OptBinFlagElem `xml:"keepNext,omitempty"`
+	KeepNext *ctypes.OnOff `xml:"keepNext,omitempty"`
 
 	// 3. Keep All Lines On One Page
-	KeepLines *elemtypes.OptBinFlagElem `xml:"keepLines,omitempty"`
+	KeepLines *ctypes.OnOff `xml:"keepLines,omitempty"`
 
 	// 4. Start Paragraph on Next Page
-	PageBreakBefore *elemtypes.OptBinFlagElem `xml:"pageBreakBefore,omitempty"`
+	PageBreakBefore *ctypes.OnOff `xml:"pageBreakBefore,omitempty"`
 
 	// 5. Text Frame Properties
 	FrameProp *FrameProp `xml:"framePr,omitempty"`
 
 	// 6. Allow First/Last Line to Display on a Separate Page
-	WindowControl *elemtypes.OptBinFlagElem `xml:"widowControl,omitempty"`
+	WindowControl *ctypes.OnOff `xml:"widowControl,omitempty"`
 
 	// 7. Numbering Definition Instance Reference
 	NumProp *NumProp `xml:"numPr,omitempty"`
 
 	// 8. Suppress Line Numbers for Paragraph
-	SuppressLineNmbrs *elemtypes.OptBinFlagElem `xml:"suppressLineNumbers,omitempty"`
+	SuppressLineNmbrs *ctypes.OnOff `xml:"suppressLineNumbers,omitempty"`
 
 	// 9. Paragraph Borders
 	Border *ParaBorder `xml:"pBdr,omitempty"`
@@ -46,34 +45,34 @@ type ParagraphProp struct {
 	Tabs ctypes.Tabs `xml:"tabs,omitempty"`
 
 	// 12. Suppress Hyphenation for Paragraph
-	SuppressAutoHyphens *elemtypes.OptBinFlagElem `xml:"suppressAutoHyphens,omitempty"`
+	SuppressAutoHyphens *ctypes.OnOff `xml:"suppressAutoHyphens,omitempty"`
 
 	// 13. Use East Asian Typography Rules for First and Last Character per Line
-	Kinsoku *elemtypes.OptBinFlagElem `xml:"kinsoku,omitempty"`
+	Kinsoku *ctypes.OnOff `xml:"kinsoku,omitempty"`
 
 	// 14. Allow Line Breaking At Character Level
-	WordWrap *elemtypes.OptBinFlagElem `xml:"wordWrap,omitempty"`
+	WordWrap *ctypes.OnOff `xml:"wordWrap,omitempty"`
 
 	// 15. Allow Punctuation to Extent Past Text Extents
-	OverflowPunct *elemtypes.OptBinFlagElem `xml:"overflowPunct,omitempty"`
+	OverflowPunct *ctypes.OnOff `xml:"overflowPunct,omitempty"`
 
 	// 16. Compress Punctuation at Start of a Line
-	TopLinePunct *elemtypes.OptBinFlagElem `xml:"topLinePunct,omitempty"`
+	TopLinePunct *ctypes.OnOff `xml:"topLinePunct,omitempty"`
 
 	// 17. Automatically Adjust Spacing of Latin and East Asian Text
-	AutoSpaceDE *elemtypes.OptBinFlagElem `xml:"autoSpaceDE,omitempty"`
+	AutoSpaceDE *ctypes.OnOff `xml:"autoSpaceDE,omitempty"`
 
 	// 18. Automatically Adjust Spacing of East Asian Text and Numbers
-	AutoSpaceDN *elemtypes.OptBinFlagElem `xml:"autoSpaceDN,omitempty"`
+	AutoSpaceDN *ctypes.OnOff `xml:"autoSpaceDN,omitempty"`
 
 	// 19. Right to Left Paragraph Layout
-	Bidi *elemtypes.OptBinFlagElem `xml:"bidi,omitempty"`
+	Bidi *ctypes.OnOff `xml:"bidi,omitempty"`
 
 	// 20. Automatically Adjust Right Indent When Using Document Grid
-	AdjustRightInd *elemtypes.OptBinFlagElem `xml:"adjustRightInd,omitempty"`
+	AdjustRightInd *ctypes.OnOff `xml:"adjustRightInd,omitempty"`
 
 	// 21. Use Document Grid Settings for Inter-Line Paragraph Spacing
-	SnapToGrid *elemtypes.OptBinFlagElem `xml:"snapToGrid,omitempty"`
+	SnapToGrid *ctypes.OnOff `xml:"snapToGrid,omitempty"`
 
 	// 22. Spacing Between Lines and Above/Below Paragraph
 	Spacing *Spacing `xml:"spacing,omitempty"`
@@ -82,13 +81,13 @@ type ParagraphProp struct {
 	Indent *Indent `xml:"ind,omitempty"`
 
 	// 24. Ignore Spacing Above and Below When Using Identical Styles
-	CtxlSpacing *elemtypes.OptBinFlagElem `xml:"contextualSpacing,omitempty"`
+	CtxlSpacing *ctypes.OnOff `xml:"contextualSpacing,omitempty"`
 
 	// 25. Use Left/Right Indents as Inside/Outside Indents
-	MirrorIndents *elemtypes.OptBinFlagElem `xml:"mirrorIndents,omitempty"`
+	MirrorIndents *ctypes.OnOff `xml:"mirrorIndents,omitempty"`
 
 	// 26. Prevent Text Frames From Overlapping
-	SuppressOverlap *elemtypes.OptBinFlagElem `xml:"suppressOverlap,omitempty"`
+	SuppressOverlap *ctypes.OnOff `xml:"suppressOverlap,omitempty"`
 
 	// 27. Paragraph Alignment
 	Justification *ctypes.Justification `xml:"jc,omitempty"`
@@ -122,7 +121,7 @@ type ParagraphProp struct {
 }
 
 type binElems struct {
-	elem    *elemtypes.OptBinFlagElem
+	elem    *ctypes.OnOff
 	XMLName string
 }
 
@@ -346,13 +345,13 @@ func (pp *ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err
 }
 
 // NewParagraphStyle creates a new ParagraphStyle.
-func NewParagraphStyle(val string) *elemtypes.SingleStrVal {
-	return &elemtypes.SingleStrVal{Val: val}
+func NewParagraphStyle(val string) *ctypes.CTString {
+	return &ctypes.CTString{Val: val}
 }
 
 // DefaultParagraphStyle creates the default ParagraphStyle with the value "Normal".
-func DefaultParagraphStyle() *elemtypes.SingleStrVal {
-	return &elemtypes.SingleStrVal{Val: "Normal"}
+func DefaultParagraphStyle() *ctypes.CTString {
+	return &ctypes.CTString{Val: "Normal"}
 }
 
 func DefaultParaProperty() *ParagraphProp {

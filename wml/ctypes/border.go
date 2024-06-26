@@ -13,8 +13,8 @@ type Border struct {
 	ThemeTint  *string            `xml:"themeTint,attr,omitempty"`
 	ThemeShade *string            `xml:"themeShade,attr,omitempty"`
 	Space      *string            `xml:"space,attr,omitempty"`
-	Shadow     *stypes.BinFlag    `xml:"shadow,attr,omitempty"`
-	Frame      *stypes.BinFlag    `xml:"frame,attr,omitempty"`
+	Shadow     *stypes.OnOff      `xml:"shadow,attr,omitempty"`
+	Frame      *stypes.OnOff      `xml:"frame,attr,omitempty"`
 }
 
 func (t *Border) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

@@ -46,7 +46,7 @@ type FrameProp struct {
 	HRule *stypes.HeightRule `xml:"hRule,attr,omitempty"`
 
 	//Lock Frame Anchor to Paragraph
-	AnchorLock *stypes.BinFlag `xml:"anchorLock,attr,omitempty"`
+	AnchorLock *stypes.OnOff `xml:"anchorLock,attr,omitempty"`
 }
 
 func (f *FrameProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

@@ -17,8 +17,8 @@ func TestCellBorders_MarshalXML(t *testing.T) {
 	themeTint := "80"
 	themeShade := "20"
 	space := "4"
-	shadow := stypes.BinFlag("true")
-	frame := stypes.BinFlag("false")
+	shadow := stypes.OnOff("true")
+	frame := stypes.OnOff("false")
 
 	borders := &CellBorders{
 		Top:     &ctypes.Border{Val: stypes.BorderStyleSingle, Color: &colorRed, ThemeColor: &themeColorAccent1, ThemeTint: &themeTint, ThemeShade: &themeShade, Space: &space, Shadow: &shadow, Frame: &frame},
@@ -80,7 +80,7 @@ func TestCellBorders_UnmarshalXML(t *testing.T) {
 	</w:tcBorders>`
 
 	expectedBorders := &CellBorders{
-		Top:     &ctypes.Border{Val: stypes.BorderStyleSingle, Color: internal.ToPtr("red"), ThemeColor: internal.ToPtr(stypes.ThemeColor("accent1")), ThemeTint: internal.ToPtr("80"), ThemeShade: internal.ToPtr("20"), Space: internal.ToPtr("4"), Shadow: internal.ToPtr(stypes.BinFlag("true")), Frame: internal.ToPtr(stypes.BinFlag("false"))},
+		Top:     &ctypes.Border{Val: stypes.BorderStyleSingle, Color: internal.ToPtr("red"), ThemeColor: internal.ToPtr(stypes.ThemeColor("accent1")), ThemeTint: internal.ToPtr("80"), ThemeShade: internal.ToPtr("20"), Space: internal.ToPtr("4"), Shadow: internal.ToPtr(stypes.OnOff("true")), Frame: internal.ToPtr(stypes.OnOff("false"))},
 		Left:    &ctypes.Border{Val: stypes.BorderStyleDouble},
 		Bottom:  &ctypes.Border{Val: stypes.BorderStyleDashed},
 		Right:   &ctypes.Border{Val: stypes.BorderStyleDotted},

@@ -32,7 +32,7 @@ func TestFrameProp_MarshalXML(t *testing.T) {
 				XAlign:     internal.ToPtr(stypes.XAlignLeft),
 				YAlign:     internal.ToPtr(stypes.YAlignCenter),
 				HRule:      internal.ToPtr(stypes.HeightRuleExact),
-				AnchorLock: internal.ToPtr(stypes.BinFlagTrue),
+				AnchorLock: internal.ToPtr(stypes.OnOffTrue),
 			},
 			expected: `<w:framePr w:w="500" w:h="300" w:dropCap="margin" w:lines="3" w:hSpace="20" w:vSpace="50" w:wrap="around" w:hAnchor="margin" w:vAnchor="page" w:x="100" w:y="200" w:xAlign="left" w:yAlign="center" w:hRule="exact" w:anchorLock="true"></w:framePr>`,
 		},
@@ -92,7 +92,7 @@ func TestFrameProp_UnmarshalXML(t *testing.T) {
 				XAlign:     internal.ToPtr(stypes.XAlignLeft),
 				YAlign:     internal.ToPtr(stypes.YAlignCenter),
 				HRule:      internal.ToPtr(stypes.HeightRuleExact),
-				AnchorLock: internal.ToPtr(stypes.BinFlagTrue),
+				AnchorLock: internal.ToPtr(stypes.OnOffTrue),
 			},
 		},
 		{

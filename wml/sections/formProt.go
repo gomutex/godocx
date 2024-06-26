@@ -8,7 +8,7 @@ import (
 
 // FormProt represents the text direction settings in a Word document.
 type FormProt struct {
-	Val stypes.BinFlag `xml:"val,attr,omitempty"`
+	Val stypes.OnOff `xml:"val,attr,omitempty"`
 }
 
 // MarshalXML implements the xml.Marshaler interface for the FormProt type.

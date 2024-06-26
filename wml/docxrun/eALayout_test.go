@@ -19,10 +19,10 @@ func TestEALayout_MarshalXML(t *testing.T) {
 			name: "All attributes set",
 			layout: EALayout{
 				ID:           internal.ToPtr(1),
-				Combine:      internal.ToPtr(stypes.BinFlagOn),
+				Combine:      internal.ToPtr(stypes.OnOffOn),
 				CombineBrkts: internal.ToPtr(stypes.CombineBracketsRound),
-				Vert:         internal.ToPtr(stypes.BinFlagOff),
-				VertCompress: internal.ToPtr(stypes.BinFlagOn),
+				Vert:         internal.ToPtr(stypes.OnOffOff),
+				VertCompress: internal.ToPtr(stypes.OnOffOn),
 			},
 			expected: `<w:eastAsianLayout w:id="1" w:combine="on" w:combineBrackets="round" w:vert="off" w:vertCompress="on"></w:eastAsianLayout>`,
 		},
@@ -36,7 +36,7 @@ func TestEALayout_MarshalXML(t *testing.T) {
 		{
 			name: "Only Combine set",
 			layout: EALayout{
-				Combine: internal.ToPtr(stypes.BinFlagOn),
+				Combine: internal.ToPtr(stypes.OnOffOn),
 			},
 			expected: `<w:eastAsianLayout w:combine="on"></w:eastAsianLayout>`,
 		},
@@ -50,14 +50,14 @@ func TestEALayout_MarshalXML(t *testing.T) {
 		{
 			name: "Only Vert set",
 			layout: EALayout{
-				Vert: internal.ToPtr(stypes.BinFlagOff),
+				Vert: internal.ToPtr(stypes.OnOffOff),
 			},
 			expected: `<w:eastAsianLayout w:vert="off"></w:eastAsianLayout>`,
 		},
 		{
 			name: "Only VertCompress set",
 			layout: EALayout{
-				VertCompress: internal.ToPtr(stypes.BinFlagOn),
+				VertCompress: internal.ToPtr(stypes.OnOffOn),
 			},
 			expected: `<w:eastAsianLayout w:vertCompress="on"></w:eastAsianLayout>`,
 		},
@@ -96,10 +96,10 @@ func TestEALayout_UnmarshalXML(t *testing.T) {
 			inputXML: `<w:eastAsianLayout w:id="1" w:combine="on" w:combineBrackets="round" w:vert="off" w:vertCompress="on"></w:eastAsianLayout>`,
 			expected: EALayout{
 				ID:           internal.ToPtr(1),
-				Combine:      internal.ToPtr(stypes.BinFlagOn),
+				Combine:      internal.ToPtr(stypes.OnOffOn),
 				CombineBrkts: internal.ToPtr(stypes.CombineBracketsRound),
-				Vert:         internal.ToPtr(stypes.BinFlagOff),
-				VertCompress: internal.ToPtr(stypes.BinFlagOn),
+				Vert:         internal.ToPtr(stypes.OnOffOff),
+				VertCompress: internal.ToPtr(stypes.OnOffOn),
 			},
 		},
 		{
@@ -113,7 +113,7 @@ func TestEALayout_UnmarshalXML(t *testing.T) {
 			name:     "Only Combine set",
 			inputXML: `<w:eastAsianLayout w:combine="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				Combine: internal.ToPtr(stypes.BinFlagOn),
+				Combine: internal.ToPtr(stypes.OnOffOn),
 			},
 		},
 		{
@@ -127,14 +127,14 @@ func TestEALayout_UnmarshalXML(t *testing.T) {
 			name:     "Only Vert set",
 			inputXML: `<w:eastAsianLayout w:vert="off"></w:eastAsianLayout>`,
 			expected: EALayout{
-				Vert: internal.ToPtr(stypes.BinFlagOff),
+				Vert: internal.ToPtr(stypes.OnOffOff),
 			},
 		},
 		{
 			name:     "Only VertCompress set",
 			inputXML: `<w:eastAsianLayout w:vertCompress="on"></w:eastAsianLayout>`,
 			expected: EALayout{
-				VertCompress: internal.ToPtr(stypes.BinFlagOn),
+				VertCompress: internal.ToPtr(stypes.OnOffOn),
 			},
 		},
 		{

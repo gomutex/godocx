@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/formatting"
 )
@@ -12,58 +11,58 @@ import (
 // RunProperty represents the properties of a run of text within a paragraph.
 type RunProperty struct {
 	//1. Referenced Character Style
-	Style *elemtypes.SingleStrVal `xml:"rStyle,omitempty"`
+	Style *ctypes.CTString `xml:"rStyle,omitempty"`
 
 	//2. Run Fonts
 	Fonts *RunFonts `xml:"rFonts,omitempty"`
 
 	//3. Bold
-	Bold *elemtypes.OptBoolElem `xml:"b,omitempty"`
+	Bold *ctypes.OnOff `xml:"b,omitempty"`
 
 	//4.Complex Script Bold
-	BoldCS *elemtypes.OptBoolElem `xml:"bCs,omitempty"`
+	BoldCS *ctypes.OnOff `xml:"bCs,omitempty"`
 
 	// 5.Italics
-	Italic *elemtypes.OptBoolElem `xml:"i,omitempty"`
+	Italic *ctypes.OnOff `xml:"i,omitempty"`
 
 	//6.Complex Script Italics
-	ItalicCS *elemtypes.OptBoolElem `xml:"iCs,omitempty"`
+	ItalicCS *ctypes.OnOff `xml:"iCs,omitempty"`
 
 	//7.Display All Characters As Capital Letters
-	Caps *elemtypes.OptBoolElem `xml:"caps,omitempty"`
+	Caps *ctypes.OnOff `xml:"caps,omitempty"`
 
 	//8.Small Caps
-	SmallCaps *elemtypes.OptBoolElem `xml:"smallCaps,omitempty"`
+	SmallCaps *ctypes.OnOff `xml:"smallCaps,omitempty"`
 
 	//9.Single Strikethrough
-	Strike *elemtypes.OptBoolElem `xml:"strike,omitempty"`
+	Strike *ctypes.OnOff `xml:"strike,omitempty"`
 
 	//10.Double Strikethrough
-	DoubleStrike *elemtypes.OptBoolElem `xml:"dstrike,omitempty"`
+	DoubleStrike *ctypes.OnOff `xml:"dstrike,omitempty"`
 
 	//11.Display Character Outline
-	Outline *elemtypes.OptBoolElem `xml:"outline,omitempty"`
+	Outline *ctypes.OnOff `xml:"outline,omitempty"`
 
 	//12.Shadow
-	Shadow *elemtypes.OptBoolElem `xml:"shadow,omitempty"`
+	Shadow *ctypes.OnOff `xml:"shadow,omitempty"`
 
 	//13.Embossing
-	Emboss *elemtypes.OptBoolElem `xml:"emboss,omitempty"`
+	Emboss *ctypes.OnOff `xml:"emboss,omitempty"`
 
 	//14.Imprinting
-	Imprint *elemtypes.OptBoolElem `xml:"imprint,omitempty"`
+	Imprint *ctypes.OnOff `xml:"imprint,omitempty"`
 
 	//15.Do Not Check Spelling or Grammar
-	NoGrammar *elemtypes.OptBoolElem `xml:"noProof,omitempty"`
+	NoGrammar *ctypes.OnOff `xml:"noProof,omitempty"`
 
 	//16.Use Document Grid Settings For Inter-Character Spacing
-	SnapToGrid *elemtypes.OptBoolElem `xml:"snapToGrid,omitempty"`
+	SnapToGrid *ctypes.OnOff `xml:"snapToGrid,omitempty"`
 
 	//17.Hidden Text
-	Vanish *elemtypes.OptBoolElem `xml:"vanish,omitempty"`
+	Vanish *ctypes.OnOff `xml:"vanish,omitempty"`
 
 	//18.Web Hidden Text
-	WebHidden *elemtypes.OptBoolElem `xml:"webHidden,omitempty"`
+	WebHidden *ctypes.OnOff `xml:"webHidden,omitempty"`
 
 	//19.Run Content Color
 	Color *formatting.Color `xml:"color,omitempty"`
@@ -75,7 +74,7 @@ type RunProperty struct {
 	ExpaComp *ExpaComp `xml:"w,omitempty"`
 
 	//22.Font Kerning
-	Kern *elemtypes.SingleUint64Val `xml:"kern,omitempty"`
+	Kern *ctypes.Uint64Elem `xml:"kern,omitempty"`
 
 	//23. Vertically Raised or Lowered Text
 	Position *ctypes.DecimalNum `xml:"position,omitempty"`
@@ -108,10 +107,10 @@ type RunProperty struct {
 	VertAlign *VertAlign `xml:"vertAlign,omitempty"`
 
 	//33.Right To Left Text
-	RightToLeft *elemtypes.OptBoolElem `xml:"rtl,omitempty"`
+	RightToLeft *ctypes.OnOff `xml:"rtl,omitempty"`
 
 	//34.Use Complex Script Formatting on Run
-	CSFormat *elemtypes.OptBoolElem `xml:"cs,omitempty"`
+	CSFormat *ctypes.OnOff `xml:"cs,omitempty"`
 
 	//35.Emphasis Mark
 	Em *Em `xml:"em,omitempty"`
@@ -123,10 +122,10 @@ type RunProperty struct {
 	EALayout *EALayout `xml:"eastAsianLayout,omitempty"`
 
 	//38.Paragraph Mark Is Always Hidden
-	SpecVanish *elemtypes.OptBoolElem `xml:"specVanish,omitempty"`
+	SpecVanish *ctypes.OnOff `xml:"specVanish,omitempty"`
 
 	//39.Office Open XML Math
-	OMath *elemtypes.OptBoolElem `xml:"oMath,omitempty"`
+	OMath *ctypes.OnOff `xml:"oMath,omitempty"`
 }
 
 // NewRunProperty creates a new RunProperty with default values.
@@ -135,7 +134,7 @@ func NewRunProperty() RunProperty {
 }
 
 type optBoolElems struct {
-	elem    *elemtypes.OptBoolElem
+	elem    *ctypes.OnOff
 	XMLName string
 }
 

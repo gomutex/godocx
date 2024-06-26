@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/dml"
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/runcontent"
@@ -90,24 +89,24 @@ func (r *Run) Highlight(color string) *Run {
 
 // AddBold enables bold formatting for the run.
 func (r *Run) Bold(value bool) *Run {
-	r.getProp().Bold = elemtypes.NewOptBoolElem(value)
+	r.getProp().Bold = ctypes.OnOffFromBool(value)
 	return r
 }
 
 func (r *Run) Italic(value bool) *Run {
-	r.getProp().Italic = elemtypes.NewOptBoolElem(value)
+	r.getProp().Italic = ctypes.OnOffFromBool(value)
 	return r
 }
 
 // Specifies that the contents of this run shall be displayed with a single horizontal line through the center of the line.
 func (r *Run) Strike(value bool) *Run {
-	r.getProp().Strike = elemtypes.NewOptBoolElem(value)
+	r.getProp().Strike = ctypes.OnOffFromBool(value)
 	return r
 }
 
 // Specifies that the contents of this run shall be displayed with two horizontal lines through each character displayed on the line
 func (r *Run) DoubleStrike(value bool) *Run {
-	r.getProp().DoubleStrike = elemtypes.NewOptBoolElem(value)
+	r.getProp().DoubleStrike = ctypes.OnOffFromBool(value)
 	return r
 }
 
@@ -115,51 +114,51 @@ func (r *Run) DoubleStrike(value bool) *Run {
 //
 // Any lowercase characters in this text run shall be formatted for display only as their capital letter character equivalents
 func (r *Run) Caps(value bool) *Run {
-	r.getProp().Caps = elemtypes.NewOptBoolElem(value)
+	r.getProp().Caps = ctypes.OnOffFromBool(value)
 	return r
 }
 
 // Specifies that all small letter characters in this text run shall be formatted for display only as their capital letter character equivalents
 func (r *Run) SmallCaps(value bool) *Run {
-	r.getProp().Caps = elemtypes.NewOptBoolElem(value)
+	r.getProp().Caps = ctypes.OnOffFromBool(value)
 	return r
 }
 
 func (r *Run) Outline(value bool) *Run {
-	r.getProp().Outline = elemtypes.NewOptBoolElem(value)
+	r.getProp().Outline = ctypes.OnOffFromBool(value)
 	return r
 }
 
 func (r *Run) Shadow(value bool) *Run {
-	r.getProp().Shadow = elemtypes.NewOptBoolElem(value)
+	r.getProp().Shadow = ctypes.OnOffFromBool(value)
 	return r
 }
 
 func (r *Run) Emboss(value bool) *Run {
-	r.getProp().Emboss = elemtypes.NewOptBoolElem(value)
+	r.getProp().Emboss = ctypes.OnOffFromBool(value)
 	return r
 }
 
 func (r *Run) Imprint(value bool) *Run {
-	r.getProp().Imprint = elemtypes.NewOptBoolElem(value)
+	r.getProp().Imprint = ctypes.OnOffFromBool(value)
 	return r
 }
 
 // Do Not Check Spelling or Grammar
 func (r *Run) NoGrammer(value bool) *Run {
-	r.getProp().NoGrammar = elemtypes.NewOptBoolElem(value)
+	r.getProp().NoGrammar = ctypes.OnOffFromBool(value)
 	return r
 }
 
 // Use Document Grid Settings For Inter-Character Spacing
 func (r *Run) SnapToGrid(value bool) *Run {
-	r.getProp().SnapToGrid = elemtypes.NewOptBoolElem(value)
+	r.getProp().SnapToGrid = ctypes.OnOffFromBool(value)
 	return r
 }
 
 // Hidden Text
 func (r *Run) HideText(value bool) *Run {
-	r.getProp().Vanish = elemtypes.NewOptBoolElem(value)
+	r.getProp().Vanish = ctypes.OnOffFromBool(value)
 	return r
 }
 

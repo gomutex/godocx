@@ -3,24 +3,24 @@ package docxrun
 import (
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
+	"github.com/gomutex/godocx/wml/ctypes"
 )
 
 func TestNewRunStyle(t *testing.T) {
 	tests := []struct {
 		name     string
 		value    string
-		expected *elemtypes.SingleStrVal
+		expected *ctypes.CTString
 	}{
 		{
 			name:     "Custom RunStyle",
 			value:    "CustomStyle",
-			expected: elemtypes.NewSingleStrVal("CustomStyle"),
+			expected: ctypes.NewCTString("CustomStyle"),
 		},
 		{
 			name:     "Empty RunStyle",
 			value:    "",
-			expected: elemtypes.NewSingleStrVal(""),
+			expected: ctypes.NewCTString(""),
 		},
 	}
 
@@ -36,7 +36,7 @@ func TestNewRunStyle(t *testing.T) {
 }
 
 func TestDefaultRunStyle(t *testing.T) {
-	expected := elemtypes.NewSingleStrVal("Normal")
+	expected := ctypes.NewCTString("Normal")
 	result := DefaultRunStyle()
 
 	if result.Val != expected.Val {

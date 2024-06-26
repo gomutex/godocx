@@ -1,4 +1,4 @@
-package elemtypes
+package ctypes
 
 import (
 	"encoding/xml"
@@ -6,20 +6,20 @@ import (
 	"testing"
 )
 
-func TestSingleUint64Val_MarshalXML(t *testing.T) {
+func TestUint64Elem_MarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    SingleUint64Val
+		input    Uint64Elem
 		expected string
 	}{
 		{
 			name:     "With value",
-			input:    SingleUint64Val{Val: 10},
+			input:    Uint64Elem{Val: 10},
 			expected: `<w:kern w:val="10"></w:kern>`,
 		},
 		{
 			name:     "Empty value",
-			input:    SingleUint64Val{Val: 18446744073709551615},
+			input:    Uint64Elem{Val: 18446744073709551615},
 			expected: `<w:kern w:val="18446744073709551615"></w:kern>`,
 		},
 	}
@@ -45,22 +45,22 @@ func TestSingleUint64Val_MarshalXML(t *testing.T) {
 	}
 }
 
-func TestSingleUint64Val_UnmarshalXML(t *testing.T) {
+func TestUint64Elem_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
 		inputXML string
-		expected SingleUint64Val
+		expected Uint64Elem
 	}{
 		{
 			name:     "With value",
 			inputXML: `<w:kern w:val="00122"></w:kern>`,
-			expected: SingleUint64Val{Val: 122},
+			expected: Uint64Elem{Val: 122},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var result SingleUint64Val
+			var result Uint64Elem
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &result)
 			if err != nil {

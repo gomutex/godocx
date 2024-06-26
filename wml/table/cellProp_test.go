@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -41,17 +40,17 @@ func TestCellProperty_MarshalXML(t *testing.T) {
 			input: CellProperty{
 				CnfStyle:      &ctypes.Cnf{Val: "TestCnfStyle"},
 				Width:         ctypes.NewTableWidth(100, stypes.TableWidthDxa),
-				GridSpan:      &elemtypes.SingleIntVal{Val: 2},
+				GridSpan:      &ctypes.DecimalNum{Val: 2},
 				HMerge:        &ctypes.Merge{Val: "continue"},
 				VMerge:        &ctypes.Merge{Val: "restart"},
 				Borders:       &CellBorders{},
 				Shading:       &ctypes.Shading{Val: "clear"},
-				NoWrap:        &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+				NoWrap:        &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				Margins:       &CellMargins{},
 				TextDirection: &ctypes.TextDirection{Val: "btLr"},
-				FitText:       &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+				FitText:       &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				VertAlign:     &VertAlign{Val: "center"},
-				HideMark:      &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+				HideMark:      &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				PrChange:      &TCPrChange{ID: 1, Author: "Author", Date: nil},
 			},
 			expected: `<w:tcPr>` +
@@ -146,17 +145,17 @@ func TestCellProperty_UnmarshalXML(t *testing.T) {
 			expected: CellProperty{
 				CnfStyle:      &ctypes.Cnf{Val: "TestCnfStyle"},
 				Width:         ctypes.NewTableWidth(100, stypes.TableWidthDxa),
-				GridSpan:      &elemtypes.SingleIntVal{Val: 2},
+				GridSpan:      &ctypes.DecimalNum{Val: 2},
 				HMerge:        &ctypes.Merge{Val: "continue"},
 				VMerge:        &ctypes.Merge{Val: "restart"},
 				Borders:       &CellBorders{},
 				Shading:       &ctypes.Shading{Val: "clear"},
-				NoWrap:        &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+				NoWrap:        &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				Margins:       &CellMargins{},
 				TextDirection: &ctypes.TextDirection{Val: "btLr"},
-				FitText:       &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+				FitText:       &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				VertAlign:     &VertAlign{Val: "center"},
-				HideMark:      &elemtypes.OptBinFlagElem{Val: stypes.BinFlagTrue},
+				HideMark:      &ctypes.OnOff{Val: internal.ToPtr(stypes.OnOffTrue)},
 				CellInsertion: &ctypes.TrackChange{
 					ID:     1,
 					Author: "Author",

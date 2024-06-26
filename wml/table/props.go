@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"strconv"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 )
 
@@ -20,7 +19,7 @@ type Property struct {
 	Overlap *Overlap `xml:"tblOverlap,omitempty"`
 
 	// 4. Visually Right to Left Table
-	BidiVisual *elemtypes.OptBinFlagElem `xml:"bidiVisual,omitempty"`
+	BidiVisual *ctypes.OnOff `xml:"bidiVisual,omitempty"`
 
 	// 5. Number of Rows in Row Band
 	RowCountInRowBand *ctypes.DecimalNum `xml:"tblStyleRowBandSize,omitempty"`
@@ -53,7 +52,7 @@ type Property struct {
 	CellMargin *CellMargins `xml:"tblCellMar,omitempty"`
 
 	// 15. Table Style Conditional Formatting Settings
-	TableLook *elemtypes.SingleStrVal `xml:"tblLook,omitempty"`
+	TableLook *ctypes.CTString `xml:"tblLook,omitempty"`
 
 	//16. Revision Information for Table Properties
 	PrChange *TblPrChange `xml:"tblPrChange,omitempty"`

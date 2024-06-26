@@ -1,4 +1,4 @@
-package elemtypes
+package ctypes
 
 import (
 	"encoding/xml"
@@ -6,21 +6,21 @@ import (
 	"testing"
 )
 
-func TestSingleIntVal_MarshalXML(t *testing.T) {
+func TestCTString_MarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    SingleIntVal
+		input    CTString
 		expected string
 	}{
 		{
 			name:     "With value",
-			input:    SingleIntVal{Val: 10},
-			expected: `<w:kern w:val="10"></w:kern>`,
+			input:    CTString{Val: "example"},
+			expected: `<w:rStyle w:val="example"></w:rStyle>`,
 		},
 		{
 			name:     "Empty value",
-			input:    SingleIntVal{Val: 1000},
-			expected: `<w:kern w:val="1000"></w:kern>`,
+			input:    CTString{Val: ""},
+			expected: `<w:rStyle w:val=""></w:rStyle>`,
 		},
 	}
 
@@ -28,7 +28,7 @@ func TestSingleIntVal_MarshalXML(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			var result strings.Builder
 			encoder := xml.NewEncoder(&result)
-			start := xml.StartElement{Name: xml.Name{Local: "w:kern"}}
+			start := xml.StartElement{Name: xml.Name{Local: "w:rStyle"}}
 
 			err := tt.input.MarshalXML(encoder, start)
 			if err != nil {
@@ -45,22 +45,27 @@ func TestSingleIntVal_MarshalXML(t *testing.T) {
 	}
 }
 
-func TestSingleIntVal_UnmarshalXML(t *testing.T) {
+func TestCTString_UnmarshalXML(t *testing.T) {
 	tests := []struct {
 		name     string
 		inputXML string
-		expected SingleIntVal
+		expected CTString
 	}{
 		{
 			name:     "With value",
-			inputXML: `<w:kern w:val="00122"></w:kern>`,
-			expected: SingleIntVal{Val: 122},
+			inputXML: `<w:rStyle w:val="example"></w:rStyle>`,
+			expected: CTString{Val: "example"},
+		},
+		{
+			name:     "Empty value",
+			inputXML: `<w:rStyle w:val=""></w:rStyle>`,
+			expected: CTString{Val: ""},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var result SingleIntVal
+			var result CTString
 
 			err := xml.Unmarshal([]byte(tt.inputXML), &result)
 			if err != nil {
@@ -68,7 +73,7 @@ func TestSingleIntVal_UnmarshalXML(t *testing.T) {
 			}
 
 			if result.Val != tt.expected.Val {
-				t.Errorf("Expected Val %d but got %d", tt.expected.Val, result.Val)
+				t.Errorf("Expected Val %s but got %s", tt.expected.Val, result.Val)
 			}
 		})
 	}

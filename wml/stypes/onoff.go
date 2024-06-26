@@ -9,38 +9,38 @@ import (
 // A value of on, 1, or true specifies that the property shall be turned on. This is the default value for this attribute, and is implied when the parent element is present, but this attribute is omitted.
 //
 // A value of off, 0, or false specifies that the property shall be explicitly turned off.
-type BinFlag string
+type OnOff string
 
 const (
-	BinFlagZero  BinFlag = "0"
-	BinFlagOne   BinFlag = "1"
-	BinFlagFalse BinFlag = "false"
-	BinFlagTrue  BinFlag = "true"
-	BinFlagOff   BinFlag = "off"
-	BinFlagOn    BinFlag = "on"
+	OnOffZero  OnOff = "0"
+	OnOffOne   OnOff = "1"
+	OnOffFalse OnOff = "false"
+	OnOffTrue  OnOff = "true"
+	OnOffOff   OnOff = "off"
+	OnOffOn    OnOff = "on"
 )
 
-func BinFlagFromStr(s string) (BinFlag, error) {
+func OnOffFromStr(s string) (OnOff, error) {
 	switch s {
 	case "0":
-		return BinFlagZero, nil
+		return OnOffZero, nil
 	case "1":
-		return BinFlagOne, nil
+		return OnOffOne, nil
 	case "false":
-		return BinFlagFalse, nil
+		return OnOffFalse, nil
 	case "true":
-		return BinFlagTrue, nil
+		return OnOffTrue, nil
 	case "off":
-		return BinFlagOff, nil
+		return OnOffOff, nil
 	case "on":
-		return BinFlagOn, nil
+		return OnOffOn, nil
 	default:
-		return "", errors.New("invalid BinFlag string")
+		return "", errors.New("invalid OnOff string")
 	}
 }
 
-func (d *BinFlag) UnmarshalXMLAttr(attr xml.Attr) error {
-	val, err := BinFlagFromStr(attr.Value)
+func (d *OnOff) UnmarshalXMLAttr(attr xml.Attr) error {
+	val, err := OnOffFromStr(attr.Value)
 	if err != nil {
 		return err
 	}

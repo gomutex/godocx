@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 )
 
@@ -17,13 +16,13 @@ type RowProperty struct {
 	Cnf *ctypes.Cnf
 
 	// Associated HTML div ID
-	DivId *elemtypes.SingleIntVal
+	DivId *ctypes.DecimalNum
 
 	//Grid Columns Before First Cell
-	GridBefore *elemtypes.SingleIntVal
+	GridBefore *ctypes.DecimalNum
 
 	//Grid Columns After Last Cell
-	GridAfter *elemtypes.SingleIntVal
+	GridAfter *ctypes.DecimalNum
 
 	//Preferred Width Before Table Row
 	WidthBefore *ctypes.TableWidth
@@ -32,13 +31,13 @@ type RowProperty struct {
 	WidthAfter *ctypes.TableWidth
 
 	//Table Row Cannot Break Across Pages
-	CantSplit *elemtypes.OptBinFlagElem
+	CantSplit *ctypes.OnOff
 
 	//Table Row Height
 	Height *ctypes.TableRowHeight
 
 	//Repeat Table Row on Every New Page
-	Header *elemtypes.OptBinFlagElem
+	Header *ctypes.OnOff
 
 	//Table Row Cell Spacing
 	CellSpacing *ctypes.TableWidth
@@ -47,7 +46,7 @@ type RowProperty struct {
 	JC *ctypes.Justification
 
 	//Hidden Table Row Marker
-	Hidden *elemtypes.OptBinFlagElem
+	Hidden *ctypes.OnOff
 
 	//2.Inserted Table Row
 	Ins *ctypes.TrackChange
@@ -115,19 +114,19 @@ loop:
 				}
 
 			case "divId":
-				r.DivId = &elemtypes.SingleIntVal{}
+				r.DivId = &ctypes.DecimalNum{}
 				if err = d.DecodeElement(r.DivId, &elem); err != nil {
 					return err
 				}
 
 			case "gridBefore":
-				r.GridBefore = &elemtypes.SingleIntVal{}
+				r.GridBefore = &ctypes.DecimalNum{}
 				if err := d.DecodeElement(r.GridBefore, &elem); err != nil {
 					return err
 				}
 
 			case "gridAfter":
-				r.GridAfter = &elemtypes.SingleIntVal{}
+				r.GridAfter = &ctypes.DecimalNum{}
 				if err := d.DecodeElement(r.GridAfter, &elem); err != nil {
 					return err
 				}
@@ -145,7 +144,7 @@ loop:
 				}
 
 			case "cantSplit":
-				r.CantSplit = &elemtypes.OptBinFlagElem{}
+				r.CantSplit = &ctypes.OnOff{}
 				if err := d.DecodeElement(r.CantSplit, &elem); err != nil {
 					return err
 				}
@@ -157,7 +156,7 @@ loop:
 				}
 
 			case "tblHeader":
-				r.Header = &elemtypes.OptBinFlagElem{}
+				r.Header = &ctypes.OnOff{}
 				if err := d.DecodeElement(r.Header, &elem); err != nil {
 					return err
 				}
@@ -175,7 +174,7 @@ loop:
 				}
 
 			case "hidden":
-				r.Hidden = &elemtypes.OptBinFlagElem{}
+				r.Hidden = &ctypes.OnOff{}
 				if err := d.DecodeElement(r.Hidden, &elem); err != nil {
 					return err
 				}

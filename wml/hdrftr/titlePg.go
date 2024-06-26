@@ -8,7 +8,7 @@ import (
 
 // Different First Page Headers and Footers
 type TitlePg struct {
-	Val stypes.BinFlag `xml:"val,attr,omitempty"`
+	Val stypes.OnOff `xml:"val,attr,omitempty"`
 }
 
 func (t *TitlePg) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

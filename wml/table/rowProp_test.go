@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -32,7 +31,7 @@ func TestRowProperty_MarshalXML(t *testing.T) {
 		{
 			name: "Only DivId populated",
 			input: RowProperty{
-				DivId: &elemtypes.SingleIntVal{},
+				DivId: &ctypes.DecimalNum{},
 			},
 			expectFail:  false,
 			expectedXML: `<w:trPr><w:divId w:val="0"></w:divId></w:trPr>`,
@@ -43,24 +42,24 @@ func TestRowProperty_MarshalXML(t *testing.T) {
 				Cnf: &ctypes.Cnf{
 					Val: "cnftest",
 				},
-				DivId:       &elemtypes.SingleIntVal{},
-				GridBefore:  &elemtypes.SingleIntVal{},
-				GridAfter:   &elemtypes.SingleIntVal{},
+				DivId:       &ctypes.DecimalNum{},
+				GridBefore:  &ctypes.DecimalNum{},
+				GridAfter:   &ctypes.DecimalNum{},
 				WidthBefore: ctypes.NewTableWidth(500, "pct"),
 				WidthAfter:  ctypes.NewTableWidth(300, "dxa"),
-				CantSplit: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagTrue,
+				CantSplit: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffTrue),
 				},
 				Height: ctypes.NewTableRowHeight(500, "atLeast"),
-				Header: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagTrue,
+				Header: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffTrue),
 				},
 				CellSpacing: ctypes.NewTableWidth(100, "dxa"),
 				JC: &ctypes.Justification{
 					Val: "center",
 				},
-				Hidden: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagFalse,
+				Hidden: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffFalse),
 				},
 			},
 			expectFail:  false,
@@ -126,7 +125,7 @@ func TestRowProperty_UnmarshalXML(t *testing.T) {
 						<w:divId></w:divId>
 					   </w:trPr>`,
 			expected: RowProperty{
-				DivId: &elemtypes.SingleIntVal{},
+				DivId: &ctypes.DecimalNum{},
 			},
 		},
 		{
@@ -149,24 +148,24 @@ func TestRowProperty_UnmarshalXML(t *testing.T) {
 				Cnf: &ctypes.Cnf{
 					Val: "cnftest",
 				},
-				DivId:       &elemtypes.SingleIntVal{},
-				GridBefore:  &elemtypes.SingleIntVal{Val: 2},
-				GridAfter:   &elemtypes.SingleIntVal{Val: 3},
+				DivId:       &ctypes.DecimalNum{},
+				GridBefore:  &ctypes.DecimalNum{Val: 2},
+				GridAfter:   &ctypes.DecimalNum{Val: 3},
 				WidthBefore: ctypes.NewTableWidth(500, "pct"),
 				WidthAfter:  ctypes.NewTableWidth(300, "dxa"),
-				CantSplit: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagTrue,
+				CantSplit: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffTrue),
 				},
 				Height: ctypes.NewTableRowHeight(500, "atLeast"),
-				Header: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagTrue,
+				Header: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffTrue),
 				},
 				CellSpacing: ctypes.NewTableWidth(100, "dxa"),
 				JC: &ctypes.Justification{
 					Val: "center",
 				},
-				Hidden: &elemtypes.OptBinFlagElem{
-					Val: stypes.BinFlagFalse,
+				Hidden: &ctypes.OnOff{
+					Val: internal.ToPtr(stypes.OnOffFalse),
 				},
 			},
 			expectFail: false,

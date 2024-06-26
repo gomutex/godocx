@@ -6,15 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/wml/ctypes"
 )
 
-func optBoolElemPtr(value elemtypes.OptBoolElem) *elemtypes.OptBoolElem {
+func optBoolElemPtr(value ctypes.OnOff) *ctypes.OnOff {
 	return &value
 }
 
-func singleUint64ValPtr(value elemtypes.SingleUint64Val) *elemtypes.SingleUint64Val {
+func singleUint64ValPtr(value ctypes.Uint64Elem) *ctypes.Uint64Elem {
 	return &value
 }
 
@@ -22,7 +21,7 @@ func singleIntValPtr(value ctypes.DecimalNum) *ctypes.DecimalNum {
 	return &value
 }
 
-func singleStrValPtr(value elemtypes.SingleStrVal) *elemtypes.SingleStrVal {
+func singleStrValPtr(value ctypes.CTString) *ctypes.CTString {
 	return &value
 }
 
@@ -36,29 +35,29 @@ func TestRunProperty_MarshalXML(t *testing.T) {
 		{
 			name: "All attributes set",
 			prop: RunProperty{
-				Bold:         optBoolElemPtr(elemtypes.OptBoolElem{}),
-				BoldCS:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Italic:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				ItalicCS:     optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Strike:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				DoubleStrike: optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Outline:      optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Shadow:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Caps:         optBoolElemPtr(elemtypes.OptBoolElem{}),
-				SmallCaps:    optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Emboss:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Imprint:      optBoolElemPtr(elemtypes.OptBoolElem{}),
-				NoGrammar:    optBoolElemPtr(elemtypes.OptBoolElem{}),
-				SnapToGrid:   optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Vanish:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				WebHidden:    optBoolElemPtr(elemtypes.OptBoolElem{}),
-				RightToLeft:  optBoolElemPtr(elemtypes.OptBoolElem{}),
-				CSFormat:     optBoolElemPtr(elemtypes.OptBoolElem{}),
-				SpecVanish:   optBoolElemPtr(elemtypes.OptBoolElem{}),
-				OMath:        optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Kern:         singleUint64ValPtr(elemtypes.SingleUint64Val{Val: 20}),
+				Bold:         optBoolElemPtr(ctypes.OnOff{}),
+				BoldCS:       optBoolElemPtr(ctypes.OnOff{}),
+				Italic:       optBoolElemPtr(ctypes.OnOff{}),
+				ItalicCS:     optBoolElemPtr(ctypes.OnOff{}),
+				Strike:       optBoolElemPtr(ctypes.OnOff{}),
+				DoubleStrike: optBoolElemPtr(ctypes.OnOff{}),
+				Outline:      optBoolElemPtr(ctypes.OnOff{}),
+				Shadow:       optBoolElemPtr(ctypes.OnOff{}),
+				Caps:         optBoolElemPtr(ctypes.OnOff{}),
+				SmallCaps:    optBoolElemPtr(ctypes.OnOff{}),
+				Emboss:       optBoolElemPtr(ctypes.OnOff{}),
+				Imprint:      optBoolElemPtr(ctypes.OnOff{}),
+				NoGrammar:    optBoolElemPtr(ctypes.OnOff{}),
+				SnapToGrid:   optBoolElemPtr(ctypes.OnOff{}),
+				Vanish:       optBoolElemPtr(ctypes.OnOff{}),
+				WebHidden:    optBoolElemPtr(ctypes.OnOff{}),
+				RightToLeft:  optBoolElemPtr(ctypes.OnOff{}),
+				CSFormat:     optBoolElemPtr(ctypes.OnOff{}),
+				SpecVanish:   optBoolElemPtr(ctypes.OnOff{}),
+				OMath:        optBoolElemPtr(ctypes.OnOff{}),
+				Kern:         singleUint64ValPtr(ctypes.Uint64Elem{Val: 20}),
 				Spacing:      singleIntValPtr(ctypes.DecimalNum{Val: 100}),
-				Style:        singleStrValPtr(elemtypes.SingleStrVal{Val: "Heading1"}),
+				Style:        singleStrValPtr(ctypes.CTString{Val: "Heading1"}),
 				Position:     singleIntValPtr(ctypes.DecimalNum{Val: 10}),
 			},
 			expected: `<w:rPr><w:rStyle w:val="Heading1"></w:rStyle><w:b></w:b><w:bCs></w:bCs><w:i></w:i><w:iCs></w:iCs><w:caps></w:caps><w:smallCaps></w:smallCaps><w:strike></w:strike><w:dstrike></w:dstrike><w:outline></w:outline><w:shadow></w:shadow><w:emboss></w:emboss><w:imprint></w:imprint><w:noProof></w:noProof><w:snapToGrid></w:snapToGrid><w:vanish></w:vanish><w:webHidden></w:webHidden><w:spacing w:val="100"></w:spacing><w:kern w:val="20"></w:kern><w:position w:val="10"></w:position><w:rtl></w:rtl><w:cs></w:cs><w:specVanish></w:specVanish><w:oMath></w:oMath></w:rPr>`,
@@ -66,7 +65,7 @@ func TestRunProperty_MarshalXML(t *testing.T) {
 		{
 			name: "Only Bold set",
 			prop: RunProperty{
-				Bold: optBoolElemPtr(elemtypes.OptBoolElem{}),
+				Bold: optBoolElemPtr(ctypes.OnOff{}),
 			},
 			expected: `<w:rPr><w:b></w:b></w:rPr>`,
 		},
@@ -104,29 +103,29 @@ func TestRunProperty_UnmarshalXML(t *testing.T) {
 			name:     "All attributes set",
 			inputXML: `<w:rPr><w:rStyle w:val="Heading1"></w:rStyle><w:b></w:b><w:bCs></w:bCs><w:i></w:i><w:iCs></w:iCs><w:caps></w:caps><w:smallCaps></w:smallCaps><w:strike></w:strike><w:dstrike></w:dstrike><w:outline></w:outline><w:shadow></w:shadow><w:emboss></w:emboss><w:imprint></w:imprint><w:noProof></w:noProof><w:snapToGrid></w:snapToGrid><w:vanish></w:vanish><w:webHidden></w:webHidden><w:spacing w:val="100"></w:spacing><w:kern w:val="20"></w:kern><w:position w:val="10"></w:position><w:rtl></w:rtl><w:cs></w:cs><w:specVanish></w:specVanish><w:oMath></w:oMath></w:rPr>`,
 			expectedProp: RunProperty{
-				Bold:         optBoolElemPtr(elemtypes.OptBoolElem{}),
-				BoldCS:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Italic:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				ItalicCS:     optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Strike:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				DoubleStrike: optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Outline:      optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Shadow:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Caps:         optBoolElemPtr(elemtypes.OptBoolElem{}),
-				SmallCaps:    optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Emboss:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Imprint:      optBoolElemPtr(elemtypes.OptBoolElem{}),
-				NoGrammar:    optBoolElemPtr(elemtypes.OptBoolElem{}),
-				SnapToGrid:   optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Vanish:       optBoolElemPtr(elemtypes.OptBoolElem{}),
-				WebHidden:    optBoolElemPtr(elemtypes.OptBoolElem{}),
-				RightToLeft:  optBoolElemPtr(elemtypes.OptBoolElem{}),
-				CSFormat:     optBoolElemPtr(elemtypes.OptBoolElem{}),
-				SpecVanish:   optBoolElemPtr(elemtypes.OptBoolElem{}),
-				OMath:        optBoolElemPtr(elemtypes.OptBoolElem{}),
-				Kern:         singleUint64ValPtr(elemtypes.SingleUint64Val{Val: 20}),
+				Bold:         optBoolElemPtr(ctypes.OnOff{}),
+				BoldCS:       optBoolElemPtr(ctypes.OnOff{}),
+				Italic:       optBoolElemPtr(ctypes.OnOff{}),
+				ItalicCS:     optBoolElemPtr(ctypes.OnOff{}),
+				Strike:       optBoolElemPtr(ctypes.OnOff{}),
+				DoubleStrike: optBoolElemPtr(ctypes.OnOff{}),
+				Outline:      optBoolElemPtr(ctypes.OnOff{}),
+				Shadow:       optBoolElemPtr(ctypes.OnOff{}),
+				Caps:         optBoolElemPtr(ctypes.OnOff{}),
+				SmallCaps:    optBoolElemPtr(ctypes.OnOff{}),
+				Emboss:       optBoolElemPtr(ctypes.OnOff{}),
+				Imprint:      optBoolElemPtr(ctypes.OnOff{}),
+				NoGrammar:    optBoolElemPtr(ctypes.OnOff{}),
+				SnapToGrid:   optBoolElemPtr(ctypes.OnOff{}),
+				Vanish:       optBoolElemPtr(ctypes.OnOff{}),
+				WebHidden:    optBoolElemPtr(ctypes.OnOff{}),
+				RightToLeft:  optBoolElemPtr(ctypes.OnOff{}),
+				CSFormat:     optBoolElemPtr(ctypes.OnOff{}),
+				SpecVanish:   optBoolElemPtr(ctypes.OnOff{}),
+				OMath:        optBoolElemPtr(ctypes.OnOff{}),
+				Kern:         singleUint64ValPtr(ctypes.Uint64Elem{Val: 20}),
 				Spacing:      singleIntValPtr(ctypes.DecimalNum{Val: 100}),
-				Style:        singleStrValPtr(elemtypes.SingleStrVal{Val: "Heading1"}),
+				Style:        singleStrValPtr(ctypes.CTString{Val: "Heading1"}),
 				Position:     singleIntValPtr(ctypes.DecimalNum{Val: 10}),
 			},
 		},
@@ -134,7 +133,7 @@ func TestRunProperty_UnmarshalXML(t *testing.T) {
 			name:     "Only Bold set",
 			inputXML: `<w:rPr><w:b/></w:rPr>`,
 			expectedProp: RunProperty{
-				Bold: optBoolElemPtr(elemtypes.OptBoolElem{}),
+				Bold: optBoolElemPtr(ctypes.OnOff{}),
 			},
 		},
 		{

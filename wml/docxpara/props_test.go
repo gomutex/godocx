@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/elemtypes"
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/docxrun"
@@ -65,7 +64,7 @@ func TestDefaultParagraphStyle(t *testing.T) {
 }
 func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 	paraProp := ParagraphProp{
-		Style: &elemtypes.SingleStrVal{
+		Style: &ctypes.CTString{
 			Val: "teststyle",
 		},
 		NumProp: &NumProp{
@@ -85,24 +84,24 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 		FrameProp: &FrameProp{
 			Width: internal.ToPtr(int64(10)),
 		},
-		KeepNext:            &elemtypes.OptBinFlagElem{},
-		KeepLines:           &elemtypes.OptBinFlagElem{},
-		PageBreakBefore:     &elemtypes.OptBinFlagElem{},
-		WindowControl:       &elemtypes.OptBinFlagElem{},
-		SuppressLineNmbrs:   &elemtypes.OptBinFlagElem{},
-		SuppressAutoHyphens: &elemtypes.OptBinFlagElem{},
-		Kinsoku:             &elemtypes.OptBinFlagElem{},
-		WordWrap:            &elemtypes.OptBinFlagElem{},
-		OverflowPunct:       &elemtypes.OptBinFlagElem{},
-		TopLinePunct:        &elemtypes.OptBinFlagElem{},
-		AutoSpaceDE:         &elemtypes.OptBinFlagElem{},
-		AutoSpaceDN:         &elemtypes.OptBinFlagElem{},
-		Bidi:                &elemtypes.OptBinFlagElem{},
-		AdjustRightInd:      &elemtypes.OptBinFlagElem{},
-		SnapToGrid:          &elemtypes.OptBinFlagElem{},
-		CtxlSpacing:         &elemtypes.OptBinFlagElem{},
-		MirrorIndents:       &elemtypes.OptBinFlagElem{},
-		SuppressOverlap:     &elemtypes.OptBinFlagElem{},
+		KeepNext:            &ctypes.OnOff{},
+		KeepLines:           &ctypes.OnOff{},
+		PageBreakBefore:     &ctypes.OnOff{},
+		WindowControl:       &ctypes.OnOff{},
+		SuppressLineNmbrs:   &ctypes.OnOff{},
+		SuppressAutoHyphens: &ctypes.OnOff{},
+		Kinsoku:             &ctypes.OnOff{},
+		WordWrap:            &ctypes.OnOff{},
+		OverflowPunct:       &ctypes.OnOff{},
+		TopLinePunct:        &ctypes.OnOff{},
+		AutoSpaceDE:         &ctypes.OnOff{},
+		AutoSpaceDN:         &ctypes.OnOff{},
+		Bidi:                &ctypes.OnOff{},
+		AdjustRightInd:      &ctypes.OnOff{},
+		SnapToGrid:          &ctypes.OnOff{},
+		CtxlSpacing:         &ctypes.OnOff{},
+		MirrorIndents:       &ctypes.OnOff{},
+		SuppressOverlap:     &ctypes.OnOff{},
 		Shading: &ctypes.Shading{
 			Val: stypes.ShdDiagStripe,
 		},
