@@ -64,7 +64,7 @@ func (b *BlipFill) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	// 3. Choice: FillModProperties
-	if err = b.FillModeProps.MarshalXML(e, start); err != nil {
+	if err = b.FillModeProps.MarshalXML(e, xml.StartElement{}); err != nil {
 		return err
 	}
 
@@ -79,11 +79,11 @@ type FillModeProps struct {
 func (f *FillModeProps) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if f.Stretch != nil {
-		return f.Stretch.MarshalXML(e, start)
+		return f.Stretch.MarshalXML(e, xml.StartElement{})
 	}
 
 	if f.Tile != nil {
-		return f.Tile.MarshalXML(e, start)
+		return f.Tile.MarshalXML(e, xml.StartElement{})
 	}
 
 	return nil

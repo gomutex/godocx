@@ -28,8 +28,6 @@ import (
 
 func (rd *RootDoc) AddTable() *table.Table {
 	tbl := table.DefaultTable()
-	tbl.Rows = []table.TableChild{}
-	tbl.Grid = table.DefaultTableGrid()
 
 	rd.Document.Body.Children = append(rd.Document.Body.Children, DocumentChild{
 		Table: tbl,
