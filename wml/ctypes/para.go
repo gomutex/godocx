@@ -3,14 +3,23 @@ package ctypes
 import (
 	"encoding/xml"
 
+	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/runcontent"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 type Paragraph struct {
 	id string
 
+	// Attributes
+	RsidRPr      *stypes.LongHexNum // Revision Identifier for Paragraph Glyph Formatting
+	RsidR        *stypes.LongHexNum // Revision Identifier for Paragraph
+	RsidDel      *stypes.LongHexNum // Revision Identifier for Paragraph Deletion
+	RsidP        *stypes.LongHexNum // Revision Identifier for Paragraph Properties
+	RsidRDefault *stypes.LongHexNum // Default Revision Identifier for Runs
+
 	// 1. Paragraph Properties
-	Property *ParagraphProp `xml:"pPr,omitempty"`
+	Property *ParagraphProp
 
 	// 2. Choices (Slice of Child elements)
 	Children []ParagraphChild
@@ -31,40 +40,74 @@ type Hyperlink struct {
 func (p Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:p"
 
-	// Opening <w:p> element
+	if p.RsidRPr != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidRPr"}, Value: string(*p.RsidRPr)})
+	}
+
+	if p.RsidR != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidR"}, Value: string(*p.RsidR)})
+	}
+	if p.RsidDel != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidDel"}, Value: string(*p.RsidDel)})
+	}
+	if p.RsidP != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidP"}, Value: string(*p.RsidP)})
+	}
+	if p.RsidRDefault != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidRDefault"}, Value: string(*p.RsidRDefault)})
+	}
+
 	if err = e.EncodeToken(start); err != nil {
 		return err
 	}
 
 	if p.Property != nil {
-		if err = e.EncodeElement(p.Property, start); err != nil {
+		if err = p.Property.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:r"},
+		}); err != nil {
 			return err
 		}
 	}
 
 	for _, cElem := range p.Children {
 		if cElem.Run != nil {
-			if err = e.EncodeElement(cElem.Run, start); err != nil {
+			if err = cElem.Run.MarshalXML(e, xml.StartElement{
+				Name: xml.Name{Local: "w:r"},
+			}); err != nil {
 				return err
 			}
 		}
 
 		if cElem.Link != nil {
-			if err = e.EncodeElement(cElem.Link, start); err != nil {
+			if err = e.EncodeElement(cElem.Link, xml.StartElement{
+				Name: xml.Name{Local: "w:hyperlink"},
+			}); err != nil {
 				return err
 			}
 		}
 	}
 
 	// Closing </w:p> element
-	if err = e.EncodeToken(xml.EndElement{Name: start.Name}); err != nil {
-		return err
-	}
-
-	return nil
+	return e.EncodeToken(start.End())
 }
 
 func (p *Paragraph) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+	// Decode attributes
+	for _, attr := range start.Attr {
+		switch attr.Name.Local {
+		case "rsidRPr":
+			p.RsidRPr = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		case "rsidR":
+			p.RsidR = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		case "rsidDel":
+			p.RsidDel = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		case "rsidP":
+			p.RsidP = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		case "rsidRDefault":
+			p.RsidRDefault = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		}
+	}
+
 loop:
 	for {
 		currentToken, err := d.Token()

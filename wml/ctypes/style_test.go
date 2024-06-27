@@ -48,8 +48,10 @@ func TestStyle_MarshalXML(t *testing.T) {
 				TableProp:     &TableProp{},
 				TableRowProp:  &RowProperty{},
 				TableCellProp: &CellProperty{},
-				TableStylePr: &TableStyleProp{
-					Type: stypes.TblStyleOverrideWholeTable,
+				TableStylePr: []TableStyleProp{
+					{
+						Type: stypes.TblStyleOverrideWholeTable,
+					},
 				},
 				Type:        internal.ToPtr(stypes.StyleTypeCharacter),
 				ID:          stringPtr("styleID"),
@@ -149,8 +151,10 @@ func TestStyle_UnmarshalXML(t *testing.T) {
 				TableProp:       &TableProp{},
 				TableRowProp:    &RowProperty{},
 				TableCellProp:   &CellProperty{},
-				TableStylePr: &TableStyleProp{
-					Type: stypes.TblStyleOverrideWholeTable,
+				TableStylePr: []TableStyleProp{
+					{
+						Type: stypes.TblStyleOverrideWholeTable,
+					},
 				},
 				Type:        internal.ToPtr(stypes.StyleTypeCharacter),
 				ID:          stringPtr("styleID"),

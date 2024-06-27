@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/dml"
+	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/runcontent"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -11,6 +12,11 @@ import (
 
 // A Run is part of a paragraph that has its own style. It could be
 type Run struct {
+	// Attributes
+	RsidRPr *stypes.LongHexNum // Revision Identifier for Run Properties
+	RsidR   *stypes.LongHexNum // Revision Identifier for Run
+	RsidDel *stypes.LongHexNum // Revision Identifier for Run Deletion
+
 	//1. Run Properties
 	Property *RunProperty
 
@@ -179,6 +185,16 @@ func (r *Run) Style(value string) *Run {
 func (r Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:r"
 
+	if r.RsidRPr != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidRPr"}, Value: string(*r.RsidRPr)})
+	}
+	if r.RsidR != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidR"}, Value: string(*r.RsidR)})
+	}
+	if r.RsidDel != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:rsidDel"}, Value: string(*r.RsidDel)})
+	}
+
 	err = e.EncodeToken(start)
 	if err != nil {
 		return err
@@ -225,6 +241,18 @@ func (r Run) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 }
 
 func (r *Run) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+	// Decode attributes
+	for _, attr := range start.Attr {
+		switch attr.Name.Local {
+		case "rsidRPr":
+			r.RsidRPr = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		case "rsidR":
+			r.RsidR = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		case "rsidDel":
+			r.RsidDel = internal.ToPtr(stypes.LongHexNum(attr.Value))
+		}
+	}
+
 loop:
 	for {
 		currentToken, err := d.Token()
