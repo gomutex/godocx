@@ -2,8 +2,6 @@ package ctypes
 
 import (
 	"encoding/xml"
-
-	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Table
@@ -25,24 +23,6 @@ type Table struct {
 
 func DefaultTable() *Table {
 	return &Table{}
-}
-
-func (t *Table) AddRow() *Row {
-	row := DefaultRow()
-	t.RowContents = append(t.RowContents, RowContent{
-		Row: row,
-	})
-	return row
-}
-
-func (t *Table) Indent(indent int) {
-	t.TableProp = *DefaultTableProp()
-	t.TableProp.Indent = NewTableWidth(indent, stypes.TableWidthAuto)
-}
-
-func (t *Table) Style(value string) {
-	t.TableProp = *DefaultTableProp()
-	t.TableProp.Style = NewTableStyle(value)
 }
 
 func (t Table) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {

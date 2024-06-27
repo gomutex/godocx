@@ -1,6 +1,9 @@
 package docx
 
-import "github.com/gomutex/godocx/wml/ctypes"
+import (
+	"github.com/gomutex/godocx/wml/ctypes"
+	"github.com/gomutex/godocx/wml/stypes"
+)
 
 type Table struct {
 	// Reverse inheriting the Rootdoc into Paragrah to access other elements
@@ -46,4 +49,23 @@ func (rd *RootDoc) AddTable() *Table {
 	})
 
 	return &tbl
+}
+
+func (t *Table) AddRow() *ctypes.Row {
+	row := ctypes.DefaultRow()
+	t.CT.RowContents = append(t.CT.RowContents, ctypes.RowContent{
+		Row: row,
+	})
+	return row
+}
+
+func (t *Table) ensureProp() {
+}
+
+func (t *Table) Indent(indent int) {
+	t.CT.TableProp.Indent = ctypes.NewTableWidth(indent, stypes.TableWidthAuto)
+}
+
+func (t *Table) Style(value string) {
+	t.CT.TableProp.Style = ctypes.NewTableStyle(value)
 }
