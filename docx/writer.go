@@ -61,19 +61,25 @@ func (rd *RootDoc) writeToZip(zw *zip.Writer) error {
 	if err != nil {
 		return err
 	}
-	rd.FileMap.Store(rd.Document.DocRels.RelativePath, []byte(docRelContent))
+	rd.FileMap.Store(rd.Document.DocRels.RelativePath, docRelContent)
 
 	rootRelContent, err := marshal(rd.RootRels)
 	if err != nil {
 		return err
 	}
-	rd.FileMap.Store(rd.RootRels.RelativePath, []byte(rootRelContent))
+	rd.FileMap.Store(rd.RootRels.RelativePath, rootRelContent)
 
 	docContent, err := marshal(rd.Document)
 	if err != nil {
 		return err
 	}
-	rd.FileMap.Store(rd.Document.relativePath, []byte(docContent))
+	rd.FileMap.Store(rd.Document.relativePath, docContent)
+
+	docStyleBytes, err := marshal(rd.DocStyles)
+	if err != nil {
+		return err
+	}
+	rd.FileMap.Store(rd.DocStyles.RelativePath, docStyleBytes)
 
 	rd.FileMap.Range(func(path, content any) bool {
 		files = append(files, path.(string))

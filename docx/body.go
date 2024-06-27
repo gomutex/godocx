@@ -77,13 +77,13 @@ func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 			switch elem.Name.Local {
 			case "p":
 				para := NewParagraph(body.Root)
-				if err := d.DecodeElement(para, &elem); err != nil {
+				if err := d.DecodeElement(&para.CT, &elem); err != nil {
 					return err
 				}
 				body.Children = append(body.Children, DocumentChild{Para: para})
 			case "tbl":
 				tbl := NewTable(body.Root)
-				if err := d.DecodeElement(tbl, &elem); err != nil {
+				if err := d.DecodeElement(&tbl.CT, &elem); err != nil {
 					return err
 				}
 				body.Children = append(body.Children, DocumentChild{Table: tbl})

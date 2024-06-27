@@ -2,7 +2,11 @@
 // including functions related to encoding and decoding XML elements.
 package docx
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+
+	"github.com/gomutex/godocx/common/constants"
+)
 
 // docxDcTerms represents an XML element with text content and an xsi:type attribute.
 // Core Document Properties
@@ -18,12 +22,12 @@ type decodeDcTerms struct {
 }
 
 // The function adds an XML header to the encoded data.
-func marshal(data any) (out string, err error) {
+func marshal(data any) ([]byte, error) {
 	body, err := xml.Marshal(data)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	out = xml.Header + string(body)
-	return
+	out := append(constants.XMLHeader, body...)
+	return out, nil
 }

@@ -3,6 +3,8 @@ package constants
 
 import "encoding/xml"
 
+var XMLHeader = []byte(`<?xml version="1.0" encoding="UTF-8"?>` + "\n")
+
 const (
 	OFFICE_DOC_TYPE    = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"
 	CORE_PROP_TYPE     = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"

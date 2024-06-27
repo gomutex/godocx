@@ -4,11 +4,13 @@ import (
 	"archive/zip"
 	"bytes"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/docx"
 	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/wml/ctypes"
 )
 
 // ReadFromZip reads files from a zip archive.
@@ -53,12 +55,6 @@ func Unpack(content *[]byte) (*docx.RootDoc, error) {
 	rd.ContentType = *ct
 
 	rd.ImageCount = 0
-	for fileName, fileContent := range fileIndex {
-		if strings.HasPrefix(fileName, constants.MediaPath) {
-			rd.ImageCount += 1
-		}
-		rd.FileMap.Store(fileName, fileContent)
-	}
 
 	rootRelURI, err := GetRelsURI("")
 	if err != nil {
@@ -74,14 +70,11 @@ func Unpack(content *[]byte) (*docx.RootDoc, error) {
 	rd.RootRels = *rootRelations
 
 	var docPath string
-	var stylesPath string
 
 	for _, relation := range rootRelations.Relationships {
 		switch relation.Type {
 		case constants.OFFICE_DOC_TYPE:
 			docPath = relation.Target
-		case constants.StylesType:
-			stylesPath = relation.Target
 		}
 	}
 
@@ -103,15 +96,6 @@ func Unpack(content *[]byte) (*docx.RootDoc, error) {
 	delete(fileIndex, docPath)
 	rd.Document = docObj
 
-	//Load Styles
-	stylesFile := fileIndex[stylesPath]
-	stylesObj, err := docx.LoadStyles(stylesPath, stylesFile)
-	if err != nil {
-		return nil, err
-	}
-	delete(fileIndex, stylesPath)
-	rd.DocStyles = stylesObj
-
 	// Load Relationship details
 	docRelFile := fileIndex[*docRelURI]
 	docRelations, err := LoadRelationShips(*docRelURI, docRelFile)
@@ -120,11 +104,40 @@ func Unpack(content *[]byte) (*docx.RootDoc, error) {
 	}
 	delete(fileIndex, *rootRelURI)
 	rd.Document.DocRels = *docRelations
+
+	wordDir := path.Dir(docPath)
+
+	rd.DocStyles = &ctypes.Styles{}
 	rID := 0
-	for range docRelations.Relationships {
+	for _, relation := range docRelations.Relationships {
 		rID += 1
+		switch relation.Type {
+		case constants.StylesType:
+			sFileName := relation.Target
+			if sFileName == "" {
+				continue
+			}
+			stylesPath := path.Join(wordDir, sFileName)
+
+			//Load Styles
+			stylesFile := fileIndex[stylesPath]
+			stylesObj, err := docx.LoadStyles(stylesPath, stylesFile)
+			if err != nil {
+				return nil, err
+			}
+			delete(fileIndex, stylesPath)
+			rd.DocStyles = stylesObj
+		}
 	}
+
 	rd.Document.RID = rID
+
+	for fileName, fileContent := range fileIndex {
+		if strings.HasPrefix(fileName, constants.MediaPath) {
+			rd.ImageCount += 1
+		}
+		rd.FileMap.Store(fileName, fileContent)
+	}
 
 	return rd, nil
 }

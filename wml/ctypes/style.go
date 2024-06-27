@@ -7,6 +7,13 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
+var stylesAttrs = map[string]string{
+	"xmlns:w":      "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+	"xmlns:mc":     "http://schemas.openxmlformats.org/markup-compatibility/2006",
+	"xmlns:w14":    "http://schemas.microsoft.com/office/word/2010/wordml",
+	"mc:Ignorable": "w14",
+}
+
 // Style Definitions
 type Styles struct {
 	RelativePath string `xml:"-"`
@@ -25,6 +32,11 @@ type Styles struct {
 
 func (s *Styles) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:styles"
+
+	for key, value := range stylesAttrs {
+		attr := xml.Attr{Name: xml.Name{Local: key}, Value: value}
+		start.Attr = append(start.Attr, attr)
+	}
 
 	if err := e.EncodeToken(start); err != nil {
 		return err
