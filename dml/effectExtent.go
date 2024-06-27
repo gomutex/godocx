@@ -21,7 +21,7 @@ func NewEffectExtent(left, top, right, bottom int64) *EffectExtent {
 	}
 }
 
-func (x *EffectExtent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (x EffectExtent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:effectExtent"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "l"}, Value: strconv.FormatInt(x.LeftEdge, 10)},

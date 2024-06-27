@@ -40,7 +40,7 @@ func NewUnderline(val UnderlineStyle) *Underline {
 
 // MarshalXML implements the xml.Marshaler interface for the Underline type.
 // It encodes the Underline instance into XML using the "w:u" element with a "w:val" attribute.
-func (u *Underline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (u Underline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:u"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(u.Val)})
 	return e.EncodeElement("", start)

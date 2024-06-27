@@ -36,7 +36,7 @@ func NewBreak(breakType BreakType) *Break {
 }
 
 // MarshalXML implements the xml.Marshaler interface.
-func (b *Break) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (b Break) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:br"
 
 	if b.BreakType != nil {

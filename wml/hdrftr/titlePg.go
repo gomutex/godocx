@@ -11,7 +11,7 @@ type TitlePg struct {
 	Val stypes.OnOff `xml:"val,attr,omitempty"`
 }
 
-func (t *TitlePg) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t TitlePg) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:titlePg"
 
 	if t.Val != "" {

@@ -33,7 +33,7 @@ func NewPicGraphic(pic *dmlpic.Pic) *Graphic {
 	}
 }
 
-func (g *Graphic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (g Graphic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:graphic"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
@@ -53,7 +53,7 @@ func (g *Graphic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (gd *GraphicData) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (gd GraphicData) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:graphicData"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "uri"}, Value: constants.DrawingMLPicNS},

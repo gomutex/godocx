@@ -23,7 +23,7 @@ func TextFromString(text string) *Text {
 	return &Text{text: text}
 }
 
-func (t *Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+func (t Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
 	elem := xml.StartElement{Name: xml.Name{Local: "w:t"}}
 

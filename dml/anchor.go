@@ -78,7 +78,7 @@ func NewAnchor() *Anchor {
 	return &Anchor{}
 }
 
-func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (a Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:anchor"
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "behindDoc"}, Value: strconv.Itoa(a.BehindDoc)})

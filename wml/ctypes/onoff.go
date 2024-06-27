@@ -22,6 +22,16 @@ func OnOffFromBool(value bool) *OnOff {
 	}
 }
 
+func OnOffFromStr(value string) (*OnOff, error) {
+	o, err := stypes.OnOffFromStr(value)
+	if err != nil {
+		return nil, err
+	}
+	return &OnOff{
+		Val: &o,
+	}, nil
+}
+
 // Disable sets the value to false and valexists true
 func (n *OnOff) Disable() {
 	o := stypes.OnOffFalse
@@ -30,7 +40,7 @@ func (n *OnOff) Disable() {
 
 // MarshalXML implements the xml.Marshaler interface for the Bold type.
 // It encodes the instance into XML using the "w:XMLName" element with a "w:val" attribute.
-func (n *OnOff) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n OnOff) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if n.Val != nil { // Add val attribute only if the val exists
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(*n.Val)})
 	}

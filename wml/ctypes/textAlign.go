@@ -14,7 +14,7 @@ type TextAlign struct {
 
 // MarshalXML implements the xml.Marshaler interface for the TextAlign type.
 // It encodes the TextAlign to its corresponding XML representation.
-func (s *TextAlign) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s TextAlign) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if s.Val == "" {
 		return errors.New("Invalid TextAlign")
 	}

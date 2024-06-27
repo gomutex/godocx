@@ -7,7 +7,7 @@ type ShapeGuide struct {
 	Formula string `xml:"fmla,attr,omitempty"`
 }
 
-func (s *ShapeGuide) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s ShapeGuide) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:gd"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "name"}, Value: s.Name},

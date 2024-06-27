@@ -15,7 +15,7 @@ func NewHighlight(value string) *Highlight {
 }
 
 // MarshalXML marshals Highlight to XML.
-func (h *Highlight) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (h Highlight) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:highlight"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: h.Val})
 	return e.EncodeElement("", start)

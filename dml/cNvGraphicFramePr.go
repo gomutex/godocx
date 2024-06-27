@@ -8,7 +8,7 @@ type NonVisualGraphicFrameProp struct {
 	GraphicFrameLocks *GraphicFrameLocks `xml:"graphicFrameLocks,omitempty"`
 }
 
-func (n *NonVisualGraphicFrameProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n NonVisualGraphicFrameProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:cNvGraphicFramePr"
 	start.Attr = []xml.Attr{}
 

@@ -13,7 +13,7 @@ type DocProp struct {
 	//TODO: Remaining attrs & child elements
 }
 
-func (d *DocProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (d DocProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:docPr"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "id"}, Value: strconv.FormatUint(d.ID, 10)},

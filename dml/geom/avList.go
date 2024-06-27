@@ -9,7 +9,7 @@ type AdjustValues struct {
 	ShapeGuides []ShapeGuide `xml:"gd,omitempty"`
 }
 
-func (a *AdjustValues) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+func (a AdjustValues) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "a:avLst"
 
 	err = e.EncodeToken(start)

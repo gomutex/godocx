@@ -13,7 +13,7 @@ type TrackChangeNum struct {
 	Original *string `xml:"original,attr,omitempty"`
 }
 
-func (t *TrackChangeNum) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t TrackChangeNum) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "w:id"}, Value: strconv.Itoa(t.ID)},
 		{Name: xml.Name{Local: "w:author"}, Value: t.Author},

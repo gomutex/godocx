@@ -25,7 +25,7 @@ func DefaultJustification() *Justification {
 	return &Justification{Val: stypes.JustificationCenter}
 }
 
-func (j *Justification) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (j Justification) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(j.Val)})
 	return e.EncodeElement("", start)
 }

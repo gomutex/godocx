@@ -22,7 +22,7 @@ func (i *Italic) Disable() *Italic {
 
 // MarshalXML implements the xml.Marshaler interface for the Italic type.
 // It encodes the Italic instance into XML using the "w:i" element with a "w:val" attribute.
-func (i *Italic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (i Italic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:i"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: map[bool]string{true: "true", false: "false"}[i.Val]})
 	return e.EncodeElement("", start)

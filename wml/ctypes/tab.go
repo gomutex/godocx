@@ -20,7 +20,7 @@ type Tab struct {
 	LeaderChar *stypes.CustLeadChar `xml:"leader,attr,omitempty"`
 }
 
-func (t *Tab) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t Tab) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:tab"
 	start.Attr = []xml.Attr{}
 

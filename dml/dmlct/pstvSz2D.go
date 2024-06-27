@@ -20,7 +20,7 @@ func NewPostvSz2D(width units.Emu, height units.Emu) *PSize2D {
 	}
 }
 
-func (p *PSize2D) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p PSize2D) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "cx"}, Value: strconv.FormatUint(p.Width, 10)})
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "cy"}, Value: strconv.FormatUint(p.Height, 10)})

@@ -33,7 +33,7 @@ func NewBlipFill(rID string) BlipFill {
 	}
 }
 
-func (b *BlipFill) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (b BlipFill) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:blipFill"
 
 	if b.DPI != nil {
@@ -76,7 +76,7 @@ type FillModeProps struct {
 	Tile    *shapes.Tile    `xml:"tile,omitempty"`
 }
 
-func (f *FillModeProps) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (f FillModeProps) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if f.Stretch != nil {
 		return f.Stretch.MarshalXML(e, xml.StartElement{})

@@ -12,7 +12,7 @@ type HeaderReference struct {
 	ID   string            `xml:"id,attr"`   //Relationship to Part
 }
 
-func (h *HeaderReference) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (h HeaderReference) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:headerReference"
 
 	if h.Type != "" {

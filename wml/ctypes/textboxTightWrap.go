@@ -13,7 +13,7 @@ type TextboxTightWrap struct {
 
 // MarshalXML implements the xml.Marshaler interface for the TextboxTightWrap type.
 // It encodes the TextboxTightWrap to its corresponding XML representation.
-func (s *TextboxTightWrap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s TextboxTightWrap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:textboxTightWrap"
 	if s.Val != "" {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(s.Val)})

@@ -19,7 +19,7 @@ type Shading struct {
 	ThemeFillShade *string            `xml:"themeFillShade,attr,omitempty"`
 }
 
-func (s *Shading) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s Shading) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:shd"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(s.Val)})
 

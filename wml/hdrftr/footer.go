@@ -12,7 +12,7 @@ type FooterReference struct {
 	ID   string            `xml:"id,attr"`   //Relationship to Part
 }
 
-func (h *FooterReference) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (h FooterReference) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:footerReference"
 
 	if h.Type != "" {

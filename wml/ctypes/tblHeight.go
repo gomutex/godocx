@@ -23,7 +23,7 @@ func NewTableRowHeight(val int, hRule stypes.HeightRule) *TableRowHeight {
 }
 
 // MarshalXML marshals TableRowHeight to XML.
-func (h *TableRowHeight) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (h TableRowHeight) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if h.Val != nil {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: strconv.Itoa(*h.Val)})
 	}

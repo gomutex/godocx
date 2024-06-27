@@ -10,7 +10,7 @@ type Stretch struct {
 	FillRect *dmlct.RelativeRect `xml:"fillRect,omitempty"`
 }
 
-func (s *Stretch) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s Stretch) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:stretch"
 
 	err := e.EncodeToken(start)

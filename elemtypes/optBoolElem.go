@@ -24,7 +24,7 @@ func (n *OptBoolElem) Disable() {
 
 // MarshalXML implements the xml.Marshaler interface for the Bold type.
 // It encodes the instance into XML using the "w:XMLName" element with a "w:val" attribute.
-func (n *OptBoolElem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n OptBoolElem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if n.Val.Valid { // Add val attribute only if the val exists
 		if n.Val.Bool {

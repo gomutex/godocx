@@ -22,7 +22,7 @@ type WrapType struct {
 	Bottom *WrapTopBtm `xml:"wrapTopAndBottom,omitempty"`
 }
 
-func (w *WrapType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (w WrapType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if w.None != nil {
 		return w.None.MarshalXML(e, start)
 	} else if w.Square != nil {
@@ -71,7 +71,7 @@ type WrapSquare struct {
 	EffectExtent *EffectExtent `xml:"effectExtent,omitempty"`
 }
 
-func (ws *WrapSquare) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (ws WrapSquare) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:wrapSquare"
 
 	start.Attr = []xml.Attr{
@@ -111,7 +111,7 @@ type WrapPolygon struct {
 	Edited *bool           `xml:"edited,attr,omitempty"`
 }
 
-func (wp *WrapPolygon) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (wp WrapPolygon) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:wrapPolygon"
 
 	start.Attr = []xml.Attr{}
@@ -163,7 +163,7 @@ type WrapTight struct {
 	DistR *uint `xml:"distR,attr,omitempty"`
 }
 
-func (w *WrapTight) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (w WrapTight) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:wrapTight"
 
 	start.Attr = []xml.Attr{
@@ -206,7 +206,7 @@ type WrapThrough struct {
 	DistR *uint `xml:"distR,attr,omitempty"`
 }
 
-func (w *WrapThrough) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (w WrapThrough) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:wrapThrough"
 
 	start.Attr = []xml.Attr{
@@ -246,7 +246,7 @@ type WrapTopBtm struct {
 	EffectExtent *EffectExtent `xml:"effectExtent,omitempty"`
 }
 
-func (w *WrapTopBtm) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (w WrapTopBtm) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:wrapTopAndBottom"
 
 	start.Attr = []xml.Attr{}

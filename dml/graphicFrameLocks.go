@@ -12,7 +12,7 @@ type GraphicFrameLocks struct {
 	NoChangeAspect types.OptBool
 }
 
-func (g *GraphicFrameLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (g GraphicFrameLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:graphicFrameLocks"
 
 	start.Attr = []xml.Attr{

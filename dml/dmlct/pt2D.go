@@ -18,7 +18,7 @@ func NewPoint2D(x, y uint64) Point2D {
 	}
 }
 
-func (p *Point2D) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p Point2D) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "x"}, Value: strconv.FormatUint(p.XAxis, 10)})
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "y"}, Value: strconv.FormatUint(p.YAxis, 10)})

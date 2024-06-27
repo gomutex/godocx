@@ -17,7 +17,7 @@ type Border struct {
 	Frame      *stypes.OnOff      `xml:"frame,attr,omitempty"`
 }
 
-func (t *Border) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t Border) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(t.Val)})
 
 	if t.Color != nil {

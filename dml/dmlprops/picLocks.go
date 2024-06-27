@@ -27,7 +27,7 @@ func DefaultPicLocks() *PicLocks {
 		NoChangeArrowheads: types.NewOptBool(true),
 	}
 }
-func (p *PicLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p PicLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:picLocks"
 	start.Attr = []xml.Attr{}
 

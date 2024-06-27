@@ -17,7 +17,7 @@ func NewColor(value string) *Color {
 // MarshalXML implements the xml.Marshaler interface for the Color type.
 //
 // It encodes the Color instance into XML using the "w:color" element with a "w:val" attribute.
-func (c *Color) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (c Color) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:color"
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: c.Val})
 	return e.EncodeElement("", start)

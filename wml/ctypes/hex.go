@@ -23,7 +23,7 @@ func NewLongHexNum(value string) (*LongHexNum, error) {
 }
 
 // MarshalXML implements the xml.Marshaler interface.
-func (s *LongHexNum) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (s LongHexNum) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	// Validate the LongHexNum value before marshaling
 	if _, err := stypes.LongHexNumFromStr(string(s.Val)); err != nil {
 		return err

@@ -63,7 +63,7 @@ func NewInline(extent dmlct.PSize2D, docProp DocProp, graphic Graphic) Inline {
 	}
 }
 
-func (i *Inline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (i Inline) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:inline"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "xmlns:a"}, Value: constants.DrawingMLMainNS},
