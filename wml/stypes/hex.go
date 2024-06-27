@@ -16,10 +16,10 @@ func LongHexNumFromStr(s string) (LongHexNum, error) {
 		return LongHexNum(s), nil
 	}
 
-	// Ensure the string is exactly 4 characters long
-	if len(s) != 4 {
-		return "", errors.New("invalid LongHexNumber length")
-	}
+	// // Ensure the string is exactly 4 characters long
+	// if len(s) != 4 {
+	// 	return "", errors.New("invalid LongHexNumber length")
+	// }
 
 	// Ensure the string contains valid hexadecimal characters
 	if _, err := hex.DecodeString(s); err != nil {
