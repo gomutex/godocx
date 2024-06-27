@@ -7,7 +7,7 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
-var stylesAttrs = map[string]string{
+var defaultStyleNSAttrs = map[string]string{
 	"xmlns:w":      "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
 	"xmlns:mc":     "http://schemas.openxmlformats.org/markup-compatibility/2006",
 	"xmlns:w14":    "http://schemas.microsoft.com/office/word/2010/wordml",
@@ -17,6 +17,7 @@ var stylesAttrs = map[string]string{
 // Style Definitions
 type Styles struct {
 	RelativePath string `xml:"-"`
+	Attr         []xml.Attr
 
 	// Sequence
 
@@ -33,9 +34,13 @@ type Styles struct {
 func (s *Styles) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:styles"
 
-	for key, value := range stylesAttrs {
-		attr := xml.Attr{Name: xml.Name{Local: key}, Value: value}
-		start.Attr = append(start.Attr, attr)
+	if len(s.Attr) == 0 {
+		for key, value := range defaultStyleNSAttrs {
+			attr := xml.Attr{Name: xml.Name{Local: key}, Value: value}
+			start.Attr = append(start.Attr, attr)
+		}
+	} else {
+		start.Attr = s.Attr
 	}
 
 	if err := e.EncodeToken(start); err != nil {
@@ -64,6 +69,58 @@ func (s *Styles) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return e.EncodeToken(start.End())
+}
+
+func (s *Styles) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+	s.Attr = make([]xml.Attr, len(start.Attr))
+	for _, attr := range start.Attr {
+		// Broken Go xml - Handling the Docx namespace
+		s.Attr = append(s.Attr, xml.Attr{
+			Name: xml.Name{
+				Local: fmt.Sprintf("%s:%s", attr.Name.Space, attr.Name.Local),
+			},
+			Value: attr.Value,
+		})
+	}
+loop:
+	for {
+		currentToken, err := d.Token()
+		if err != nil {
+			return err
+		}
+
+		switch elem := currentToken.(type) {
+		case xml.StartElement:
+			switch elem.Name.Local {
+			case "docDefaults":
+				dd := DocDefault{}
+				if err = d.DecodeElement(&dd, &elem); err != nil {
+					return err
+				}
+				s.DocDefaults = &dd
+			case "latentStyles":
+				ls := LatentStyle{}
+				if err = d.DecodeElement(&ls, &elem); err != nil {
+					return err
+				}
+				s.LatentStyle = &ls
+			case "style":
+				style := Style{}
+				if err = d.DecodeElement(&style, &elem); err != nil {
+					return err
+				}
+				s.StyleList = append(s.StyleList, style)
+			default:
+				if err = d.Skip(); err != nil {
+					return err
+				}
+			}
+		case xml.EndElement:
+			break loop
+		}
+	}
+
+	return nil
 }
 
 type Style struct {
@@ -133,7 +190,7 @@ type Style struct {
 	TableCellProp *CellProperty `xml:"tcPr,omitempty"`
 
 	//22.Style Conditional Table Formatting Properties
-	TableStylePr *TableStyleProp `xml:"tblStylePr,omitempty"`
+	TableStylePr []TableStyleProp `xml:",any"`
 
 	// Attributes
 
@@ -320,8 +377,8 @@ func (s *Style) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	// 22. TableStylePr: Style Conditional Table Formatting Properties
-	if s.TableStylePr != nil {
-		if err := s.TableStylePr.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tblStylePr"}}); err != nil {
+	for _, tsPr := range s.TableStylePr {
+		if err := tsPr.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tblStylePr"}}); err != nil {
 			return fmt.Errorf("Style TableStylePr: %w", err)
 		}
 	}

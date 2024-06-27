@@ -64,7 +64,7 @@ type RunProperty struct {
 	WebHidden *OnOff `xml:"webHidden,omitempty"`
 
 	//19.Run Content Color
-	Color *formatting.Color `xml:"color,omitempty"`
+	Color *Color `xml:"color,omitempty"`
 
 	//20. Character Spacing Adjustment
 	Spacing *DecimalNum `xml:"spacing,omitempty"`

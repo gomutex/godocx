@@ -52,7 +52,7 @@ func (r *Run) getProp() *RunProperty {
 // Returns:
 //   - *Run: The modified Run instance with the updated color.
 func (r *Run) Color(colorCode string) *Run {
-	r.getProp().Color = formatting.NewColor(colorCode)
+	r.getProp().Color = NewColor(colorCode)
 	return r
 }
 

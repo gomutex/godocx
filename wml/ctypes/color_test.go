@@ -1,4 +1,4 @@
-package formatting
+package ctypes
 
 import (
 	"encoding/xml"
