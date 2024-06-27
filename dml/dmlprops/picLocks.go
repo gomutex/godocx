@@ -3,28 +3,28 @@ package dmlprops
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 // Picture Locks
 type PicLocks struct {
-	DisallowShadowGrouping types.OptBool `xml:"noGrp,attr,omitempty"`
-	NoSelect               types.OptBool `xml:"noSelect,attr,omitempty"`
-	NoRot                  types.OptBool `xml:"noRot,attr,omitempty"`
-	NoChangeAspect         types.OptBool `xml:"noChangeAspect,attr,omitempty"`
-	NoMove                 types.OptBool `xml:"noMove,attr,omitempty"`
-	NoResize               types.OptBool `xml:"noResize,attr,omitempty"`
-	NoEditPoints           types.OptBool `xml:"noEditPoints,attr,omitempty"`
-	NoAdjustHandles        types.OptBool `xml:"noAdjustHandles,attr,omitempty"`
-	NoChangeArrowheads     types.OptBool `xml:"noChangeArrowheads,attr,omitempty"`
-	NoChangeShapeType      types.OptBool `xml:"noChangeShapeType,attr,omitempty"`
-	NoCrop                 types.OptBool `xml:"noCrop,attr,omitempty"`
+	DisallowShadowGrouping dmlst.OptBool `xml:"noGrp,attr,omitempty"`
+	NoSelect               dmlst.OptBool `xml:"noSelect,attr,omitempty"`
+	NoRot                  dmlst.OptBool `xml:"noRot,attr,omitempty"`
+	NoChangeAspect         dmlst.OptBool `xml:"noChangeAspect,attr,omitempty"`
+	NoMove                 dmlst.OptBool `xml:"noMove,attr,omitempty"`
+	NoResize               dmlst.OptBool `xml:"noResize,attr,omitempty"`
+	NoEditPoints           dmlst.OptBool `xml:"noEditPoints,attr,omitempty"`
+	NoAdjustHandles        dmlst.OptBool `xml:"noAdjustHandles,attr,omitempty"`
+	NoChangeArrowheads     dmlst.OptBool `xml:"noChangeArrowheads,attr,omitempty"`
+	NoChangeShapeType      dmlst.OptBool `xml:"noChangeShapeType,attr,omitempty"`
+	NoCrop                 dmlst.OptBool `xml:"noCrop,attr,omitempty"`
 }
 
 func DefaultPicLocks() *PicLocks {
 	return &PicLocks{
-		NoChangeAspect:     types.NewOptBool(true),
-		NoChangeArrowheads: types.NewOptBool(true),
+		NoChangeAspect:     dmlst.NewOptBool(true),
+		NoChangeArrowheads: dmlst.NewOptBool(true),
 	}
 }
 func (p PicLocks) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

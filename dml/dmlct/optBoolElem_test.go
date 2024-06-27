@@ -1,11 +1,11 @@
-package elemtypes
+package dmlct
 
 import (
 	"encoding/xml"
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestOptBoolElem_MarshalXML(t *testing.T) {
@@ -16,17 +16,17 @@ func TestOptBoolElem_MarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "Valid true",
-			input:    OptBoolElem{Val: types.NewOptBool(true)},
+			input:    OptBoolElem{Val: dmlst.NewOptBool(true)},
 			expected: `<w:b w:val="true"></w:b>`,
 		},
 		{
 			name:     "Valid false",
-			input:    OptBoolElem{Val: types.NewOptBool(false)},
+			input:    OptBoolElem{Val: dmlst.NewOptBool(false)},
 			expected: `<w:b w:val="false"></w:b>`,
 		},
 		{
 			name:     "Invalid",
-			input:    OptBoolElem{Val: types.OptBool{Valid: false}},
+			input:    OptBoolElem{Val: dmlst.OptBool{Valid: false}},
 			expected: `<w:b></w:b>`,
 		},
 	}
@@ -61,17 +61,17 @@ func TestOptBoolElem_UnmarshalXML(t *testing.T) {
 		{
 			name:     "Valid true",
 			inputXML: `<w:b w:val="true"></w:b>`,
-			expected: OptBoolElem{Val: types.NewOptBool(true)},
+			expected: OptBoolElem{Val: dmlst.NewOptBool(true)},
 		},
 		{
 			name:     "Valid false",
 			inputXML: `<w:b w:val="false"></w:b>`,
-			expected: OptBoolElem{Val: types.NewOptBool(false)},
+			expected: OptBoolElem{Val: dmlst.NewOptBool(false)},
 		},
 		{
 			name:     "Invalid",
 			inputXML: `<w:b></w:b>>`,
-			expected: OptBoolElem{Val: types.OptBool{Valid: false}},
+			expected: OptBoolElem{Val: dmlst.OptBool{Valid: false}},
 		},
 	}
 

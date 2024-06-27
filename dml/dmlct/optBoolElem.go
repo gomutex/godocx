@@ -1,25 +1,25 @@
-package elemtypes
+package dmlct
 
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 // Optional Bool Element: Helper element that only has one attribute which is optional
 type OptBoolElem struct {
-	Val types.OptBool
+	Val dmlst.OptBool
 }
 
 func NewOptBoolElem(value bool) *OptBoolElem {
 	return &OptBoolElem{
-		Val: types.NewOptBool(value),
+		Val: dmlst.NewOptBool(value),
 	}
 }
 
 // Disable sets the value to false and valexists true
 func (n *OptBoolElem) Disable() {
-	n.Val = types.NewOptBool(false)
+	n.Val = dmlst.NewOptBool(false)
 }
 
 // MarshalXML implements the xml.Marshaler interface for the Bold type.
@@ -50,7 +50,7 @@ func (n *OptBoolElem) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 	for _, a := range start.Attr {
 		if a.Name.Local == "val" {
 			// If value is "true", then set it to true
-			n.Val = types.NewOptBool(a.Value == "true")
+			n.Val = dmlst.NewOptBool(a.Value == "true")
 			break
 		}
 	}

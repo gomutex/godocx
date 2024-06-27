@@ -1,4 +1,4 @@
-package types
+package dmlst
 
 import (
 	"encoding/xml"

@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"testing"
 
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestMarshalPicLocks(t *testing.T) {
@@ -14,17 +14,17 @@ func TestMarshalPicLocks(t *testing.T) {
 	}{
 		{
 			picLocks: &PicLocks{
-				DisallowShadowGrouping: types.NewOptBool(true),
-				NoSelect:               types.NewOptBool(false),
-				NoRot:                  types.NewOptBool(true),
-				NoChangeAspect:         types.NewOptBool(false),
-				NoMove:                 types.NewOptBool(true),
-				NoResize:               types.NewOptBool(true),
-				NoEditPoints:           types.NewOptBool(false),
-				NoAdjustHandles:        types.NewOptBool(true),
-				NoChangeArrowheads:     types.NewOptBool(false),
-				NoChangeShapeType:      types.NewOptBool(true),
-				NoCrop:                 types.NewOptBool(false),
+				DisallowShadowGrouping: dmlst.NewOptBool(true),
+				NoSelect:               dmlst.NewOptBool(false),
+				NoRot:                  dmlst.NewOptBool(true),
+				NoChangeAspect:         dmlst.NewOptBool(false),
+				NoMove:                 dmlst.NewOptBool(true),
+				NoResize:               dmlst.NewOptBool(true),
+				NoEditPoints:           dmlst.NewOptBool(false),
+				NoAdjustHandles:        dmlst.NewOptBool(true),
+				NoChangeArrowheads:     dmlst.NewOptBool(false),
+				NoChangeShapeType:      dmlst.NewOptBool(true),
+				NoCrop:                 dmlst.NewOptBool(false),
 			},
 			expectedXML: `<a:picLocks noGrp="1" noSelect="0" noRot="1" noChangeAspect="0" noMove="1" noResize="1" noEditPoints="0" noAdjustHandles="1" noChangeArrowheads="0" noChangeShapeType="1" noCrop="0"></a:picLocks>`,
 		},
@@ -56,17 +56,17 @@ func TestUnmarshalPicLocks(t *testing.T) {
 		{
 			inputXML: `<a:picLocks noGrp="1" noSelect="0" noRot="1" noChangeAspect="0" noMove="1" noResize="1" noEditPoints="0" noAdjustHandles="1" noChangeArrowheads="0" noChangeShapeType="1" noCrop="0"></a:picLocks>`,
 			expectedLocks: PicLocks{
-				DisallowShadowGrouping: types.NewOptBool(true),
-				NoSelect:               types.NewOptBool(false),
-				NoRot:                  types.NewOptBool(true),
-				NoChangeAspect:         types.NewOptBool(false),
-				NoMove:                 types.NewOptBool(true),
-				NoResize:               types.NewOptBool(true),
-				NoEditPoints:           types.NewOptBool(false),
-				NoAdjustHandles:        types.NewOptBool(true),
-				NoChangeArrowheads:     types.NewOptBool(false),
-				NoChangeShapeType:      types.NewOptBool(true),
-				NoCrop:                 types.NewOptBool(false),
+				DisallowShadowGrouping: dmlst.NewOptBool(true),
+				NoSelect:               dmlst.NewOptBool(false),
+				NoRot:                  dmlst.NewOptBool(true),
+				NoChangeAspect:         dmlst.NewOptBool(false),
+				NoMove:                 dmlst.NewOptBool(true),
+				NoResize:               dmlst.NewOptBool(true),
+				NoEditPoints:           dmlst.NewOptBool(false),
+				NoAdjustHandles:        dmlst.NewOptBool(true),
+				NoChangeArrowheads:     dmlst.NewOptBool(false),
+				NoChangeShapeType:      dmlst.NewOptBool(true),
+				NoCrop:                 dmlst.NewOptBool(false),
 			},
 		},
 		{

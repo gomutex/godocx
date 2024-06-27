@@ -6,7 +6,6 @@ import (
 
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlst"
-	"github.com/gomutex/godocx/types"
 )
 
 func TestMarshalDrawing(t *testing.T) {
@@ -42,7 +41,7 @@ func TestMarshalDrawing(t *testing.T) {
 						},
 						CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 							GraphicFrameLocks: &GraphicFrameLocks{
-								NoChangeAspect: types.NewOptBool(true),
+								NoChangeAspect: dmlst.NewOptBool(true),
 							},
 						},
 						Graphic: *DefaultGraphic(),
@@ -137,7 +136,7 @@ func TestUnmarshalDrawing(t *testing.T) {
 						},
 						CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 							GraphicFrameLocks: &GraphicFrameLocks{
-								NoChangeAspect: types.NewOptBool(true),
+								NoChangeAspect: dmlst.NewOptBool(true),
 							},
 						},
 						Graphic: *DefaultGraphic(),

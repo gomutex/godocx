@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestMarshalNonVisualGraphicFrameProp(t *testing.T) {
@@ -16,7 +16,7 @@ func TestMarshalNonVisualGraphicFrameProp(t *testing.T) {
 		{
 			prop: &NonVisualGraphicFrameProp{
 				GraphicFrameLocks: &GraphicFrameLocks{
-					NoChangeAspect: types.NewOptBool(true),
+					NoChangeAspect: dmlst.NewOptBool(true),
 				},
 			},
 			expectedXML: `<wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr>`,
@@ -50,7 +50,7 @@ func TestUnmarshalNonVisualGraphicFrameProp(t *testing.T) {
 			inputXML: `<wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"></a:graphicFrameLocks></wp:cNvGraphicFramePr>`,
 			expected: NonVisualGraphicFrameProp{
 				GraphicFrameLocks: &GraphicFrameLocks{
-					NoChangeAspect: types.NewOptBool(true),
+					NoChangeAspect: dmlst.NewOptBool(true),
 				},
 			},
 		},

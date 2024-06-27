@@ -7,7 +7,7 @@ import (
 
 	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/dml/dmlct"
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 // This element specifies that the DrawingML object located at this position in the document is an inline object. Within a WordprocessingML document, drawing objects can exist in two states:
@@ -57,7 +57,7 @@ func NewInline(extent dmlct.PSize2D, docProp DocProp, graphic Graphic) Inline {
 		Graphic: graphic,
 		CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 			GraphicFrameLocks: &GraphicFrameLocks{
-				NoChangeAspect: types.NewOptBool(true),
+				NoChangeAspect: dmlst.NewOptBool(true),
 			},
 		},
 	}
