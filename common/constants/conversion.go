@@ -20,6 +20,48 @@ func TranslateNamespace(content []byte) []byte {
 	return content
 }
 
+var NSToLocal = map[string]string{
+	// Document Properties
+	"http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes": "vt",
+
+	// DrawingML
+	"http://schemas.openxmlformats.org/drawingml/2006/main":    "a",
+	"http://schemas.openxmlformats.org/drawingml/2006/chart":   "c",
+	"http://schemas.openxmlformats.org/drawingml/2006/diagram": "dgm",
+
+	// DrawingML Compatibility
+	"http://schemas.openxmlformats.org/drawingml/2006/compatibility": "compat",
+
+	// DrawingML Picture
+	"http://schemas.openxmlformats.org/drawingml/2006/picture": "pic",
+
+	// Microsoft Drawing
+	"http://schemas.microsoft.com/office/drawing/2010/main":          "a14",
+	"http://schemas.microsoft.com/office/drawing/2010/compatibility": "compat14",
+	"http://schemas.microsoft.com/office/drawing/2016/SVG/main":      "asvg",
+
+	// Microsoft Office Relationships
+	"http://schemas.openxmlformats.org/officeDocument/2006/relationships": "r",
+	"http://schemas.microsoft.com/office/2006/relationships":              "r2006",
+	"http://schemas.microsoft.com/office/2011/relationships":              "r2011",
+
+	// Microsoft Office Compatibility Relationships
+	"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slicer": "sle",
+	"http://schemas.microsoft.com/office/drawing/2010/relationships":             "r14",
+
+	// Markup Compatibility
+	"http://schemas.openxmlformats.org/markup-compatibility/2006": "mc",
+
+	// Theme
+	"http://schemas.openxmlformats.org/drawingml/2006/main/theme": "thm",
+
+	// Word Processing
+	"http://schemas.openxmlformats.org/wordprocessingml/2006/main": "w",
+
+	// Word Processing Styles
+	"http://schemas.openxmlformats.org/officeDocument/2006/styles": "s",
+}
+
 // replaceBytes replace source bytes with given target.
 func replaceBytes(s, source, target []byte, n int) []byte {
 	if n == 0 {
