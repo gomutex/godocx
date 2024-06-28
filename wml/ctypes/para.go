@@ -145,8 +145,8 @@ loop:
 func (p *Paragraph) AddText(text string) *Run {
 	t := TextFromString(text)
 
-	runChildren := []*RunChild{}
-	runChildren = append(runChildren, &RunChild{
+	runChildren := []RunChild{}
+	runChildren = append(runChildren, RunChild{
 		Text: t,
 	})
 	run := &Run{

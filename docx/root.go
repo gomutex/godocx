@@ -37,8 +37,10 @@ func NewRootDoc() *RootDoc {
 // Returns:
 //   - doc: The Document instance containing the decoded main document structure.
 //   - err: An error, if any occurred during the decoding process.
-func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
-	doc := Document{}
+func LoadDocXml(rd *RootDoc, fileName string, fileBytes []byte) (*Document, error) {
+	doc := Document{
+		Root: rd,
+	}
 	err := xml.Unmarshal(fileBytes, &doc)
 	if err != nil {
 		return nil, err
@@ -46,22 +48,6 @@ func LoadDocXml(fileName string, fileBytes []byte) (*Document, error) {
 
 	doc.relativePath = fileName
 	return &doc, nil
-}
-
-// AddEmptyParagraph adds a new empty paragraph to the document.
-// It returns the created Paragraph instance.
-//
-// Returns:
-//   - p: The created Paragraph instance.
-func (rd *RootDoc) AddEmptyParagraph() *Paragraph {
-	p := &Paragraph{}
-
-	bodyElem := DocumentChild{
-		Para: p,
-	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
-
-	return p
 }
 
 // Load styles.xml into Styles struct

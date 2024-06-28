@@ -6,6 +6,10 @@ import (
 )
 
 func (rd *RootDoc) GetStyleByID(styleID string, styleType stypes.StyleType) *ctypes.Style {
+	if rd.DocStyles == nil {
+		return nil
+	}
+
 	for _, style := range rd.DocStyles.StyleList {
 		if style.ID == nil || style.Type == nil {
 			continue

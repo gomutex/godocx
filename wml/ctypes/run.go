@@ -21,7 +21,7 @@ type Run struct {
 	Property *RunProperty
 
 	// 2. Choice - Run Inner content
-	Children []*RunChild
+	Children []RunChild
 }
 
 type RunChild struct {
@@ -325,7 +325,7 @@ loop:
 					return err
 				}
 
-				r.Children = append(r.Children, &RunChild{Text: txt})
+				r.Children = append(r.Children, RunChild{Text: txt})
 			case "rPr":
 				r.Property = &RunProperty{}
 				if err = d.DecodeElement(r.Property, &elem); err != nil {
@@ -337,7 +337,7 @@ loop:
 					return err
 				}
 
-				r.Children = append(r.Children, &RunChild{
+				r.Children = append(r.Children, RunChild{
 					Tab: tabElem,
 				})
 			case "br":
@@ -346,7 +346,7 @@ loop:
 					return err
 				}
 
-				r.Children = append(r.Children, &RunChild{
+				r.Children = append(r.Children, RunChild{
 					Break: &br,
 				})
 			case "drawing":
@@ -355,7 +355,7 @@ loop:
 					return err
 				}
 
-				r.Children = append(r.Children, &RunChild{
+				r.Children = append(r.Children, RunChild{
 					Drawing: drawingElem,
 				})
 			default:
@@ -460,4 +460,22 @@ func (r *Run) MarshalChild(e *xml.Encoder) error {
 		}
 	}
 	return nil
+}
+
+// Add a break element of `stypes.BreakType` to this run.
+func (r *Run) AddBreak(breakType *stypes.BreakType) {
+	// clear := stypes.BreakClearNone
+	// switch breakType{
+	// case stypes.BreakType:
+
+	// }
+	br := Break{}
+
+	if breakType != nil {
+		br.BreakType = breakType
+	}
+
+	r.Children = append(r.Children, RunChild{
+		Break: &br,
+	})
 }
