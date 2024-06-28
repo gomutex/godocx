@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
@@ -73,11 +74,23 @@ func (s *Styles) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 func (s *Styles) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
 	s.Attr = make([]xml.Attr, len(start.Attr))
+
 	for _, attr := range start.Attr {
 		// Broken Go xml - Handling the Docx namespace
+		//TODO: Centralize, generic function for document also
+		ns := attr.Name.Space
+		if ns != "xmlns" {
+			// Convert if it is namespace with http:// not the xmlns attribute
+			local, ok := constants.NSToLocal[ns]
+			ns = local
+			if !ok {
+				continue
+			}
+		}
+
 		s.Attr = append(s.Attr, xml.Attr{
 			Name: xml.Name{
-				Local: fmt.Sprintf("%s:%s", attr.Name.Space, attr.Name.Local),
+				Local: fmt.Sprintf("%s:%s", ns, attr.Name.Local),
 			},
 			Value: attr.Value,
 		})
