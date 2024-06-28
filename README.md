@@ -37,7 +37,7 @@ import (
 
 func main() {
 		// Open an existing DOCX document
-	// docx, err := godocx.OpenDocument("./testdata/test.docx")
+	// document, err := godocx.OpenDocument("./testdata/test.docx")
 
 	// Create New Document
 	document, err := godocx.NewDocument()

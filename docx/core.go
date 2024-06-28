@@ -1,5 +1,3 @@
-// Package oxml provides utilities for working with Office Open XML (OOXML) documents,
-// including functions related to encoding and decoding XML elements.
 package docx
 
 import (

@@ -110,7 +110,15 @@ func (d *Document) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) (e
 
 }
 
-// Return newly Paragraph object containing only a page break.
+// AddPageBreak adds a page break to the document by inserting a paragraph containing only a page break.
+//
+// Returns:
+//   - *Paragraph: A pointer to the newly created Paragraph object containing the page break.
+//
+// Example:
+//
+//	document := godocx.NewDocument()
+//	para := document.AddPageBreak()
 func (rd *RootDoc) AddPageBreak() *Paragraph {
 	p := rd.AddEmptyParagraph()
 	p.AddRun().AddBreak(internal.ToPtr(stypes.BreakTypePage))

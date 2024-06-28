@@ -12,26 +12,22 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
+// Paragraph represents a paragraph in a DOCX document.
 type Paragraph struct {
-	// Reverse inheriting the Rootdoc into Paragrah to access other elements
-	Root *RootDoc
-
-	// Paragraph Complex Type
-	CT ctypes.Paragraph
+	root *RootDoc         // root is a reference to the root document.
+	ct   ctypes.Paragraph // ct holds the underlying Paragraph Complex Type.
 }
 
-func NewParagraph(root *RootDoc) *Paragraph {
+// newParagraph creates and initializes a new Paragraph instance.
+func newParagraph(root *RootDoc) *Paragraph {
 	return &Paragraph{
-		Root: root,
+		root: root,
 	}
 }
 
-func NewParagraphChild() *ctypes.ParagraphChild {
-	return &ctypes.ParagraphChild{}
-}
-
-func DefaultParagraphChild() *ctypes.ParagraphChild {
-	return &ctypes.ParagraphChild{}
+// GetCT returns a pointer to the underlying Paragraph Complex Type.
+func (p *Paragraph) GetCT() *ctypes.Paragraph {
+	return &p.ct
 }
 
 // AddParagraph adds a new paragraph with the specified text to the document.
@@ -43,7 +39,7 @@ func DefaultParagraphChild() *ctypes.ParagraphChild {
 // Returns:
 //   - p: The created Paragraph instance.
 func (rd *RootDoc) AddParagraph(text string) *Paragraph {
-	p := NewParagraph(rd)
+	p := newParagraph(rd)
 	p.AddText(text)
 	bodyElem := DocumentChild{
 		Para: p,
@@ -58,59 +54,62 @@ func (rd *RootDoc) AddParagraph(text string) *Paragraph {
 // Parameters:
 //   - value: A string representing the style value. It can be any valid style defined in the WordprocessingML specification.
 //
-// Returns:
-//   - *Paragraph: A pointer to the modified Paragraph instance with the updated style.
-//
 // Example:
 //
-//	p1 := docx.AddParagraph("Example para")
+//	p1 := document.AddParagraph("Example para")
 //	paragraph.Style("List Number")
 func (p *Paragraph) Style(value string) {
-	if p.CT.Property == nil {
-		p.CT.Property = ctypes.DefaultParaProperty()
+	if p.ct.Property == nil {
+		p.ct.Property = ctypes.DefaultParaProperty()
 	}
-	p.CT.Property.Style = ctypes.NewParagraphStyle(value)
+	p.ct.Property.Style = ctypes.NewParagraphStyle(value)
 }
 
 // Justification sets the paragraph justification type.
 //
 // Parameters:
-//   - value: A string representing the justification value. It can be one of the following:
-//     - "left" for left justification
-//     - "center" for center justification
-//     - "right" for right justification
-//     - "both" for justification with equal spacing on both sides
-//     - "distribute": Paragraph characters are distributed to fill the entire width of paragraph
+//   - value: A value of type stypes.Justification representing the justification type.
+//     It can be one of the Justification type values defined in the stypes package.
 //
-// Returns:
-//   - *Paragraph: A pointer to the modified Paragraph instance with the updated justification.
-
-func (p *Paragraph) Justification(value string) error {
-	if p.CT.Property == nil {
-		p.CT.Property = ctypes.DefaultParaProperty()
+// Example:
+//
+//	p1 := document.AddParagraph("Example justified para")
+//	p1.Justification(stypes.JustificationCenter) // Center justification
+func (p *Paragraph) Justification(value stypes.Justification) {
+	if p.ct.Property == nil {
+		p.ct.Property = ctypes.DefaultParaProperty()
 	}
 
-	val, err := stypes.JustificationFromStr(value)
-	if err != nil {
-		return err
-	}
-
-	p.CT.Property.Justification = ctypes.NewGenSingleStrVal(val)
-
-	return nil
+	p.ct.Property.Justification = ctypes.NewGenSingleStrVal(value)
 }
 
+// Numbering sets the paragraph numbering properties.
+//
+// This function assigns a numbering definition ID and a level to the paragraph,
+// which affects how numbering is displayed in the document.
+//
+// Parameters:
+//   - id: An integer representing the numbering definition ID.
+//   - level: An integer representing the level within the numbering definition.
+//
+// Example:
+//
+//	p1 := document.AddParagraph("Example numbered para")
+//	p1.Numbering(1, 0)
+//
+// In this example, the paragraph p1 is assigned the numbering properties
+// defined by numbering definition ID 1 and level 0.
 func (p Paragraph) Numbering(id int, level int) {
 
-	if p.CT.Property == nil {
-		p.CT.Property = ctypes.DefaultParaProperty()
+	if p.ct.Property == nil {
+		p.ct.Property = ctypes.DefaultParaProperty()
 	}
 
-	if p.CT.Property.NumProp == nil {
-		p.CT.Property.NumProp = &ctypes.NumProp{}
+	if p.ct.Property.NumProp == nil {
+		p.ct.Property.NumProp = &ctypes.NumProp{}
 	}
-	p.CT.Property.NumProp.NumID = ctypes.NewDecimalNum(id)
-	p.CT.Property.NumProp.ILvl = ctypes.NewDecimalNum(level)
+	p.ct.Property.NumProp.NumID = ctypes.NewDecimalNum(id)
+	p.ct.Property.NumProp.ILvl = ctypes.NewDecimalNum(level)
 }
 
 // Appends a new text to the Paragraph.
@@ -124,7 +123,7 @@ func (p Paragraph) Numbering(id int, level int) {
 //
 // Returns:
 //   - *Run: The newly created Run instance added to the Paragraph.
-func (p *Paragraph) AddText(text string) *ctypes.Run {
+func (p *Paragraph) AddText(text string) *Run {
 	t := ctypes.TextFromString(text)
 
 	runChildren := []ctypes.RunChild{}
@@ -135,9 +134,9 @@ func (p *Paragraph) AddText(text string) *ctypes.Run {
 		Children: runChildren,
 	}
 
-	p.CT.Children = append(p.CT.Children, ctypes.ParagraphChild{Run: run})
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
-	return run
+	return newRun(p.root, run)
 }
 
 // AddEmptyParagraph adds a new empty paragraph to the document.
@@ -146,7 +145,7 @@ func (p *Paragraph) AddText(text string) *ctypes.Run {
 // Returns:
 //   - p: The created Paragraph instance.
 func (rd *RootDoc) AddEmptyParagraph() *Paragraph {
-	p := NewParagraph(rd)
+	p := newParagraph(rd)
 
 	bodyElem := DocumentChild{
 		Para: p,
@@ -156,13 +155,13 @@ func (rd *RootDoc) AddEmptyParagraph() *Paragraph {
 	return p
 }
 
-func (p *Paragraph) AddRun() *ctypes.Run {
+func (p *Paragraph) AddRun() *Run {
 
 	run := &ctypes.Run{}
 
-	p.CT.Children = append(p.CT.Children, ctypes.ParagraphChild{Run: run})
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
-	return run
+	return newRun(p.root, run)
 }
 
 // func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
@@ -195,7 +194,17 @@ func (p *Paragraph) AddRun() *ctypes.Run {
 // 	return hyperLink
 // }
 
-func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, height units.Inch) *dml.Inline {
+// AddDrawing adds a new drawing (image) to the Paragraph.
+//
+// Parameters:
+//   - rID: The relationship ID of the image in the document.
+//   - imgCount: The count of images in the document.
+//   - width: The width of the image in inches.
+//   - height: The height of the image in inches.
+//
+// Returns:
+//   - *dml.Inline: The created Inline instance representing the added drawing.
+func (p *Paragraph) addDrawing(rID string, imgCount uint, width units.Inch, height units.Inch) *dml.Inline {
 	eWidth := width.ToEmu()
 	eHeight := height.ToEmu()
 
@@ -221,17 +230,22 @@ func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, heig
 		Children: runChildren,
 	}
 
-	p.CT.Children = append(p.CT.Children, ctypes.ParagraphChild{Run: run})
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
 	return &inline
 }
 
+// GetStyle retrieves the style information applied to the Paragraph.
+//
+// Returns:
+//   - *ctypes.Style: The style information of the Paragraph.
+//   - error: An error if the style information is not found.
 func (p *Paragraph) GetStyle() (*ctypes.Style, error) {
-	if p.CT.Property == nil || p.CT.Property.Style == nil {
+	if p.ct.Property == nil || p.ct.Property.Style == nil {
 		return nil, errors.New("No property for the style")
 	}
 
-	style := p.Root.GetStyleByID(p.CT.Property.Style.Val, stypes.StyleTypeParagraph)
+	style := p.root.GetStyleByID(p.ct.Property.Style.Val, stypes.StyleTypeParagraph)
 	if style == nil {
 		return nil, errors.New("No style found for the paragraph")
 	}
