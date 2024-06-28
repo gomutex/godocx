@@ -41,7 +41,7 @@ func main() {
 	docx.AddHeading("Example Heading", 1) // Heading text and level
 
 	// Save the modified document to a new file
-	err = docx.SaveTo("sample.docx")
+	err = docx.SaveTo("demo.docx")
 	if err != nil {
 		log.Fatal(err)
 	}

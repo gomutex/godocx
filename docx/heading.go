@@ -17,7 +17,7 @@ func (rd *RootDoc) AddHeading(text string, level uint) (*Paragraph, error) {
 		return nil, errors.New("Heading level not supported")
 	}
 
-	p := Paragraph{}
+	p := NewParagraph(rd)
 	p.CT.Property = ctypes.DefaultParaProperty()
 
 	style := "Title"
@@ -28,10 +28,10 @@ func (rd *RootDoc) AddHeading(text string, level uint) (*Paragraph, error) {
 	p.CT.Property.Style = ctypes.NewParagraphStyle(style)
 
 	bodyElem := DocumentChild{
-		Para: &p,
+		Para: p,
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
 	p.AddText(text)
-	return &p, nil
+	return p, nil
 }

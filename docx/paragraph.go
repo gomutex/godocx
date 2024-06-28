@@ -43,14 +43,14 @@ func DefaultParagraphChild() *ctypes.ParagraphChild {
 // Returns:
 //   - p: The created Paragraph instance.
 func (rd *RootDoc) AddParagraph(text string) *Paragraph {
-	p := Paragraph{}
+	p := NewParagraph(rd)
 	p.AddText(text)
 	bodyElem := DocumentChild{
-		Para: &p,
+		Para: p,
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
-	return &p
+	return p
 }
 
 // Style sets the paragraph style.
@@ -127,13 +127,38 @@ func (p Paragraph) Numbering(id int, level int) {
 func (p *Paragraph) AddText(text string) *ctypes.Run {
 	t := ctypes.TextFromString(text)
 
-	runChildren := []*ctypes.RunChild{}
-	runChildren = append(runChildren, &ctypes.RunChild{
+	runChildren := []ctypes.RunChild{}
+	runChildren = append(runChildren, ctypes.RunChild{
 		Text: t,
 	})
 	run := &ctypes.Run{
 		Children: runChildren,
 	}
+
+	p.CT.Children = append(p.CT.Children, ctypes.ParagraphChild{Run: run})
+
+	return run
+}
+
+// AddEmptyParagraph adds a new empty paragraph to the document.
+// It returns the created Paragraph instance.
+//
+// Returns:
+//   - p: The created Paragraph instance.
+func (rd *RootDoc) AddEmptyParagraph() *Paragraph {
+	p := NewParagraph(rd)
+
+	bodyElem := DocumentChild{
+		Para: p,
+	}
+	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
+
+	return p
+}
+
+func (p *Paragraph) AddRun() *ctypes.Run {
+
+	run := &ctypes.Run{}
 
 	p.CT.Children = append(p.CT.Children, ctypes.ParagraphChild{Run: run})
 
@@ -183,12 +208,12 @@ func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, heig
 		*dml.NewPicGraphic(dmlpic.NewPic(rID, imgCount, eWidth, eHeight)),
 	)
 
-	runChildren := []*ctypes.RunChild{}
+	runChildren := []ctypes.RunChild{}
 	drawing := &dml.Drawing{}
 
 	drawing.Inline = append(drawing.Inline, inline)
 
-	runChildren = append(runChildren, &ctypes.RunChild{
+	runChildren = append(runChildren, ctypes.RunChild{
 		Drawing: drawing,
 	})
 
@@ -201,7 +226,7 @@ func (p *Paragraph) AddDrawing(rID string, imgCount uint, width units.Inch, heig
 	return &inline
 }
 
-func (p *Paragraph) GetStyle(styleID string) (*ctypes.Style, error) {
+func (p *Paragraph) GetStyle() (*ctypes.Style, error) {
 	if p.CT.Property == nil || p.CT.Property.Style == nil {
 		return nil, errors.New("No property for the style")
 	}

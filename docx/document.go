@@ -2,6 +2,9 @@ package docx
 
 import (
 	"encoding/xml"
+
+	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 var docAttrs = map[string]string{
@@ -105,4 +108,12 @@ func (d *Document) UnmarshalXML(decoder *xml.Decoder, start xml.StartElement) (e
 		}
 	}
 
+}
+
+// Return newly Paragraph object containing only a page break.
+func (rd *RootDoc) AddPageBreak() *Paragraph {
+	p := rd.AddEmptyParagraph()
+	p.AddRun().AddBreak(internal.ToPtr(stypes.BreakTypePage))
+
+	return p
 }

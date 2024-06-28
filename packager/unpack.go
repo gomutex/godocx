@@ -89,7 +89,7 @@ func Unpack(content *[]byte) (*docx.RootDoc, error) {
 
 	// Load document
 	docFile := fileIndex[docPath]
-	docObj, err := docx.LoadDocXml(docPath, docFile)
+	docObj, err := docx.LoadDocXml(rd, docPath, docFile)
 	if err != nil {
 		return nil, err
 	}
