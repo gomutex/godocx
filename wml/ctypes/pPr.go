@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
+
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Numbering Level Associated Paragraph Properties
@@ -87,16 +89,16 @@ type ParagraphProp struct {
 	SuppressOverlap *OnOff `xml:"suppressOverlap,omitempty"`
 
 	// 27. Paragraph Alignment
-	Justification *Justification `xml:"jc,omitempty"`
+	Justification *GenSingleStrVal[stypes.Justification] `xml:"jc,omitempty"`
 
 	// 28. Paragraph Text Flow Direction
-	TextDirection *TextDirection `xml:"textDirection,omitempty"`
+	TextDirection *GenSingleStrVal[stypes.TextDirection] `xml:"textDirection,omitempty"`
 
 	// 29. Vertical Character Alignment on Line
-	TextAlignment *TextAlign `xml:"textAlignment,omitempty"`
+	TextAlignment *GenSingleStrVal[stypes.TextAlign] `xml:"textAlignment,omitempty"`
 
 	// 30.Allow Surrounding Paragraphs to Tight Wrap to Text Box Contents
-	TextboxTightWrap *TextboxTightWrap `xml:"textboxTightWrap,omitempty"`
+	TextboxTightWrap *GenSingleStrVal[stypes.TextboxTightWrap] `xml:"textboxTightWrap,omitempty"`
 
 	// 31. Associated Outline Level
 	OutlineLvl *DecimalNum `xml:"outlineLvl,omitempty"`
@@ -105,7 +107,7 @@ type ParagraphProp struct {
 	DivID *DecimalNum `xml:"divId,omitempty"`
 
 	// 33. Paragraph Conditional Formatting
-	CnfStyle *Cnf `xml:"cnfStyle,omitempty"`
+	CnfStyle *CTString `xml:"cnfStyle,omitempty"`
 
 	// 34. Run Properties for the Paragraph Mark
 	RunProperty *RunProperty `xml:"rPr,omitempty"`
@@ -200,7 +202,7 @@ func (pp ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err 
 		if err = pp.Shading.MarshalXML(e, xml.StartElement{
 			Name: xml.Name{Local: "w:shd"},
 		}); err != nil {
-			return fmt.Errorf("TextDirection: %w", err)
+			return fmt.Errorf("Shading: %w", err)
 		}
 	}
 
@@ -275,21 +277,27 @@ func (pp ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err 
 
 	// 28. TextDirection
 	if pp.TextDirection != nil {
-		if err = pp.TextDirection.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.TextDirection.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:textDirection"},
+		}); err != nil {
 			return fmt.Errorf("TextDirection: %w", err)
 		}
 	}
 
 	// 29. TextAlignment
 	if pp.TextAlignment != nil {
-		if err = pp.TextAlignment.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.TextAlignment.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:textAlignment"},
+		}); err != nil {
 			return fmt.Errorf("TextAlignment: %w", err)
 		}
 	}
 
 	// 30. TextboxTightWrap
 	if pp.TextboxTightWrap != nil {
-		if err = pp.TextboxTightWrap.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.TextboxTightWrap.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:textboxTightWrap"},
+		}); err != nil {
 			return fmt.Errorf("TextboxTightWrap: %w", err)
 		}
 	}
@@ -314,7 +322,9 @@ func (pp ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err 
 
 	// 33. CnfStyle
 	if pp.CnfStyle != nil {
-		if err = pp.CnfStyle.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.CnfStyle.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:cnfStyle"},
+		}); err != nil {
 			return fmt.Errorf("CnfStyle: %w", err)
 		}
 	}
@@ -328,14 +338,18 @@ func (pp ParagraphProp) MarshalXML(e *xml.Encoder, start xml.StartElement) (err 
 	}
 
 	if pp.SectPr != nil {
-		if err = pp.SectPr.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.SectPr.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:sectPr"},
+		}); err != nil {
 			return fmt.Errorf("PPrChange: %w", err)
 		}
 	}
 
 	//36. PPrChange
 	if pp.PPrChange != nil {
-		if err = pp.PPrChange.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = pp.PPrChange.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:pPrChange"},
+		}); err != nil {
 			return fmt.Errorf("PPrChange: %w", err)
 		}
 	}
@@ -358,20 +372,6 @@ func DefaultParaProperty() *ParagraphProp {
 }
 
 // <== ParaProp ends here ==>
-
-// Paragraph Conditional Formatting
-type Cnf struct {
-	Val string `xml:"val,attr"`
-}
-
-func (c Cnf) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "w:cnfStyle"
-	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: c.Val})
-
-	return e.EncodeElement("", start)
-}
-
-// <== cnfStyle ends here ==>
 
 // Revision Information for Paragraph Properties
 type PPrChange struct {
@@ -399,7 +399,9 @@ func (p PPrChange) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	if p.ParaProp != nil {
-		if err := p.ParaProp.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err := p.ParaProp.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:pPr"},
+		}); err != nil {
 			return err
 		}
 	}

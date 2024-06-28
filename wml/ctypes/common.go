@@ -5,6 +5,22 @@ import (
 	"strconv"
 )
 
+// Generic Element with Single Val attribute
+type GenSingleStrVal[T ~string] struct {
+	Val T `xml:"val,attr"`
+}
+
+func (g GenSingleStrVal[T]) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(g.Val)})
+	return e.EncodeElement("", start)
+}
+
+func NewGenSingleStrVal[T ~string](val T) *GenSingleStrVal[T] {
+	return &GenSingleStrVal[T]{
+		Val: val,
+	}
+}
+
 // CTString - Generic Element that has only one string-type attribute
 // And the String type does not have validation
 // dont use this if the element requires validation

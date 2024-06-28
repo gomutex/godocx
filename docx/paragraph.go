@@ -91,12 +91,12 @@ func (p *Paragraph) Justification(value string) error {
 		p.CT.Property = ctypes.DefaultParaProperty()
 	}
 
-	jc, err := ctypes.NewJustification(value)
+	val, err := stypes.JustificationFromStr(value)
 	if err != nil {
 		return err
 	}
 
-	p.CT.Property.Justification = jc
+	p.CT.Property.Justification = ctypes.NewGenSingleStrVal(val)
 
 	return nil
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/internal"
-	"github.com/gomutex/godocx/wml/formatting"
 	"github.com/gomutex/godocx/wml/runcontent"
 	"github.com/gomutex/godocx/wml/stypes"
 )
@@ -26,6 +25,7 @@ type Run struct {
 
 type RunChild struct {
 	//TODO: Maintain sequence and rest of the elements
+	//Field Code
 	InstrText *string
 	Text      *runcontent.Text
 	Drawing   *dml.Drawing
@@ -88,7 +88,7 @@ func (r *Run) Shading(shdType stypes.Shading, color, fill string) *Run {
 
 // AddHighlight sets the highlight color for the run.
 func (r *Run) Highlight(color string) *Run {
-	r.getProp().Highlight = formatting.NewHighlight(color)
+	r.getProp().Highlight = NewCTString(color)
 	return r
 }
 
@@ -172,8 +172,8 @@ func (r *Run) Spacing(value int) *Run {
 	return r
 }
 
-func (r *Run) Underline(value formatting.UnderlineStyle) *Run {
-	r.getProp().Underline = formatting.NewUnderline(value)
+func (r *Run) Underline(value stypes.Underline) *Run {
+	r.getProp().Underline = NewGenSingleStrVal(value)
 	return r
 }
 

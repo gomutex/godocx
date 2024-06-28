@@ -67,5 +67,5 @@ func (t *Table) Indent(indent int) {
 }
 
 func (t *Table) Style(value string) {
-	t.CT.TableProp.Style = ctypes.NewTableStyle(value)
+	t.CT.TableProp.Style = ctypes.NewCTString(value)
 }

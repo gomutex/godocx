@@ -9,16 +9,16 @@ import (
 
 // Document Final Section Properties : w:sectPr
 type SectionProp struct {
-	HeaderReference *hdrftr.HeaderReference `xml:"headerReference,omitempty"`
-	FooterReference *hdrftr.FooterReference `xml:"footerReference,omitempty"`
-	PageSize        *PageSize               `xml:"pgSz,omitempty"`
-	Type            *SectionType            `xml:"type,omitempty"`
-	PageMargin      *PageMargin             `xml:"pgMar,omitempty"`
-	PageNum         *PageNumbering          `xml:"pgNumType,omitempty"`
-	FormProt        *FormProt               `xml:"formProt,omitempty"`
-	TitlePg         *hdrftr.TitlePg         `xml:"titlePg,omitempty"`
-	TextDir         *TextDirection          `xml:"textDirection,omitempty"`
-	DocGrid         *DocGrid                `xml:"docGrid,omitempty"`
+	HeaderReference *hdrftr.HeaderReference                `xml:"headerReference,omitempty"`
+	FooterReference *hdrftr.FooterReference                `xml:"footerReference,omitempty"`
+	PageSize        *PageSize                              `xml:"pgSz,omitempty"`
+	Type            *GenSingleStrVal[stypes.SectionMark]   `xml:"type,omitempty"`
+	PageMargin      *PageMargin                            `xml:"pgMar,omitempty"`
+	PageNum         *PageNumbering                         `xml:"pgNumType,omitempty"`
+	FormProt        *GenSingleStrVal[stypes.OnOff]         `xml:"formProt,omitempty"`
+	TitlePg         *GenSingleStrVal[stypes.OnOff]         `xml:"titlePg,omitempty"`
+	TextDir         *GenSingleStrVal[stypes.TextDirection] `xml:"textDirection,omitempty"`
+	DocGrid         *DocGrid                               `xml:"docGrid,omitempty"`
 }
 
 func NewSectionProper() *SectionProp {
@@ -46,7 +46,9 @@ func (s SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	if s.Type != nil {
-		if err := s.Type.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err := s.Type.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:type"},
+		}); err != nil {
 			return err
 		}
 	}
@@ -70,19 +72,25 @@ func (s SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	if s.FormProt != nil {
-		if err = s.FormProt.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = s.FormProt.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:formProt"},
+		}); err != nil {
 			return err
 		}
 	}
 
 	if s.TitlePg != nil {
-		if err = s.TitlePg.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = s.TitlePg.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:titlePg"},
+		}); err != nil {
 			return err
 		}
 	}
 
 	if s.TextDir != nil {
-		if s.TextDir.MarshalXML(e, xml.StartElement{}); err != nil {
+		if s.TextDir.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:textDirection"},
+		}); err != nil {
 			return err
 		}
 	}
@@ -95,20 +103,3 @@ func (s SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
-
-// Section Type
-type SectionType struct {
-	Val stypes.SectionMark `xml:"val,attr,omitempty"`
-}
-
-// MarshalXML implements the xml.Marshaler interface for the SectionType type.
-// It encodes the SectionType to its corresponding XML representation.
-func (s SectionType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = "w:type"
-	if s.Val != "" {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(s.Val)})
-	}
-	return e.EncodeElement("", start)
-}
-
-// <== SectionType Ends here ==>

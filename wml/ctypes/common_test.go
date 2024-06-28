@@ -1,6 +1,7 @@
 package ctypes
 
 import (
+	"bytes"
 	"encoding/xml"
 	"strings"
 	"testing"
@@ -227,3 +228,60 @@ func TestUint64Elem_UnmarshalXML(t *testing.T) {
 }
 
 // !--- Tests of Uint64 ends here ---!
+
+func TestGenSingleStrVal_MarshalXML(t *testing.T) {
+	tests := []struct {
+		name string
+		val  string
+		want string
+	}{
+		{"Test1", "Hello", `<GenSingleStrVal w:val="Hello"></GenSingleStrVal>`},
+		{"Test2", "World", `<GenSingleStrVal w:val="World"></GenSingleStrVal>`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gen := NewGenSingleStrVal(tt.val)
+
+			var buf bytes.Buffer
+			enc := xml.NewEncoder(&buf)
+			start := xml.StartElement{Name: xml.Name{Local: "GenSingleStrVal"}}
+			if err := gen.MarshalXML(enc, start); err != nil {
+				t.Errorf("MarshalXML() error = %v", err)
+				return
+			}
+			if got := buf.String(); got != tt.want {
+				t.Errorf("MarshalXML() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGenSingleStrVal_UnmarshalXML(t *testing.T) {
+	tests := []struct {
+		name string
+		xml  string
+		want string
+	}{
+		{"Test1", `<GenSingleStrVal w:val="Hello"></GenSingleStrVal>`, "Hello"},
+		{"Test2", `<GenSingleStrVal w:val="World"></GenSingleStrVal>`, "World"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var gen GenSingleStrVal[string]
+
+			err := xml.Unmarshal([]byte(tt.xml), &gen)
+			if err != nil {
+				t.Errorf("UnmarshalXML() error = %v", err)
+				return
+			}
+
+			if gen.Val != tt.want {
+				t.Errorf("UnmarshalXML() = %v, want %v", gen.Val, tt.want)
+			}
+		})
+	}
+}
+
+// !--- Tests of GenSingleStrVal ends here ---!

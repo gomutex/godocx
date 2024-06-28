@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/gomutex/godocx/internal"
-	"github.com/gomutex/godocx/wml/hdrftr"
 
 	"github.com/gomutex/godocx/wml/stypes"
 )
@@ -28,14 +27,9 @@ func TestParagraphProp(t *testing.T) {
 		t.Fatalf("Error unmarshaling XML to ParagraphProp: %v", err)
 	}
 
-	jc, err := NewJustification("center")
-	if err != nil {
-		t.Fatal(err)
-	}
-
 	expectedParagraphProp := ParagraphProp{
 		Style:         NewParagraphStyle("Heading1"),
-		Justification: jc,
+		Justification: NewGenSingleStrVal(stypes.JustificationCenter),
 	}
 
 	if !areParagraphPropertiesEqual(expectedParagraphProp, parsedParagraphProp) {
@@ -103,15 +97,9 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 		Shading: &Shading{
 			Val: stypes.ShdDiagStripe,
 		},
-		TextDirection: &TextDirection{
-			Val: stypes.TextDirectionBtLr,
-		},
-		TextAlignment: &TextAlign{
-			Val: stypes.TextAlignAuto,
-		},
-		TextboxTightWrap: &TextboxTightWrap{
-			Val: stypes.TextboxTightWrapAllLines,
-		},
+		TextDirection:    NewGenSingleStrVal(stypes.TextDirectionBtLr),
+		TextAlignment:    NewGenSingleStrVal(stypes.TextAlignAuto),
+		TextboxTightWrap: NewGenSingleStrVal(stypes.TextboxTightWrapAllLines),
 		Tabs: Tabs{
 			Tab: []Tab{
 				{
@@ -125,32 +113,46 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 		DivID: &DecimalNum{
 			Val: 2222222,
 		},
-		CnfStyle: &Cnf{
+		CnfStyle: &CTString{
 			Val: "cnftest",
 		},
 		RunProperty: &RunProperty{
 			Shading: DefaultShading(),
 		},
-		Justification: &Justification{
-			Val: "center",
-		},
+		Justification: NewGenSingleStrVal(stypes.JustificationCenter),
 		PPrChange: &PPrChange{
 			ID:     1,
 			Author: "authortest",
 		},
 		SectPr: &SectionProp{
-			TitlePg: &hdrftr.TitlePg{},
+			TitlePg: NewGenSingleStrVal(stypes.OnOffTrue),
 		},
 	}
 
-	marshaledXML, err := xml.Marshal(paraProp)
+	// marshaledXML, err := xml.Marshal(paraProp)
+	// if err != nil {
+	// 	t.Fatalf("Error marshaling XML: %v", err)
+	// }
+
+	var result strings.Builder
+	encoder := xml.NewEncoder(&result)
+	start := xml.StartElement{Name: xml.Name{Local: "w:pPr"}}
+
+	err := paraProp.MarshalXML(encoder, start)
 	if err != nil {
 		t.Fatalf("Error marshaling XML: %v", err)
 	}
 
+	encoder.Flush()
+	if err != nil {
+		t.Errorf("Error flushing encoder: %v", err)
+	}
+
+	marshaledXML := result.String()
+
 	// Unmarshal the marshaled XML back into a new ParagraphProp instance
 	var unmarshaledProp ParagraphProp
-	err = xml.Unmarshal(marshaledXML, &unmarshaledProp)
+	err = xml.Unmarshal([]byte(marshaledXML), &unmarshaledProp)
 	if err != nil {
 		t.Fatalf("Error unmarshaling XML: %v", err)
 	}
@@ -160,16 +162,21 @@ func TestParagraphProp_MarshalUnmarshal(t *testing.T) {
 		t.Error(err)
 	}
 
-	// For further validation, you can convert the XML back to string and compare
-	var result strings.Builder
-	encoder := xml.NewEncoder(&result)
-	err = encoder.Encode(paraProp)
+	var rresult strings.Builder
+	rencoder := xml.NewEncoder(&rresult)
+
+	err = paraProp.MarshalXML(rencoder, start)
 	if err != nil {
-		t.Fatalf("Error encoding XML: %v", err)
+		t.Fatalf("Error marshaling XML: %v", err)
 	}
 
-	if result.String() != string(marshaledXML) {
-		t.Errorf("Expected XML:\n%s\nGot:\n%s", string(marshaledXML), result.String())
+	rencoder.Flush()
+	if err != nil {
+		t.Errorf("Error flushing encoder: %v", err)
+	}
+
+	if result.String() != rresult.String() {
+		t.Errorf("Expected XML :\n%s\nGot:\n%s", result.String(), rresult.String())
 	}
 }
 
@@ -277,72 +284,6 @@ func isEqualParagraphProps(a, b ParagraphProp) error {
 }
 
 // <== ParaProp Tests end here ==>
-
-func TestCnf_MarshalXML(t *testing.T) {
-	tests := []struct {
-		name     string
-		cnf      Cnf
-		expected string
-	}{
-		{
-			name:     "WithVal",
-			cnf:      Cnf{Val: "12345"},
-			expected: `<w:cnfStyle w:val="12345"></w:cnfStyle>`,
-		},
-		{
-			name:     "EmptyVal",
-			cnf:      Cnf{Val: ""},
-			expected: `<w:cnfStyle w:val=""></w:cnfStyle>`,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			xmlBytes, err := xml.Marshal(&tt.cnf)
-			if err != nil {
-				t.Fatalf("Error marshaling Cnf: %v", err)
-			}
-
-			result := string(xmlBytes)
-			if !strings.Contains(result, tt.expected) {
-				t.Errorf("Expected XML:\n%s\nBut got:\n%s", tt.expected, result)
-			}
-		})
-	}
-}
-
-func TestCnf_UnmarshalXML(t *testing.T) {
-	tests := []struct {
-		xmlStr   string
-		expected Cnf
-	}{
-		{
-			xmlStr:   `<w:cnfStyle w:val="12345"></w:cnfStyle>`,
-			expected: Cnf{Val: "12345"},
-		},
-		{
-			xmlStr:   `<w:cnfStyle w:val=""></w:cnfStyle>`,
-			expected: Cnf{Val: ""},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.xmlStr, func(t *testing.T) {
-			var cnf Cnf
-
-			err := xml.Unmarshal([]byte(tt.xmlStr), &cnf)
-			if err != nil {
-				t.Fatalf("Error unmarshaling XML: %v", err)
-			}
-
-			if cnf.Val != tt.expected.Val {
-				t.Errorf("Expected Val %s but got %s", tt.expected.Val, cnf.Val)
-			}
-		})
-	}
-}
-
-// <== Cnf Tests end here ==>
 
 func TestPPrChange_MarshalXML(t *testing.T) {
 	tests := []struct {

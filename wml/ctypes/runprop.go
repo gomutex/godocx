@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/gomutex/godocx/wml/formatting"
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // RunProperty represents the properties of a run of text within a paragraph.
@@ -85,10 +85,10 @@ type RunProperty struct {
 	SizeCs *FontSizeCS `xml:"szCs,omitempty"`
 
 	//26.Text Highlighting
-	Highlight *formatting.Highlight `xml:"highlight,omitempty"`
+	Highlight *CTString `xml:"highlight,omitempty"`
 
 	//27.Underline
-	Underline *formatting.Underline `xml:"u,omitempty"`
+	Underline *GenSingleStrVal[stypes.Underline] `xml:"u,omitempty"`
 
 	//28.Animated Text Effect
 	Effect *Effect `xml:"effect,omitempty"`
@@ -103,7 +103,7 @@ type RunProperty struct {
 	FitText *FitText `xml:"fitText,omitempty"`
 
 	//32.Subscript/Superscript Text
-	VertAlign *VertAlignRun `xml:"vertAlign,omitempty"`
+	VertAlign *GenSingleStrVal[stypes.VerticalAlignRun] `xml:"vertAlign,omitempty"`
 
 	//33.Right To Left Text
 	RightToLeft *OnOff `xml:"rtl,omitempty"`
@@ -112,7 +112,7 @@ type RunProperty struct {
 	CSFormat *OnOff `xml:"cs,omitempty"`
 
 	//35.Emphasis Mark
-	Em *Em `xml:"em,omitempty"`
+	Em *GenSingleStrVal[stypes.Em] `xml:"em,omitempty"`
 
 	//36.Languages for Run Content
 	Lang *Lang `xml:"lang,omitempty"`
@@ -250,14 +250,18 @@ func (rp RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	//26.Text Highlighting
 	if rp.Highlight != nil {
-		if err = rp.Highlight.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = rp.Highlight.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:highlight"},
+		}); err != nil {
 			return fmt.Errorf("highlight: %w", err)
 		}
 	}
 
 	//27.Underline
 	if rp.Underline != nil {
-		if err = rp.Underline.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = rp.Underline.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:u"},
+		}); err != nil {
 			return fmt.Errorf("underline: %w", err)
 		}
 	}
@@ -296,7 +300,9 @@ func (rp RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	//32.Subscript/Superscript Text
 	if rp.VertAlign != nil {
-		if err = rp.VertAlign.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = rp.VertAlign.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:vertAlign"},
+		}); err != nil {
 			return fmt.Errorf("vertical align: %w", err)
 		}
 	}
@@ -321,7 +327,9 @@ func (rp RunProperty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	//35.Emphasis Mark
 	if rp.Em != nil {
-		if err = rp.Em.MarshalXML(e, xml.StartElement{}); err != nil {
+		if err = rp.Em.MarshalXML(e, xml.StartElement{
+			Name: xml.Name{Local: "w:em"},
+		}); err != nil {
 			return fmt.Errorf("emphasis mark: %w", err)
 		}
 	}

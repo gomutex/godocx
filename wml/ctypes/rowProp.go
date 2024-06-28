@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
+
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Table Row Properties
@@ -11,7 +13,7 @@ type RowProperty struct {
 	//1. Choice - ZeroOrMore
 
 	//Table Row Conditional Formatting
-	Cnf *Cnf
+	Cnf *CTString
 
 	// Associated HTML div ID
 	DivId *DecimalNum
@@ -41,7 +43,7 @@ type RowProperty struct {
 	CellSpacing *TableWidth
 
 	// Table Row Alignment
-	JC *Justification
+	JC *GenSingleStrVal[stypes.Justification]
 
 	//Hidden Table Row Marker
 	Hidden *OnOff
@@ -106,7 +108,7 @@ loop:
 		case xml.StartElement:
 			switch elem.Name.Local {
 			case "cnfStyle":
-				r.Cnf = &Cnf{}
+				r.Cnf = &CTString{}
 				if err = d.DecodeElement(r.Cnf, &elem); err != nil {
 					return err
 				}
@@ -166,7 +168,7 @@ loop:
 				}
 
 			case "jc":
-				r.JC = &Justification{}
+				r.JC = &GenSingleStrVal[stypes.Justification]{}
 				if err := d.DecodeElement(r.JC, &elem); err != nil {
 					return err
 				}

@@ -20,7 +20,7 @@ func TestRowProperty_MarshalXML(t *testing.T) {
 		{
 			name: "Only Cnf populated",
 			input: RowProperty{
-				Cnf: &Cnf{
+				Cnf: &CTString{
 					Val: "cnfval",
 				},
 			},
@@ -38,7 +38,7 @@ func TestRowProperty_MarshalXML(t *testing.T) {
 		{
 			name: "All fields populated",
 			input: RowProperty{
-				Cnf: &Cnf{
+				Cnf: &CTString{
 					Val: "cnftest",
 				},
 				DivId:       &DecimalNum{},
@@ -54,9 +54,7 @@ func TestRowProperty_MarshalXML(t *testing.T) {
 					Val: internal.ToPtr(stypes.OnOffTrue),
 				},
 				CellSpacing: NewTableWidth(100, "dxa"),
-				JC: &Justification{
-					Val: "center",
-				},
+				JC:          NewGenSingleStrVal(stypes.JustificationCenter),
 				Hidden: &OnOff{
 					Val: internal.ToPtr(stypes.OnOffFalse),
 				},
@@ -113,7 +111,7 @@ func TestRowProperty_UnmarshalXML(t *testing.T) {
 						<w:cnfStyle val="cnftest"></w:cnfStyle>
 					   </w:trPr>`,
 			expected: RowProperty{
-				Cnf: &Cnf{
+				Cnf: &CTString{
 					Val: "cnftest",
 				},
 			},
@@ -144,7 +142,7 @@ func TestRowProperty_UnmarshalXML(t *testing.T) {
 						<w:hidden w:val="off"></w:hidden>
 					   </w:trPr>`,
 			expected: RowProperty{
-				Cnf: &Cnf{
+				Cnf: &CTString{
 					Val: "cnftest",
 				},
 				DivId:       &DecimalNum{},
@@ -160,9 +158,7 @@ func TestRowProperty_UnmarshalXML(t *testing.T) {
 					Val: internal.ToPtr(stypes.OnOffTrue),
 				},
 				CellSpacing: NewTableWidth(100, "dxa"),
-				JC: &Justification{
-					Val: "center",
-				},
+				JC:          NewGenSingleStrVal(stypes.JustificationCenter),
 				Hidden: &OnOff{
 					Val: internal.ToPtr(stypes.OnOffFalse),
 				},

@@ -24,32 +24,32 @@ func TestTableProp_MarshalXML(t *testing.T) {
 		{
 			name: "With Style",
 			input: TableProp{
-				Style: &TableStyle{Val: "TestStyle"},
+				Style: NewCTString("TestStyle"),
 			},
 			expected: `<w:tblPr><w:tblStyle w:val="TestStyle"></w:tblStyle></w:tblPr>`,
 		},
 		{
 			name: "With Justification",
 			input: TableProp{
-				Justification: &Justification{Val: "center"},
+				Justification: NewGenSingleStrVal(stypes.JustificationCenter),
 			},
 			expected: `<w:tblPr><w:jc w:val="center"></w:jc></w:tblPr>`,
 		},
 		{
 			name: "With All Fields",
 			input: TableProp{
-				Style: &TableStyle{Val: "TestStyle"},
+				Style: NewCTString("TestStyle"),
 				FloatPos: &FloatPos{
 					LeftFromText: internal.ToPtr(uint64(10)),
 				},
-				Overlap: &Overlap{Val: stypes.TblOverlapNever},
+				Overlap: NewGenSingleStrVal(stypes.TblOverlapNever),
 				BidiVisual: &OnOff{
 					Val: internal.ToPtr(stypes.OnOffOne),
 				},
 				RowCountInRowBand: &DecimalNum{Val: 1},
 				RowCountInColBand: &DecimalNum{Val: 2},
 				Width:             NewTableWidth(10, stypes.TableWidthAuto),
-				Justification:     &Justification{Val: "center"},
+				Justification:     NewGenSingleStrVal(stypes.JustificationCenter),
 				CellSpacing:       NewTableWidth(20, stypes.TableWidthDxa),
 				Indent:            NewTableWidth(30, stypes.TableWidthPct),
 				Borders: &TableBorders{
@@ -118,7 +118,7 @@ func TestTableProp_UnmarshalXML(t *testing.T) {
 						<w:tblStyle w:val="TestStyle"></w:tblStyle>
 						</w:tblPr>`,
 			expected: TableProp{
-				Style: &TableStyle{Val: "TestStyle"},
+				Style: NewCTString("TestStyle"),
 			},
 		},
 		{
@@ -127,7 +127,7 @@ func TestTableProp_UnmarshalXML(t *testing.T) {
 						<w:jc w:val="center"></w:jc>
 						</w:tblPr>`,
 			expected: TableProp{
-				Justification: &Justification{Val: "center"},
+				Justification: NewGenSingleStrVal(stypes.JustificationCenter),
 			},
 		},
 		{
@@ -150,18 +150,18 @@ func TestTableProp_UnmarshalXML(t *testing.T) {
 				`<w:tblLook w:val="001"></w:tblLook>` +
 				`</w:tblPr>`,
 			expected: TableProp{
-				Style: &TableStyle{Val: "TestStyle"},
+				Style: NewCTString("TestStyle"),
 				FloatPos: &FloatPos{
 					LeftFromText: internal.ToPtr(uint64(10)),
 				},
-				Overlap: &Overlap{Val: stypes.TblOverlapNever},
+				Overlap: NewGenSingleStrVal(stypes.TblOverlapNever),
 				BidiVisual: &OnOff{
 					Val: internal.ToPtr(stypes.OnOffOne),
 				},
 				RowCountInRowBand: &DecimalNum{Val: 1},
 				RowCountInColBand: &DecimalNum{Val: 2},
 				Width:             NewTableWidth(10, stypes.TableWidthAuto),
-				Justification:     &Justification{Val: "center"},
+				Justification:     NewGenSingleStrVal(stypes.JustificationCenter),
 				CellSpacing:       NewTableWidth(20, stypes.TableWidthDxa),
 				Indent:            NewTableWidth(30, stypes.TableWidthPct),
 				Borders: &TableBorders{

@@ -172,7 +172,7 @@ type Style struct {
 	PersonalReply *OnOff `xml:"personalReply,omitempty"`
 
 	//16. Revision Identifier for Style Definition
-	RevID *LongHexNum `xml:"rsid,omitempty"`
+	RevID *GenSingleStrVal[stypes.LongHexNum] `xml:"rsid,omitempty"`
 
 	//17. Style Paragraph Properties
 	ParaProp *ParagraphProp `xml:"pPr,omitempty"`

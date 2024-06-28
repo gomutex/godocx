@@ -3,6 +3,8 @@ package ctypes
 import (
 	"encoding/xml"
 	"strconv"
+
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 type CellProperty struct {
@@ -10,7 +12,7 @@ type CellProperty struct {
 	// Sequnce:
 
 	// 1. Table Cell Conditional Formatting
-	CnfStyle *Cnf `xml:"cnfStyle,omitempty"`
+	CnfStyle *CTString `xml:"cnfStyle,omitempty"`
 
 	// 2. Preferred Table Cell Width
 	Width *TableWidth `xml:"tcW,omitempty"`
@@ -19,10 +21,10 @@ type CellProperty struct {
 	GridSpan *DecimalNum `xml:"gridSpan,omitempty"`
 
 	// 4.Horizontally Merged Cell
-	HMerge *Merge `xml:"hMerge,omitempty"`
+	HMerge *GenSingleStrVal[stypes.MergeCell] `xml:"hMerge,omitempty"`
 
 	// 5.Vertically Merged Cell
-	VMerge *Merge `xml:"vMerge,omitempty"`
+	VMerge *GenSingleStrVal[stypes.MergeCell] `xml:"vMerge,omitempty"`
 
 	// 6.Table Cell Borders
 	Borders *CellBorders `xml:"tcBorders,omitempty"`
@@ -37,13 +39,13 @@ type CellProperty struct {
 	Margins *CellMargins `xml:"tcMar,omitempty"`
 
 	//10.Table Cell Text Flow Direction
-	TextDirection *TextDirection `xml:"textDirection,omitempty"`
+	TextDirection *GenSingleStrVal[stypes.TextDirection] `xml:"textDirection,omitempty"`
 
 	//11.Fit Text Within Cell
 	FitText *OnOff `xml:"tcFitText,omitempty"`
 
 	//12. Table Cell Vertical Alignment
-	VAlign *VAlign `xml:"vAlign,omitempty"`
+	VAlign *GenSingleStrVal[stypes.VerticalJc] `xml:"vAlign,omitempty"`
 
 	//13.Ignore End Of Cell Marker In Row Height Calculation
 	HideMark *OnOff `xml:"hideMark,omitempty"`
