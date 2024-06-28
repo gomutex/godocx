@@ -12,7 +12,7 @@ type TrackChange struct {
 	Date   *string `xml:"date,attr,omitempty"`
 }
 
-func (t *TrackChange) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t TrackChange) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "w:id"}, Value: strconv.Itoa(t.ID)},
 		{Name: xml.Name{Local: "w:author"}, Value: t.Author},

@@ -7,7 +7,7 @@ type Blip struct {
 	EmbedID string `xml:"embed,attr,omitempty"`
 }
 
-func (b *Blip) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (b Blip) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:blip"
 
 	start.Attr = []xml.Attr{

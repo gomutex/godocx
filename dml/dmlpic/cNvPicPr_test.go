@@ -7,7 +7,7 @@ import (
 
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlprops"
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestMarshalNonVisualPicProp(t *testing.T) {
@@ -24,7 +24,7 @@ func TestMarshalNonVisualPicProp(t *testing.T) {
 				},
 				CNvPicPr: CNvPicPr{
 					PicLocks: &dmlprops.PicLocks{
-						NoChangeAspect: types.NewOptBool(true),
+						NoChangeAspect: dmlst.NewOptBool(true),
 					},
 				},
 			},
@@ -61,7 +61,7 @@ func TestUnmarshalNonVisualPicProp(t *testing.T) {
 				},
 				CNvPicPr: CNvPicPr{
 					PicLocks: &dmlprops.PicLocks{
-						NoChangeAspect: types.NewOptBool(true),
+						NoChangeAspect: dmlst.NewOptBool(true),
 					},
 				},
 			},

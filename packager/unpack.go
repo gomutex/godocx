@@ -4,11 +4,13 @@ import (
 	"archive/zip"
 	"bytes"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/gomutex/godocx/common/constants"
-	"github.com/gomutex/godocx/doc"
+	"github.com/gomutex/godocx/docx"
 	"github.com/gomutex/godocx/internal"
+	"github.com/gomutex/godocx/wml/ctypes"
 )
 
 // ReadFromZip reads files from a zip archive.
@@ -34,9 +36,9 @@ func ReadFromZip(content *[]byte) (map[string][]byte, error) {
 	return fileList, nil
 }
 
-func Unpack(content *[]byte) (*doc.RootDoc, error) {
+func Unpack(content *[]byte) (*docx.RootDoc, error) {
 
-	rd := doc.NewRootDoc()
+	rd := docx.NewRootDoc()
 
 	fileIndex, err := ReadFromZip(content)
 	if err != nil {
@@ -53,12 +55,6 @@ func Unpack(content *[]byte) (*doc.RootDoc, error) {
 	rd.ContentType = *ct
 
 	rd.ImageCount = 0
-	for fileName, fileContent := range fileIndex {
-		if strings.HasPrefix(fileName, constants.MediaPath) {
-			rd.ImageCount += 1
-		}
-		rd.FileMap.Store(fileName, fileContent)
-	}
 
 	rootRelURI, err := GetRelsURI("")
 	if err != nil {
@@ -73,32 +69,32 @@ func Unpack(content *[]byte) (*doc.RootDoc, error) {
 	delete(fileIndex, *rootRelURI)
 	rd.RootRels = *rootRelations
 
-	var docPath *string
+	var docPath string
 
 	for _, relation := range rootRelations.Relationships {
 		switch relation.Type {
 		case constants.OFFICE_DOC_TYPE:
-			docPath = &relation.Target
+			docPath = relation.Target
 		}
 	}
 
-	if docPath == nil {
+	if docPath == "" {
 		return nil, fmt.Errorf("root officeDocument type not found")
 	}
 
-	docRelURI, err := GetRelsURI(*docPath)
+	docRelURI, err := GetRelsURI(docPath)
 	if err != nil {
 		return nil, err
 	}
 
-	docFile := fileIndex[*docPath]
-	doc, err := doc.LoadDocXml(*docPath, docFile)
+	// Load document
+	docFile := fileIndex[docPath]
+	docObj, err := docx.LoadDocXml(docPath, docFile)
 	if err != nil {
 		return nil, err
 	}
-	delete(fileIndex, *docPath)
-
-	rd.Document = doc
+	delete(fileIndex, docPath)
+	rd.Document = docObj
 
 	// Load Relationship details
 	docRelFile := fileIndex[*docRelURI]
@@ -108,11 +104,40 @@ func Unpack(content *[]byte) (*doc.RootDoc, error) {
 	}
 	delete(fileIndex, *rootRelURI)
 	rd.Document.DocRels = *docRelations
+
+	wordDir := path.Dir(docPath)
+
+	rd.DocStyles = &ctypes.Styles{}
 	rID := 0
-	for _ = range docRelations.Relationships {
+	for _, relation := range docRelations.Relationships {
 		rID += 1
+		switch relation.Type {
+		case constants.StylesType:
+			sFileName := relation.Target
+			if sFileName == "" {
+				continue
+			}
+			stylesPath := path.Join(wordDir, sFileName)
+
+			//Load Styles
+			stylesFile := fileIndex[stylesPath]
+			stylesObj, err := docx.LoadStyles(stylesPath, stylesFile)
+			if err != nil {
+				return nil, err
+			}
+			delete(fileIndex, stylesPath)
+			rd.DocStyles = stylesObj
+		}
 	}
+
 	rd.Document.RID = rID
+
+	for fileName, fileContent := range fileIndex {
+		if strings.HasPrefix(fileName, constants.MediaPath) {
+			rd.ImageCount += 1
+		}
+		rd.FileMap.Store(fileName, fileContent)
+	}
 
 	return rd, nil
 }

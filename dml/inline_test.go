@@ -6,7 +6,7 @@ import (
 
 	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/dml/dmlct"
-	"github.com/gomutex/godocx/types"
+	"github.com/gomutex/godocx/dml/dmlst"
 )
 
 func TestMarshalInline(t *testing.T) {
@@ -33,7 +33,7 @@ func TestMarshalInline(t *testing.T) {
 				},
 				CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 					GraphicFrameLocks: &GraphicFrameLocks{
-						NoChangeAspect: types.NewOptBool(true),
+						NoChangeAspect: dmlst.NewOptBool(true),
 					},
 				},
 				Graphic: *DefaultGraphic(),
@@ -81,7 +81,7 @@ func TestUnmarshalInline(t *testing.T) {
 				},
 				CNvGraphicFramePr: &NonVisualGraphicFrameProp{
 					GraphicFrameLocks: &GraphicFrameLocks{
-						NoChangeAspect: types.NewOptBool(true),
+						NoChangeAspect: dmlst.NewOptBool(true),
 					},
 				},
 				Graphic: *DefaultGraphic(),

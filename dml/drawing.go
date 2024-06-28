@@ -56,7 +56,7 @@ loop:
 	return nil
 }
 
-func (dr *Drawing) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (dr Drawing) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:drawing"
 
 	err := e.EncodeToken(start)

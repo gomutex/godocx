@@ -8,8 +8,8 @@ import (
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlpic"
 	"github.com/gomutex/godocx/dml/dmlprops"
+	"github.com/gomutex/godocx/dml/dmlst"
 	"github.com/gomutex/godocx/dml/shapes"
-	"github.com/gomutex/godocx/types"
 )
 
 func TestMarshalGraphic(t *testing.T) {
@@ -28,8 +28,8 @@ func TestMarshalGraphic(t *testing.T) {
 					},
 					CNvPicPr: dmlpic.CNvPicPr{
 						PicLocks: &dmlprops.PicLocks{
-							NoChangeAspect:     types.NewOptBool(true),
-							NoChangeArrowheads: types.NewOptBool(true),
+							NoChangeAspect:     dmlst.NewOptBool(true),
+							NoChangeArrowheads: dmlst.NewOptBool(true),
 						},
 					},
 				},

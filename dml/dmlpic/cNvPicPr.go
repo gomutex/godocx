@@ -25,7 +25,7 @@ func NewCNvPicPr() CNvPicPr {
 	return CNvPicPr{}
 }
 
-func (c *CNvPicPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (c CNvPicPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:cNvPicPr"
 
 	if c.PreferRelativeResize != nil {
@@ -76,7 +76,7 @@ func DefaultNVPicProp(id uint, name string) NonVisualPicProp {
 	}
 }
 
-func (n *NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n NonVisualPicProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:nvPicPr"
 
 	err := e.EncodeToken(start)

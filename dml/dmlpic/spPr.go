@@ -59,7 +59,7 @@ func NewPicShapeProp(options ...PicShapePropOption) *PicShapeProp {
 	return p
 }
 
-func (p *PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p PicShapeProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:spPr"
 
 	if p.BwMode != nil {

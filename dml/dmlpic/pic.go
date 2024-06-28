@@ -48,7 +48,7 @@ func NewPic(rID string, imgCount uint, width units.Emu, height units.Emu) *Pic {
 	}
 }
 
-func (p *Pic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p Pic) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "pic:pic"
 
 	start.Attr = []xml.Attr{
@@ -107,7 +107,7 @@ func WithTFExtent(width units.Emu, height units.Emu) TFGroupOption {
 	}
 }
 
-func (t *TransformGroup) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t TransformGroup) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:xfrm"
 
 	err := e.EncodeToken(start)
@@ -135,7 +135,7 @@ type Offset struct {
 	Y uint64 `xml:"y,attr,omitempty"`
 }
 
-func (o *Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (o Offset) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:off"
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "x"}, Value: strconv.FormatUint(o.X, 10)},
@@ -161,7 +161,7 @@ func NewPresetGeom(preset string) *PresetGeometry {
 	}
 }
 
-func (p *PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p PresetGeometry) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "a:prstGeom"
 	start.Attr = []xml.Attr{}
 

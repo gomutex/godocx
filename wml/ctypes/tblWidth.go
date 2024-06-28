@@ -20,7 +20,7 @@ func NewTableWidth(width int, widthType stypes.TableWidth) *TableWidth {
 	}
 }
 
-func (t *TableWidth) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
+func (t TableWidth) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
 	if t.Width != nil {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:w"}, Value: strconv.Itoa(*t.Width)})

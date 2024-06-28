@@ -17,7 +17,7 @@ type PoistionV struct {
 	PosOffset    int            `xml:"posOffset"`
 }
 
-func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if p.RelativeFrom == "" {
 		return errors.New("Invalid RelativeFrom in PoistionH")
@@ -40,7 +40,7 @@ func (p *PoistionH) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-func (p *PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (p PoistionV) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if p.RelativeFrom == "" {
 		return errors.New("Invalid RelativeFrom in PoistionV")
 	}

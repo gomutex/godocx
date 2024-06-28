@@ -21,7 +21,7 @@ func TestTrackChangeNum_MarshalXML(t *testing.T) {
 				Date:     internal.ToPtr("2023-06-18T12:34:56Z"),
 				Original: internal.ToPtr("42"),
 			},
-			expected: `<TrackChangeNum id="123" author="John Doe" date="2023-06-18T12:34:56Z" original="42"></TrackChangeNum>`,
+			expected: `<TrackChangeNum w:id="123" w:author="John Doe" w:date="2023-06-18T12:34:56Z" w:original="42"></TrackChangeNum>`,
 		},
 		{
 			name: "Without optional attributes",
@@ -29,7 +29,7 @@ func TestTrackChangeNum_MarshalXML(t *testing.T) {
 				ID:     124,
 				Author: "Jane Doe",
 			},
-			expected: `<TrackChangeNum id="124" author="Jane Doe"></TrackChangeNum>`,
+			expected: `<TrackChangeNum w:id="124" w:author="Jane Doe"></TrackChangeNum>`,
 		},
 		{
 			name: "With only date attribute",
@@ -38,7 +38,7 @@ func TestTrackChangeNum_MarshalXML(t *testing.T) {
 				Author: "Alice",
 				Date:   internal.ToPtr("2024-06-18T12:34:56Z"),
 			},
-			expected: `<TrackChangeNum id="125" author="Alice" date="2024-06-18T12:34:56Z"></TrackChangeNum>`,
+			expected: `<TrackChangeNum w:id="125" w:author="Alice" w:date="2024-06-18T12:34:56Z"></TrackChangeNum>`,
 		},
 		{
 			name: "With only original attribute",
@@ -47,7 +47,7 @@ func TestTrackChangeNum_MarshalXML(t *testing.T) {
 				Author:   "Bob",
 				Original: internal.ToPtr("99"),
 			},
-			expected: `<TrackChangeNum id="126" author="Bob" original="99"></TrackChangeNum>`,
+			expected: `<TrackChangeNum w:id="126" w:author="Bob" w:original="99"></TrackChangeNum>`,
 		},
 	}
 
@@ -73,7 +73,7 @@ func TestTrackChangeNum_UnmarshalXML(t *testing.T) {
 	}{
 		{
 			name:     "With all attributes",
-			inputXML: `<TrackChangeNum id="123" author="John Doe" date="2023-06-18T12:34:56Z" original="42"></TrackChangeNum>`,
+			inputXML: `<TrackChangeNum w:id="123" w:author="John Doe" w:date="2023-06-18T12:34:56Z" w:original="42"></TrackChangeNum>`,
 			expected: TrackChangeNum{
 				ID:       123,
 				Author:   "John Doe",
@@ -83,7 +83,7 @@ func TestTrackChangeNum_UnmarshalXML(t *testing.T) {
 		},
 		{
 			name:     "Without optional attributes",
-			inputXML: `<TrackChangeNum id="124" author="Jane Doe"></TrackChangeNum>`,
+			inputXML: `<TrackChangeNum w:id="124" w:author="Jane Doe"></TrackChangeNum>`,
 			expected: TrackChangeNum{
 				ID:     124,
 				Author: "Jane Doe",
@@ -91,7 +91,7 @@ func TestTrackChangeNum_UnmarshalXML(t *testing.T) {
 		},
 		{
 			name:     "With only date attribute",
-			inputXML: `<TrackChangeNum id="125" author="Alice" date="2024-06-18T12:34:56Z"></TrackChangeNum>`,
+			inputXML: `<TrackChangeNum w:id="125" w:author="Alice" w:date="2024-06-18T12:34:56Z"></TrackChangeNum>`,
 			expected: TrackChangeNum{
 				ID:     125,
 				Author: "Alice",
@@ -100,7 +100,7 @@ func TestTrackChangeNum_UnmarshalXML(t *testing.T) {
 		},
 		{
 			name:     "With only original attribute",
-			inputXML: `<TrackChangeNum id="126" author="Bob" original="99"></TrackChangeNum>`,
+			inputXML: `<TrackChangeNum w:id="126" w:author="Bob" w:original="99"></TrackChangeNum>`,
 			expected: TrackChangeNum{
 				ID:       126,
 				Author:   "Bob",

@@ -20,7 +20,7 @@ type Tab struct {
 	LeaderChar *stypes.CustLeadChar `xml:"leader,attr,omitempty"`
 }
 
-func (t *Tab) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (t Tab) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:tab"
 	start.Attr = []xml.Attr{}
 
@@ -69,4 +69,20 @@ func (t Tabs) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return nil
+}
+
+type PTab struct {
+	Alignment  stypes.PTabAlignment  `xml:"alignment,attr,omitempty"`
+	RelativeTo stypes.PTabRelativeTo `xml:"relativeTo,attr,omitempty"`
+	Leader     stypes.PTabLeader     `xml:"leader,attr,omitempty"`
+}
+
+func (t PTab) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Attr = []xml.Attr{
+		{Name: xml.Name{Local: "w:alignment"}, Value: string(t.Alignment)},
+		{Name: xml.Name{Local: "w:relativeTo"}, Value: string(t.RelativeTo)},
+		{Name: xml.Name{Local: "w:leader"}, Value: string(t.Leader)},
+	}
+
+	return e.EncodeElement("", start)
 }

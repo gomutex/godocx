@@ -31,7 +31,7 @@ func NewNonVisProp(id uint, name string) *CNvPr {
 	}
 }
 
-func (c *CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (c CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if c.Name == "" {
 		return fmt.Errorf("invalid Name for Non-Visual Drawing Properties when marshaling")
 	}

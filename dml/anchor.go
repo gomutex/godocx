@@ -62,7 +62,17 @@ type Anchor struct {
 	EffectExtent *EffectExtent `xml:"effectExtent,omitempty"`
 
 	// 6. Wrapping
-	Wrap WrapType `xml:",any"`
+	// 6.1 .wrapNone
+	WrapNone *WrapNone `xml:"wrapNone,omitempty"`
+
+	// 6.2. wrapSquare
+	WrapSquare *WrapSquare `xml:"wrapSquare,omitempty"`
+
+	// 6.3. wrapThrough
+	WrapThrough *WrapThrough `xml:"wrapThrough,omitempty"`
+
+	// 6.4. wrapTopAndBottom
+	WrapTopBtm *WrapTopBtm `xml:"wrapTopAndBottom,omitempty"`
 
 	// 7. Drawing Object Non-Visual Properties
 	DocProp DocProp `xml:"docPr"`
@@ -78,7 +88,7 @@ func NewAnchor() *Anchor {
 	return &Anchor{}
 }
 
-func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (a Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "wp:anchor"
 
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "behindDoc"}, Value: strconv.Itoa(a.BehindDoc)})
@@ -135,7 +145,9 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	// 6. Wrap Choice
-	a.Wrap.MarshalXML(e, xml.StartElement{})
+	if err := a.MarshalWrap(e); err != nil {
+		return err
+	}
 
 	// 7. DocProp
 	if err := a.DocProp.MarshalXML(e, xml.StartElement{}); err != nil {
@@ -155,4 +167,17 @@ func (a *Anchor) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	}
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
+}
+
+func (a *Anchor) MarshalWrap(e *xml.Encoder) error {
+	if a.WrapNone != nil {
+		return a.WrapNone.MarshalXML(e, xml.StartElement{})
+	} else if a.WrapSquare != nil {
+		return a.WrapSquare.MarshalXML(e, xml.StartElement{})
+	} else if a.WrapThrough != nil {
+		return a.WrapThrough.MarshalXML(e, xml.StartElement{})
+	} else if a.WrapTopBtm != nil {
+		return a.WrapTopBtm.MarshalXML(e, xml.StartElement{})
+	}
+	return nil
 }
