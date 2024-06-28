@@ -74,6 +74,8 @@ func main() {
 
 ## Demo Output
 
+This is screenshot of demo document generated from the godocx library. 
+
 ![Screenshot of the demo output](https://github.com/gomutex/godocx-examples/raw/main/demo.png)
 
 ## Inspiration
