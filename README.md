@@ -8,6 +8,11 @@ Godocx is a Golang library for creating and modifying DOCX (Microsoft Word) docu
 ## Usage
 Here's a simple example of how you can use Godocx to create and modify DOCX documents:
 
+### Examples
+Explore additional examples and use cases over at GitHub repository dedicated to showcasing the capabilities of Golang Docx:
+https://github.com/gomutex/godocx-examples
+
+
 ```go
 // More examples in separate repository
 // https://github.com/gomutex/godocx-examples
@@ -21,39 +26,56 @@ import (
 )
 
 func main() {
-	// Open an existing DOCX document
+		// Open an existing DOCX document
 	// docx, err := godocx.OpenDocument("./testdata/test.docx")
 
 	// Create New Document
-	docx, err := godocx.NewDocument()
+	document, err := godocx.NewDocument()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Add a new paragraph to the document
-	_ = docx.AddParagraph("Hello World")
-	p := docx.AddEmptyParagraph()
-	_ = p.AddText("Add Paragraph and get `Run` instance. ")
-	r := p.AddText("This sentence is in Bold")
-	r.Bold(true)
+	document.AddHeading("Document Title", 0)
 
-	// Add Heading
-	docx.AddHeading("Example Heading", 1) // Heading text and level
+	// Add a new paragraph to the document
+	p := document.AddParagraph("A plain paragraph having some ")
+	p.AddText("bold").Bold(true)
+	p.AddText(" and some ")
+	p.AddText("italic.").Italic(true)
+
+	document.AddHeading("Heading, level 1", 1)
+	document.AddParagraph("Intense quote").Style("Intense Quote")
+	document.AddParagraph("first item in unordered list").Style("List Bullet")
+	document.AddParagraph("first item in ordered list").Style("List Number")
+
+	records := []struct{ Qty, ID, Desc string }{{"5", "A001", "Laptop"}, {"10", "B202", "Smartphone"}, {"2", "E505", "Smartwatch"}}
+
+	table := document.AddTable()
+	table.Style("LightList-Accent4")
+	hdrRow := table.AddRow()
+	hdrRow.AddCell().AddParagraph("Qty")
+	hdrRow.AddCell().AddParagraph("ID")
+	hdrRow.AddCell().AddParagraph("Description")
+
+	for _, record := range records {
+		row := table.AddRow()
+		row.AddCell().AddParagraph(record.Qty)
+		row.AddCell().AddParagraph(record.ID)
+		row.AddCell().AddParagraph(record.Desc)
+	}
 
 	// Save the modified document to a new file
-	err = docx.SaveTo("demo.docx")
+	err = document.SaveTo("demo.docx")
 	if err != nil {
 		log.Fatal(err)
 	}
 }
-
 ```
 
-## Examples
-Explore additional examples and use cases over at GitHub repository dedicated to showcasing the capabilities of Golang Docx:
-https://github.com/gomutex/godocx-examples
+## Demo Output
+
+![Screenshot of the demo output](https://github.com/gomutex/godocx-examples/raw/main/demo.png)
 
 ## Inspiration
-This GoDocx Library draws inspiration from two renowned libraries in the programming world - python-docx and docx-rs (Rust). 
-
+The Godocx library is inspired from the python-docx
 

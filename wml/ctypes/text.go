@@ -3,6 +3,7 @@ package ctypes
 import (
 	"bytes"
 	"encoding/xml"
+	"strings"
 )
 
 type Text struct {
@@ -20,7 +21,12 @@ func NewText() *Text {
 }
 
 func TextFromString(text string) *Text {
-	return &Text{text: text}
+	t := &Text{text: text}
+	if strings.TrimSpace(text) != text {
+		xmlSpace := "preserve"
+		t.space = &xmlSpace
+	}
+	return t
 }
 
 func (t Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
