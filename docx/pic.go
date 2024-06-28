@@ -18,14 +18,22 @@ type PicMeta struct {
 
 // AddPicture adds a new image to the document.
 //
+// Example usage:
+//
+//	// Add a picture to the document
+//	_, err = document.AddPicture("gopher.png", units.Inch(2.9), units.Inch(2.9))
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
 // Parameters:
 //   - path: The path of the image file to be added.
 //   - width: The width of the image in inches.
 //   - height: The height of the image in inches.
 //
 // Returns:
-//   - p: The created Paragraph instance containing the image.
-//   - err: An error, if any occurred during the process.
+//   - *PicMeta: Metadata about the added picture, including the Paragraph instance and Inline element.
+//   - error: An error, if any occurred during the process.
 func (rd *RootDoc) AddPicture(path string, width units.Inch, height units.Inch) (*PicMeta, error) {
 
 	imgBytes, err := internal.FileToByte(path)
@@ -61,14 +69,14 @@ func (rd *RootDoc) AddPicture(path string, width units.Inch, height units.Inch) 
 
 	rID := rd.Document.addRelation(constants.SourceRelationshipImage, relName)
 
-	p := NewParagraph(rd)
+	p := newParagraph(rd)
 
 	bodyElem := DocumentChild{
 		Para: p,
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
-	inline := p.AddDrawing(rID, rd.ImageCount, width, height)
+	inline := p.addDrawing(rID, rd.ImageCount, width, height)
 
 	return &PicMeta{
 		Para:   p,
