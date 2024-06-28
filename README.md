@@ -3,10 +3,20 @@
 <p align="center"><img width="650" src="./godocx.png" alt="Godocx logo"></p>
 
 
-Godocx is a Golang library for creating and modifying DOCX (Microsoft Word) documents.
+Godocx is a library written in pure Go providing a set of functions that allow you to write to and read from Docx file. 
+
+This library needs Go version 1.18 or later.  The full docs can be seen using go's built-in documentation tool, or online at [go.dev](https://pkg.go.dev/github.com/gomutex/godocx). Please refer the [subpackage docx](https://pkg.go.dev/github.com/gomutex/godocx/docx) for the list of functions that can be used.
+
 
 ## Usage
 Here's a simple example of how you can use Godocx to create and modify DOCX documents:
+
+## Installation
+Use the godocx in your project
+```bash
+go get github.com/gomutex/godocx
+```
+
 
 ### Examples
 Explore additional examples and use cases over at GitHub repository dedicated to showcasing the capabilities of Golang Docx:
@@ -81,3 +91,6 @@ This is screenshot of demo document generated from the godocx library.
 ## Inspiration
 The Godocx library is inspired from the python-docx
 
+## Licenses
+
+The Godocx library is licensed under the [MIT License](https://opensource.org/licenses/MIT).
