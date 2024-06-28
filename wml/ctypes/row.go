@@ -121,3 +121,14 @@ func (c TRCellContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error 
 	}
 	return nil
 }
+
+type RowContent struct {
+	Row *Row `xml:"tr,omitempty"`
+}
+
+func (r RowContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if r.Row != nil {
+		return r.Row.MarshalXML(e, xml.StartElement{})
+	}
+	return nil
+}

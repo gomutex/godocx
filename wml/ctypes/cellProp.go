@@ -21,10 +21,10 @@ type CellProperty struct {
 	GridSpan *DecimalNum `xml:"gridSpan,omitempty"`
 
 	// 4.Horizontally Merged Cell
-	HMerge *GenSingleStrVal[stypes.MergeCell] `xml:"hMerge,omitempty"`
+	HMerge *GenOptStrVal[stypes.MergeCell] `xml:"hMerge,omitempty"`
 
 	// 5.Vertically Merged Cell
-	VMerge *GenSingleStrVal[stypes.MergeCell] `xml:"vMerge,omitempty"`
+	VMerge *GenOptStrVal[stypes.MergeCell] `xml:"vMerge,omitempty"`
 
 	// 6.Table Cell Borders
 	Borders *CellBorders `xml:"tcBorders,omitempty"`

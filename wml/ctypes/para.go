@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 
 	"github.com/gomutex/godocx/internal"
-	"github.com/gomutex/godocx/wml/runcontent"
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
@@ -144,7 +143,7 @@ loop:
 }
 
 func (p *Paragraph) AddText(text string) *Run {
-	t := runcontent.TextFromString(text)
+	t := TextFromString(text)
 
 	runChildren := []*RunChild{}
 	runChildren = append(runChildren, &RunChild{

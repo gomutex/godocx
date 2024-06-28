@@ -9,7 +9,6 @@ import (
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlpic"
 	"github.com/gomutex/godocx/wml/ctypes"
-	"github.com/gomutex/godocx/wml/runcontent"
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
@@ -126,7 +125,7 @@ func (p Paragraph) Numbering(id int, level int) {
 // Returns:
 //   - *Run: The newly created Run instance added to the Paragraph.
 func (p *Paragraph) AddText(text string) *ctypes.Run {
-	t := runcontent.TextFromString(text)
+	t := ctypes.TextFromString(text)
 
 	runChildren := []*ctypes.RunChild{}
 	runChildren = append(runChildren, &ctypes.RunChild{

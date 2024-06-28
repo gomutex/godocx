@@ -1,4 +1,4 @@
-package runcontent
+package ctypes
 
 import (
 	"bytes"
@@ -25,13 +25,11 @@ func TextFromString(text string) *Text {
 
 func (t Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
-	elem := xml.StartElement{Name: xml.Name{Local: "w:t"}}
-
 	if t.space != nil {
-		elem.Attr = append(elem.Attr, xml.Attr{Name: xml.Name{Local: "xml:space"}, Value: *t.space})
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "xml:space"}, Value: *t.space})
 	}
 
-	if err = e.EncodeElement(t.text, elem); err != nil {
+	if err = e.EncodeElement(t.text, start); err != nil {
 		return err
 	}
 

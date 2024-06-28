@@ -1,4 +1,4 @@
-package hdrftr
+package ctypes
 
 import (
 	"encoding/xml"

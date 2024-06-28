@@ -1,4 +1,4 @@
-package runcontent
+package ctypes
 
 import (
 	"encoding/xml"
@@ -21,7 +21,7 @@ func TestTextMarshalXML(t *testing.T) {
 		var result strings.Builder
 		encoder := xml.NewEncoder(&result)
 
-		start := xml.StartElement{Name: xml.Name{Local: "fake"}}
+		start := xml.StartElement{Name: xml.Name{Local: "w:t"}}
 		err := tc.input.MarshalXML(encoder, start)
 
 		if err != nil {

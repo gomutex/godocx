@@ -43,9 +43,7 @@ func TestMarshalAnchor(t *testing.T) {
 					RightEdge:  3,
 					BottomEdge: 4,
 				},
-				Wrap: WrapType{
-					None: &WrapNone{},
-				},
+				WrapNone: &WrapNone{},
 				PositionH: PoistionH{
 					RelativeFrom: dmlst.RelFromHColumn,
 				},
@@ -112,9 +110,7 @@ func TestUnmarshalAnchor(t *testing.T) {
 					RightEdge:  3,
 					BottomEdge: 4,
 				},
-				Wrap: WrapType{
-					None: &WrapNone{},
-				},
+				WrapNone: &WrapNone{},
 			},
 		},
 	}

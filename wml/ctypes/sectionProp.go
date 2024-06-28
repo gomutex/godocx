@@ -3,14 +3,13 @@ package ctypes
 import (
 	"encoding/xml"
 
-	"github.com/gomutex/godocx/wml/hdrftr"
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
 // Document Final Section Properties : w:sectPr
 type SectionProp struct {
-	HeaderReference *hdrftr.HeaderReference                `xml:"headerReference,omitempty"`
-	FooterReference *hdrftr.FooterReference                `xml:"footerReference,omitempty"`
+	HeaderReference *HeaderReference                       `xml:"headerReference,omitempty"`
+	FooterReference *FooterReference                       `xml:"footerReference,omitempty"`
 	PageSize        *PageSize                              `xml:"pgSz,omitempty"`
 	Type            *GenSingleStrVal[stypes.SectionMark]   `xml:"type,omitempty"`
 	PageMargin      *PageMargin                            `xml:"pgMar,omitempty"`

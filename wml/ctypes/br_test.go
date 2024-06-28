@@ -1,13 +1,15 @@
-package runcontent
+package ctypes
 
 import (
 	"encoding/xml"
 	"strings"
 	"testing"
+
+	"github.com/gomutex/godocx/wml/stypes"
 )
 
 func TestBreakMarshaling(t *testing.T) {
-	breakType := BreakType("page")
+	breakType := stypes.BreakTypePage
 	br := NewBreak(breakType)
 
 	expectedXML := `<w:br w:type="page"></w:br>`

@@ -8,33 +8,6 @@ import (
 	"github.com/gomutex/godocx/dml/dmlst"
 )
 
-type WrapType struct {
-	// 1.wrapNone
-	None *WrapNone `xml:"wrapNone,omitempty"`
-
-	// 2. wrapSquare
-	Square *WrapSquare `xml:"wrapSquare,omitempty"`
-
-	// 3. wrapThrough
-	Through *WrapThrough `xml:"wrapThrough,omitempty"`
-
-	// 4. wrapTopAndBottom
-	Bottom *WrapTopBtm `xml:"wrapTopAndBottom,omitempty"`
-}
-
-func (w WrapType) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	if w.None != nil {
-		return w.None.MarshalXML(e, start)
-	} else if w.Square != nil {
-		return w.Square.MarshalXML(e, start)
-	} else if w.Through != nil {
-		return w.Through.MarshalXML(e, start)
-	} else if w.Bottom != nil {
-		return w.Bottom.MarshalXML(e, start)
-	}
-	return nil
-}
-
 type WrapNone struct {
 	XMLName xml.Name `xml:"wrapNone"`
 }

@@ -21,6 +21,24 @@ func NewGenSingleStrVal[T ~string](val T) *GenSingleStrVal[T] {
 	}
 }
 
+// Generic Element with Optional Single Val attribute
+type GenOptStrVal[T ~string] struct {
+	Val *T `xml:"val,attr"`
+}
+
+func (g GenOptStrVal[T]) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	if g.Val != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:val"}, Value: string(*g.Val)})
+	}
+	return e.EncodeElement("", start)
+}
+
+func NewGenOptStrVal[T ~string](val T) *GenOptStrVal[T] {
+	return &GenOptStrVal[T]{
+		Val: &val,
+	}
+}
+
 // CTString - Generic Element that has only one string-type attribute
 // And the String type does not have validation
 // dont use this if the element requires validation
@@ -87,3 +105,19 @@ func (s Uint64Elem) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 // !--- Uint64Elem ends here---!
+
+type Empty struct {
+}
+
+func (s Empty) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return e.EncodeElement("", start)
+}
+
+type Markup struct {
+	ID int `xml:"id,attr"`
+}
+
+func (m Markup) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:id"}, Value: strconv.Itoa(m.ID)})
+	return e.EncodeElement("", start)
+}
