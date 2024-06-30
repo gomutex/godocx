@@ -5,7 +5,9 @@
 
 Godocx is a library written in pure Go providing a set of functions that allow you to write to and read from Docx file. 
 
-This library needs Go version 1.18 or later.  The full docs can be seen using go's built-in documentation tool, or online at [go.dev](https://pkg.go.dev/github.com/gomutex/godocx). Please refer the [subpackage docx](https://pkg.go.dev/github.com/gomutex/godocx/docx) for the list of functions that can be used.
+This library needs Go version 1.18 or later. The usage documentation for the godocx can be accessed via the [Godocx Documentation Page](https://gomutex.github.io/godocx-docs). 
+
+In depth, go docs can be seen using go's built-in documentation tool, or online at [go.dev](https://pkg.go.dev/github.com/gomutex/godocx). Please refer the [subpackage docx](https://pkg.go.dev/github.com/gomutex/godocx/docx) for the list of functions that can be used.
 
 
 ## Usage
