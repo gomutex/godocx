@@ -1,0 +1,71 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <style>
+    .docx-text {
+      fill: currentColor;
+    }
+    .monitor {
+      fill: #2E3A59;
+      stroke: #1F2A40;
+    }
+    .screen {
+      fill: #FFFFFF;
+      stroke: #BCC6D1;
+    }
+    .base {
+      fill: #1E2A38;
+    }
+    .document {
+      fill: #007ACC;
+      stroke: #005A9C;
+    }
+    .document-line {
+      stroke: #FFFFFF;
+      stroke-width: 2;
+    }
+    .shadow {
+      fill: rgba(0,0,0,0.2);
+    }
+    .line {
+      stroke: #BCC6D1;
+      stroke-width: 1;
+      stroke-dasharray: 5,5;
+    }
+    .circle1 {
+      fill: #00BFAE;
+      stroke: #009688;
+    }
+    .circle2 {
+      fill: #FFEB3B;
+      stroke: #FBC02D;
+    }
+    .circle3 {
+      fill: #FFC107;
+      stroke: #FFA000;
+    }
+  </style>
+  <!-- Computer Monitor -->
+  <rect x="50" y="80" width="200" height="150" class="monitor" stroke-width="4" rx="10" />
+  <rect x="70" y="100" width="160" height="100" class="screen" stroke-width="2" rx="5" />
+  <rect x="110" y="180" width="80" height="10" class="base" rx="5" />
+
+  <!-- Document Icon -->
+  <rect x="120" y="120" width="60" height="80" class="document" stroke-width="2" rx="5" />
+  <line x1="120" y1="130" x2="180" y2="130" class="document-line" />
+  <line x1="120" y1="150" x2="180" y2="150" class="document-line" />
+  <line x1="120" y1="170" x2="180" y2="170" class="document-line" />
+  <line x1="150" y1="120" x2="150" y2="200" class="document-line" />
+
+  <!-- Additional Details -->
+  <circle cx="160" cy="240" r="10" fill="#FF5722" stroke="#BF360C" stroke-width="2" />
+  <text x="160" y="245" font-family="Arial, sans-serif" font-size="12" class="docx-text" text-anchor="middle" dominant-baseline="middle" font-weight="bold">DOCX</text>
+
+  <!-- Shadow -->
+  <ellipse cx="150" cy="240" rx="110" ry="20" class="shadow" />
+
+  <!-- Decorative Elements -->
+  <line x1="50" y1="100" x2="250" y2="100" class="line" />
+  <circle cx="250" cy="60" r="10" class="circle1" />
+  <circle cx="80" cy="60" r="10" class="circle2" />
+  <circle cx="150" cy="30" r="12" class="circle3" />
+</svg>
+

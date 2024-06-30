@@ -1,0 +1,58 @@
+<svg width="500" height="300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="transparent" />
+
+  <!-- Paragraph Icon -->
+  <rect x="50" y="50" width="80" height="40" fill="#4CAF50" stroke="#388E3C" stroke-width="2" rx="5" />
+  <line x1="60" y1="60" x2="130" y2="60" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="60" y1="70" x2="130" y2="70" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="60" y1="80" x2="130" y2="80" stroke="#FFFFFF" stroke-width="2" />
+  <text x="90" y="45" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
+    P
+  </text>
+  <text x="90" y="35" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
+    Paragraph
+  </text>
+
+  <!-- Heading Icon -->
+  <rect x="200" y="50" width="80" height="40" fill="#2196F3" stroke="#1976D2" stroke-width="2" rx="5" />
+  <line x1="220" y1="60" x2="260" y2="60" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="220" y1="70" x2="260" y2="70" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="220" y1="80" x2="260" y2="80" stroke="#FFFFFF" stroke-width="2" />
+  <text x="240" y="45" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
+    H
+  </text>
+  <text x="240" y="35" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
+    Heading
+  </text>
+
+  <!-- Table Icon -->
+  <rect x="50" y="150" width="80" height="80" fill="#FF9800" stroke="#F57C00" stroke-width="2" rx="5" />
+  <line x1="50" y1="190" x2="130" y2="190" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="50" y1="230" x2="130" y2="230" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="90" y1="150" x2="90" y2="230" stroke="#FFFFFF" stroke-width="2" />
+  <line x1="130" y1="150" x2="130" y2="230" stroke="#FFFFFF" stroke-width="2" />
+  <text x="90" y="140" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
+    T
+  </text>
+  <text x="90" y="130" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
+    Table
+  </text>
+
+  <!-- Picture Icon -->
+  <rect x="200" y="150" width="80" height="80" fill="#9C27B0" stroke="#7B1FA2" stroke-width="2" rx="5" />
+  <circle cx="240" cy="190" r="20" fill="#FFFFFF" />
+  <path d="M240 170 L250 190 L230 190 Z" fill="#4CAF50" />
+  <text x="240" y="140" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
+    🖼️
+  </text>
+  <text x="240" y="130" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">
+    Picture
+  </text>
+
+  <!-- Title Text -->
+  <text x="250" y="30" font-family="Arial, sans-serif" font-size="24" fill="#333333" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
+    Features
+  </text>
+</svg>
+
