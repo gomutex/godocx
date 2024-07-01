@@ -1,5 +1,9 @@
 # Godocx
 
+[![Go CI](https://github.com/gomutex/godocx/actions/workflows/go.yml/badge.svg)](https://github.com/gomutex/godocx/actions/workflows/go.yml) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/gomutex/godocx) [![Go Reference](https://pkg.go.dev/badge/github.com/gomutex/godocx.svg)](https://pkg.go.dev/github.com/gomutex/godocx)
+ [![Go Report Card](https://goreportcard.com/badge/github.com/gomutex/godocx)](https://goreportcard.com/report/github.com/gomutex/godocx) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+
 <p align="center"><img width="650" src="./godocx.png" alt="Godocx logo"></p>
 
 
