@@ -21,14 +21,6 @@ func DefaultRow() *Row {
 	}
 }
 
-func (r *Row) AddCell() *Cell {
-	cell := DefaultCell()
-	r.Contents = append(r.Contents, TRCellContent{
-		Cell: cell,
-	})
-	return cell
-}
-
 // TODO  Implement Marshal and Unmarshal properly for all fields
 
 func (r Row) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {

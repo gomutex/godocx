@@ -19,17 +19,6 @@ func DefaultCell() *Cell {
 	return &Cell{}
 }
 
-func (c *Cell) AddParagraph(text string) *Paragraph {
-	p := AddParagraph(text)
-	tblContent := TCBlockContent{
-		Paragraph: p,
-	}
-
-	c.Contents = append(c.Contents, tblContent)
-
-	return p
-}
-
 func (c Cell) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:tc"
 
