@@ -36,7 +36,14 @@ jobs:
           name: Go-results-${{ matrix.go-version }}
           path: TestResults-${{ matrix.go-version }}.json
           
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+      - name: Update coverage report
+        uses: ncruces/go-coverage-report@v0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          report: true
+          chart: true
+          amend: true
+        if: |
+          matrix.os == 'ubuntu-latest' &&
+          github.event_name == 'push'  
+        continue-on-error: true
+   
