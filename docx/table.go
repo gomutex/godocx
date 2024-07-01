@@ -6,7 +6,7 @@ import (
 )
 
 type Table struct {
-	// Reverse inheriting the Rootdoc into Paragrah to access other elements
+	// Reverse inheriting the Rootdoc into paragraph to access other elements
 	root *RootDoc
 
 	// Paragraph Complex Type
