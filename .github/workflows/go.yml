@@ -28,15 +28,16 @@ jobs:
         run: go get .
 
       - name: Test with Go
-        run: go test -json ./... > TestResults-${{ matrix.go-version }}.json
+        run: go test -v -coverprofile=coverage-${{ matrix.go-version }}.txt -covermode=atomic ./... > TestResults-${{ matrix.go-version }}.json
 
       - name: Upload Go test results
         uses: actions/upload-artifact@v4
         with:
           name: Go-results-${{ matrix.go-version }}
           path: TestResults-${{ matrix.go-version }}.json
-          
+    
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage-${{ matrix.go-version }}.txt
