@@ -141,6 +141,7 @@ func (t *Table) Style(value string) {
 	t.ct.TableProp.Style = ctypes.NewCTString(value)
 }
 
+// Row Wrapper
 type Row struct {
 	// Reverse inheriting the Rootdoc into paragraph to access other elements
 	root *RootDoc
@@ -149,47 +150,7 @@ type Row struct {
 	ct ctypes.Row
 }
 
-// func (r *Row) unmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-// 	return r.ct.UnmarshalXML(d, start)
-// }
-
-type RunPropOpts func(*Run)
-
-func WithFontSize(size uint64) RunPropOpts {
-	return func(r *Run) {
-		r.getProp().Size = ctypes.NewFontSize(size * 2)
-	}
-}
-
-func (r *Row) AddTextCell(text string, opts ...RunPropOpts) *Cell {
-	// Wrapper cell
-	cell := Cell{
-		root: r.root,
-		ct:   *ctypes.DefaultCell(),
-	}
-
-	// add paragraph with text & get Run obj
-	p := newParagraph(r.root)
-	run := p.AddText(text)
-
-	// Table cell block content
-	tblContent := ctypes.TCBlockContent{
-		Paragraph: &p.ct,
-	}
-
-	cell.ct.Contents = append(cell.ct.Contents, tblContent)
-
-	r.ct.Contents = append(r.ct.Contents, ctypes.TRCellContent{
-		Cell: &cell.ct,
-	})
-
-	for _, opt := range opts {
-		opt(run)
-	}
-
-	return &cell
-}
-
+// Add Cell to row and returns Cell
 func (r *Row) AddCell() *Cell {
 	cell := Cell{
 		root: r.root,
@@ -203,6 +164,7 @@ func (r *Row) AddCell() *Cell {
 	return &cell
 }
 
+// Cell Wrapper
 type Cell struct {
 	// Reverse inheriting the Rootdoc into paragraph to access other elements
 	root *RootDoc
@@ -211,8 +173,21 @@ type Cell struct {
 	ct ctypes.Cell
 }
 
+// Adds paragraph with text and returns Paragraph
 func (c *Cell) AddParagraph(text string) *Paragraph {
 	p := newParagraph(c.root, paraWithText(text))
+	tblContent := ctypes.TCBlockContent{
+		Paragraph: &p.ct,
+	}
+
+	c.ct.Contents = append(c.ct.Contents, tblContent)
+
+	return p
+}
+
+// Add empty paragraph without any text and returns Paragraph
+func (c *Cell) AddEmptyPara() *Paragraph {
+	p := newParagraph(c.root)
 	tblContent := ctypes.TCBlockContent{
 		Paragraph: &p.ct,
 	}
