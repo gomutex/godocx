@@ -46,12 +46,12 @@ func TestTextUnmarshalXML(t *testing.T) {
 	}{
 		{`<w:t></w:t>`, NewText()},
 		{`<w:t xml:space="preserve">Hello, World!</w:t>`, &Text{
-			text:  "Hello, World!",
-			space: internal.ToPtr("preserve"),
+			Text:  "Hello, World!",
+			Space: internal.ToPtr("preserve"),
 		}},
 		{`<w:t xml:space="preserve">Some text</w:t>`, &Text{
-			text:  "Some text",
-			space: internal.ToPtr("preserve"),
+			Text:  "Some text",
+			Space: internal.ToPtr("preserve"),
 		}},
 	}
 
@@ -70,11 +70,11 @@ func TestTextUnmarshalXML(t *testing.T) {
 				t.Fatalf("Error during UnmarshalXML: %v", err)
 			}
 
-			if result.text != tc.expected.text {
-				t.Errorf("Expected text %q, but got %q", tc.expected.text, result.text)
+			if result.Text != tc.expected.Text {
+				t.Errorf("Expected text %q, but got %q", tc.expected.Text, result.Text)
 			}
 
-			if err := internal.ComparePtr("space", tc.expected.space, result.space); err != nil {
+			if err := internal.ComparePtr("space", tc.expected.Space, result.Space); err != nil {
 				t.Errorf(err.Error())
 			}
 		})

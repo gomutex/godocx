@@ -1,6 +1,7 @@
 package docx
 
 import (
+	"encoding/xml"
 	"errors"
 	"fmt"
 
@@ -18,10 +19,42 @@ type Paragraph struct {
 	ct   ctypes.Paragraph // ct holds the underlying Paragraph Complex Type.
 }
 
-// newParagraph creates and initializes a new Paragraph instance.
-func newParagraph(root *RootDoc) *Paragraph {
-	return &Paragraph{
+func (p *Paragraph) unmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	return p.ct.UnmarshalXML(d, start)
+}
+
+type paraOpts struct {
+	text string
+}
+
+func newParaOpts() *paraOpts {
+	return &paraOpts{}
+}
+
+// paraOption defines a type for functions that can configure a Paragraph.
+type paraOption func(*Paragraph)
+
+// newParagraph creates and initializes a new Paragraph instance with given options.
+func newParagraph(root *RootDoc, opts ...paraOption) *Paragraph {
+	p := &Paragraph{
 		root: root,
+	}
+	for _, opt := range opts {
+		opt(p)
+	}
+	return p
+}
+
+// paraWithText is an option for adding text to a Paragraph.
+func paraWithText(text string) paraOption {
+	return func(p *Paragraph) {
+		p.AddText(text)
+	}
+}
+
+func (p *Paragraph) ensureProp() {
+	if p.ct.Property == nil {
+		p.ct.Property = ctypes.DefaultParaProperty()
 	}
 }
 
@@ -59,9 +92,7 @@ func (rd *RootDoc) AddParagraph(text string) *Paragraph {
 //	p1 := document.AddParagraph("Example para")
 //	paragraph.Style("List Number")
 func (p *Paragraph) Style(value string) {
-	if p.ct.Property == nil {
-		p.ct.Property = ctypes.DefaultParaProperty()
-	}
+	p.ensureProp()
 	p.ct.Property.Style = ctypes.NewParagraphStyle(value)
 }
 
@@ -76,9 +107,7 @@ func (p *Paragraph) Style(value string) {
 //	p1 := document.AddParagraph("Example justified para")
 //	p1.Justification(stypes.JustificationCenter) // Center justification
 func (p *Paragraph) Justification(value stypes.Justification) {
-	if p.ct.Property == nil {
-		p.ct.Property = ctypes.DefaultParaProperty()
-	}
+	p.ensureProp()
 
 	p.ct.Property.Justification = ctypes.NewGenSingleStrVal(value)
 }
@@ -99,15 +128,14 @@ func (p *Paragraph) Justification(value stypes.Justification) {
 //
 // In this example, the paragraph p1 is assigned the numbering properties
 // defined by numbering definition ID 1 and level 0.
-func (p Paragraph) Numbering(id int, level int) {
+func (p *Paragraph) Numbering(id int, level int) {
 
-	if p.ct.Property == nil {
-		p.ct.Property = ctypes.DefaultParaProperty()
-	}
+	p.ensureProp()
 
 	if p.ct.Property.NumProp == nil {
 		p.ct.Property.NumProp = &ctypes.NumProp{}
 	}
+
 	p.ct.Property.NumProp.NumID = ctypes.NewDecimalNum(id)
 	p.ct.Property.NumProp.ILvl = ctypes.NewDecimalNum(level)
 }
@@ -162,6 +190,24 @@ func (p *Paragraph) AddRun() *Run {
 	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
 	return newRun(p.root, run)
+}
+
+// GetStyle retrieves the style information applied to the Paragraph.
+//
+// Returns:
+//   - *ctypes.Style: The style information of the Paragraph.
+//   - error: An error if the style information is not found.
+func (p *Paragraph) GetStyle() (*ctypes.Style, error) {
+	if p.ct.Property == nil || p.ct.Property.Style == nil {
+		return nil, errors.New("No property for the style")
+	}
+
+	style := p.root.GetStyleByID(p.ct.Property.Style.Val, stypes.StyleTypeParagraph)
+	if style == nil {
+		return nil, errors.New("No style found for the paragraph")
+	}
+
+	return style, nil
 }
 
 // func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
@@ -233,22 +279,4 @@ func (p *Paragraph) addDrawing(rID string, imgCount uint, width units.Inch, heig
 	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
 	return &inline
-}
-
-// GetStyle retrieves the style information applied to the Paragraph.
-//
-// Returns:
-//   - *ctypes.Style: The style information of the Paragraph.
-//   - error: An error if the style information is not found.
-func (p *Paragraph) GetStyle() (*ctypes.Style, error) {
-	if p.ct.Property == nil || p.ct.Property.Style == nil {
-		return nil, errors.New("No property for the style")
-	}
-
-	style := p.root.GetStyleByID(p.ct.Property.Style.Val, stypes.StyleTypeParagraph)
-	if style == nil {
-		return nil, errors.New("No style found for the paragraph")
-	}
-
-	return style, nil
 }

@@ -7,8 +7,8 @@ import (
 )
 
 type Text struct {
-	text  string
-	space *string
+	Text  string
+	Space *string
 }
 
 const (
@@ -21,21 +21,21 @@ func NewText() *Text {
 }
 
 func TextFromString(text string) *Text {
-	t := &Text{text: text}
+	t := &Text{Text: text}
 	if strings.TrimSpace(text) != text {
 		xmlSpace := "preserve"
-		t.space = &xmlSpace
+		t.Space = &xmlSpace
 	}
 	return t
 }
 
 func (t Text) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
-	if t.space != nil {
-		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "xml:space"}, Value: *t.space})
+	if t.Space != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "xml:space"}, Value: *t.Space})
 	}
 
-	if err = e.EncodeElement(t.text, start); err != nil {
+	if err = e.EncodeElement(t.Text, start); err != nil {
 		return err
 	}
 
@@ -47,7 +47,7 @@ func (t *Text) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) 
 
 	for _, attr := range start.Attr {
 		if attr.Name.Local == "space" {
-			t.space = &attr.Value
+			t.Space = &attr.Value
 			break
 		}
 	}
@@ -63,7 +63,7 @@ func (t *Text) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) 
 			buf.Write([]byte(tokenElem))
 		case xml.EndElement:
 			if tokenElem == start.End() {
-				t.text = buf.String()
+				t.Text = buf.String()
 				return nil
 			}
 		}
