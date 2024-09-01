@@ -4,11 +4,15 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"path/filepath"
+	"strings"
 
+	"github.com/gomutex/godocx/common/constants"
 	"github.com/gomutex/godocx/common/units"
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/dml/dmlct"
 	"github.com/gomutex/godocx/dml/dmlpic"
+	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/ctypes"
 	"github.com/gomutex/godocx/wml/stypes"
 )
@@ -279,4 +283,47 @@ func (p *Paragraph) addDrawing(rID string, imgCount uint, width units.Inch, heig
 	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
 	return &inline
+}
+
+func (p *Paragraph) AddPicture(path string, width units.Inch, height units.Inch) (*PicMeta, error) {
+
+	imgBytes, err := internal.FileToByte(path)
+	if err != nil {
+		return nil, err
+	}
+
+	imgExt := filepath.Ext(path)
+	p.root.ImageCount += 1
+	fileName := fmt.Sprintf("image%d%s", p.root.ImageCount, imgExt)
+	fileIdxPath := fmt.Sprintf("%s%s", constants.MediaPath, fileName)
+
+	imgExtStripDot := strings.TrimPrefix(imgExt, ".")
+	imgMIME, err := MIMEFromExt(imgExtStripDot)
+	if err != nil {
+		return nil, err
+	}
+
+	err = p.root.ContentType.AddExtension(imgExtStripDot, imgMIME)
+	if err != nil {
+		return nil, err
+	}
+
+	overridePart := fmt.Sprintf("/%s%s", constants.MediaPath, fileName)
+	err = p.root.ContentType.AddOverride(overridePart, imgMIME)
+	if err != nil {
+		return nil, err
+	}
+
+	p.root.FileMap.Store(fileIdxPath, imgBytes)
+
+	relName := fmt.Sprintf("media/%s", fileName)
+
+	rID := p.root.Document.addRelation(constants.SourceRelationshipImage, relName)
+
+	inline := p.addDrawing(rID, p.root.ImageCount, width, height)
+
+	return &PicMeta{
+		Para:   p,
+		Inline: inline,
+	}, nil
 }
