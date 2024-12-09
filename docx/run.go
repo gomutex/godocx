@@ -182,3 +182,15 @@ func (r *Run) Style(value string) *Run {
 	r.getProp().Style = ctypes.NewRunStyle(value)
 	return r
 }
+
+// VerticalAlign sets the vertical alignment for the run text.
+//
+// Parameter: A value from the stypes.VerticalAlignRun type indicating the desired vertical alignment. One of:
+//
+//	VerticalAlignRunBaseline, VerticalAlignRunSuperscript, VerticalAlignRunSubscript
+//
+// Returns: The modified Run instance with the updated vertical alignment.
+func (r *Run) VerticalAlign(value stypes.VerticalAlignRun) *Run {
+	r.getProp().VertAlign = ctypes.NewGenSingleStrVal(value)
+	return r
+}
