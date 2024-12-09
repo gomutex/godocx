@@ -19,6 +19,23 @@ func (t *Table) unmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	return t.ct.UnmarshalXML(d, start)
 }
 
+func (t *Table) Width(v int, u stypes.TableWidth) *Table {
+	w := ctypes.TableWidth{
+		Width:     &v,
+		WidthType: &u,
+	}
+	t.ct.TableProp.Width = &w
+	return t
+}
+
+func (t *Table) Grid(widths ...uint64) *Table {
+	for _, w := range widths {
+		col := ctypes.Column{Width: &w}
+		t.ct.Grid.Col = append(t.ct.Grid.Col, col)
+	}
+	return t
+}
+
 func NewTable(root *RootDoc) *Table {
 	return &Table{
 		root: root,
@@ -195,4 +212,38 @@ func (c *Cell) AddEmptyPara() *Paragraph {
 	c.ct.Contents = append(c.ct.Contents, tblContent)
 
 	return p
+}
+
+// ColSpan sets the number of columns a cell should span across in a table.
+func (c *Cell) ColSpan(cols int) *Cell {
+	if c.ct.Property != nil {
+		c.ct.Property.GridSpan = &ctypes.DecimalNum{Val: cols}
+	}
+	return c
+}
+
+// RowSpan sets the cell to span vertically in a table, indicating it is part of a vertically merged group of cells.
+func (c *Cell) RowSpan() *Cell {
+	if c.ct.Property != nil {
+		vMerge := ctypes.AnnotationVMergeRest
+		c.ct.Property.CellMerge = &ctypes.CellMerge{
+			VMerge: &vMerge,
+		}
+	}
+	return c
+}
+
+// VerticalAlign sets the vertical alignment of a cell based on the provided string: "top", "center", "middle", or "bottom".
+func (c *Cell) VerticalAlign(valign string) *Cell {
+	if c.ct.Property != nil {
+		switch valign {
+		case "top":
+			c.ct.Property.VAlign = ctypes.NewGenSingleStrVal(stypes.VerticalJcTop)
+		case "center", "middle":
+			c.ct.Property.VAlign = ctypes.NewGenSingleStrVal(stypes.VerticalJcCenter)
+		case "bottom":
+			c.ct.Property.VAlign = ctypes.NewGenSingleStrVal(stypes.VerticalJcBottom)
+		}
+	}
+	return c
 }
