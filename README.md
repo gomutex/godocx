@@ -94,6 +94,12 @@ This is screenshot of demo document generated from the godocx library.
 
 ![Screenshot of the demo output](https://github.com/gomutex/godocx-examples/raw/main/demo.png)
 
+
+## Feature addtion request
+
+If you need a feature that's missing in godocx, feel free to raise an issue describing what you want to achieve, along with a sample DOCX. While I can't promise immediate implementation, I'll review your request and work on it if it's valid.
+
+
 ## Inspiration
 The Godocx library is inspired from the python-docx
 
