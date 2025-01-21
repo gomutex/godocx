@@ -28,11 +28,35 @@ func (t *Table) Width(v int, u stypes.TableWidth) *Table {
 	return t
 }
 
+/*
+The table grid is a definition of the set of grid columns which define all of the shared vertical edges of the table,
+as well as default widths for each of these grid columns.
+These grid column widths are then used to determine the size of the table based on the table layout algorithm used
+*/
 func (t *Table) Grid(widths ...uint64) *Table {
 	for _, w := range widths {
-		col := ctypes.Column{Width: &w}
+		tw := w
+		col := ctypes.Column{Width: &tw}
 		t.ct.Grid.Col = append(t.ct.Grid.Col, col)
 	}
+	return t
+}
+
+func (t *Table) CellMargin(top *ctypes.TableWidth, left *ctypes.TableWidth, bottom *ctypes.TableWidth, right *ctypes.TableWidth) *Table {
+	t.ct.TableProp.CellMargin = &ctypes.CellMargins{
+		Top:    top,
+		Left:   left,
+		Bottom: bottom,
+		Right:  right,
+	}
+	return t
+}
+
+func (t *Table) Layout(layout stypes.TableLayout) *Table {
+	t.ct.TableProp.Layout = &ctypes.TableLayout{
+		LayoutType: &layout,
+	}
+
 	return t
 }
 
@@ -244,6 +268,31 @@ func (c *Cell) VerticalAlign(valign string) *Cell {
 		case "bottom":
 			c.ct.Property.VAlign = ctypes.NewGenSingleStrVal(stypes.VerticalJcBottom)
 		}
+	}
+	return c
+}
+
+func (c *Cell) BackgroundColor(color string) *Cell {
+	c.ct.Property.Shading.Fill = &color
+	return c
+}
+
+func (c *Cell) Width(width int, widthType stypes.TableWidth) *Cell {
+	c.ct.Property.Width = ctypes.NewTableWidth(width, widthType)
+	return c
+}
+
+func (c *Cell) Borders(top *ctypes.Border, left *ctypes.Border, bottom *ctypes.Border, right *ctypes.Border,
+	insideH *ctypes.Border, insideV *ctypes.Border, tl2br *ctypes.Border, tr2bl *ctypes.Border) *Cell {
+	c.ct.Property.Borders = &ctypes.CellBorders{
+		Top:     top,
+		Left:    left,
+		Bottom:  bottom,
+		Right:   right,
+		InsideH: insideH,
+		InsideV: insideV,
+		TL2BR:   tl2br,
+		TR2BL:   tr2bl,
 	}
 	return c
 }
