@@ -2,6 +2,7 @@ package ctypes
 
 import (
 	"encoding/xml"
+	"strconv"
 
 	"github.com/gomutex/godocx/wml/stypes"
 )
@@ -15,6 +16,26 @@ type Border struct {
 	Space      *string            `xml:"space,attr,omitempty"`
 	Shadow     *stypes.OnOff      `xml:"shadow,attr,omitempty"`
 	Frame      *stypes.OnOff      `xml:"frame,attr,omitempty"`
+	Size       *int               `xml:"sz,attr,omitempty"`
+}
+
+/*
+new cell border
+@param style: border style
+@param color: border color; @see github.com/gomutex/godocx/wml/color
+@param space: the gap between the border and the cell content
+@param size:  border size
+*/
+func NewCellBorder(style stypes.BorderStyle, color string, space string, size int) *Border {
+	if size < 0 {
+		size = 0
+	}
+	return &Border{
+		Val:   style,
+		Color: &color,
+		Space: &space,
+		Size:  &size,
+	}
 }
 
 func (t Border) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -42,6 +63,10 @@ func (t Border) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	if t.Frame != nil {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:frame"}, Value: string(*t.Frame)})
+	}
+
+	if t.Size != nil {
+		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "w:sz"}, Value: strconv.Itoa(*t.Size)})
 	}
 
 	return e.EncodeElement("", start)

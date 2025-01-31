@@ -86,6 +86,15 @@ func (rd *RootDoc) AddParagraph(text string) *Paragraph {
 	return p
 }
 
+/*
+@param before: Spacing Above Paragraph in twips
+@param after: Spacing Below Paragraph in twips
+*/
+func (p *Paragraph) Spacing(before uint64, after uint64) {
+	p.ensureProp()
+	p.ct.Property.Spacing = ctypes.NewParagraphSpacing(before, after)
+}
+
 // Style sets the paragraph style.
 //
 // Parameters:

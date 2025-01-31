@@ -31,6 +31,13 @@ type Spacing struct {
 	LineRule *stypes.LineSpacingRule `xml:"lineRule,attr,omitempty"`
 }
 
+func NewParagraphSpacing(before uint64, after uint64) *Spacing {
+	return &Spacing{
+		Before: &before,
+		After:  &after,
+	}
+}
+
 func (s Spacing) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:spacing"
 

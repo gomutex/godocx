@@ -16,7 +16,11 @@ type Cell struct {
 }
 
 func DefaultCell() *Cell {
-	return &Cell{}
+	return &Cell{
+		Property: &CellProperty{
+			Shading: DefaultShading(),
+		},
+	}
 }
 
 func (c Cell) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
