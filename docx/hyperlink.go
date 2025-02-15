@@ -56,6 +56,17 @@ func (r *Hyperlink) Size(size uint64) *Hyperlink {
 	return r
 }
 
+// Font sets the font for the hyperlink.
+func (r *Hyperlink) Font(font string) *Hyperlink {
+	if r.getProp().Fonts == nil {
+		r.getProp().Fonts = &ctypes.RunFonts{}
+	}
+
+	r.getProp().Fonts.Ascii = font
+	r.getProp().Fonts.HAnsi = font
+	return r
+}
+
 // Shading sets the shading properties (type, color, fill) for the hyperlink
 func (r *Hyperlink) Shading(shdType stypes.Shading, color, fill string) *Hyperlink {
 	r.getProp().Shading = ctypes.NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)
