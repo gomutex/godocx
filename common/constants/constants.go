@@ -32,7 +32,7 @@ var (
 
 const (
 	XMLNS          = `http://schemas.openxmlformats.org/package/2006/relationships`
-	HyperLinkStyle = "a1"
+	HyperLinkStyle = "Hyperlink"
 )
 
 const (

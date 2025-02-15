@@ -223,35 +223,31 @@ func (p *Paragraph) GetStyle() (*ctypes.Style, error) {
 	return style, nil
 }
 
-// func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
-// 	rId := p.rootRef.addLinkRelation(link)
+func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
+	rId := p.root.Document.addLinkRelation(link)
 
-// 	runChildren := []*RunChild{}
-// 	runChildren = append(runChildren, &RunChild{
-// 		InstrText: &text,
-// 	})
-// 	run := &Run{
-// 		Children: runChildren,
-// 		RunProperty: &RunProperty{
-// 			RunStyle: &RunStyle{
-// 				Val: constants.HyperLinkStyle,
-// 			},
-// 		},
-// 	}
+	runChildren := []ctypes.RunChild{}
+	runChildren = append(runChildren, ctypes.RunChild{
+		Text: ctypes.TextFromString(text),
+	})
+	run := &ctypes.Run{
+		Children: runChildren,
+		Property: &ctypes.RunProperty{
+			Style: &ctypes.CTString{
+				Val: constants.HyperLinkStyle,
+			},
+		},
+	}
 
-// 	paraChild := &ParagraphChild{
-// 		Run: run,
-// 	}
+	hyperLink := &ctypes.Hyperlink{
+		ID:  rId,
+		Run: run,
+	}
 
-// 	hyperLink := &Hyperlink{
-// 		ID: rId,
-// 	}
-// 	hyperLink.Children = append(hyperLink.Children, paraChild)
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Link: hyperLink})
 
-// 	p.Children = append(p.Children, &ParagraphChild{Link: hyperLink})
-
-// 	return hyperLink
-// }
+	return newHyperlink(p.root, hyperLink)
+}
 
 // AddDrawing adds a new drawing (image) to the Paragraph.
 //
