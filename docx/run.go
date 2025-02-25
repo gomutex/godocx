@@ -56,6 +56,17 @@ func (r *Run) Size(size uint64) *Run {
 	return r
 }
 
+// Font sets the font for the run.
+func (r *Run) Font(font string) *Run {
+	if r.getProp().Fonts == nil {
+		r.getProp().Fonts = &ctypes.RunFonts{}
+	}
+
+	r.getProp().Fonts.Ascii = font
+	r.getProp().Fonts.HAnsi = font
+	return r
+}
+
 // Shading sets the shading properties (type, color, fill) for the run
 func (r *Run) Shading(shdType stypes.Shading, color, fill string) *Run {
 	r.getProp().Shading = ctypes.NewShading().SetShadingType(shdType).SetColor(color).SetFill(fill)

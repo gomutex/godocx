@@ -30,9 +30,9 @@ type ParagraphChild struct {
 }
 
 type Hyperlink struct {
-	XMLName xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main hyperlink,omitempty"`
-	ID      string   `xml:"http://schemas.openxmlformats.org/officeDocument/2006/relationships id,attr"`
-	// Run     Run
+	XMLName  xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main hyperlink,omitempty"`
+	ID       string   `xml:"http://schemas.openxmlformats.org/officeDocument/2006/relationships id,attr"`
+	Run      *Run
 	Children []ParagraphChild
 }
 
