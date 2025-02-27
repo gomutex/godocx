@@ -153,6 +153,30 @@ func (p *Paragraph) Numbering(id int, level int) {
 	p.ct.Property.NumProp.ILvl = ctypes.NewDecimalNum(level)
 }
 
+// Indent sets the paragraph indentation properties.
+//
+// This function assigns an indent definition to the paragraph,
+// which affects how exactly the paragraph is going to be indented.
+//
+// Parameters:
+//   - indentProp: A ctypes.Indent instance pointer representing exact indentation
+//     measurements to use.
+//
+// Example:
+//
+//	var size360 int = 360
+//	var sizeu420 uint64 = 420
+//	indent360 := ctypes.Indent{Left: &size360, Hanging: &sizeu420}
+//
+//	p1 := document.AddParagraph("Example indented para")
+//	p1.Indent(&indent360)
+func (p *Paragraph) Indent(indentProp *ctypes.Indent) {
+
+	p.ensureProp()
+
+	p.ct.Property.Indent = indentProp
+}
+
 // Appends a new text to the Paragraph.
 // Example:
 //
