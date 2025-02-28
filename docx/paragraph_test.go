@@ -93,6 +93,38 @@ func TestParagraph_Numbering(t *testing.T) {
 	f(4, 3, 4, 3)
 }
 
+func TestParagraph_Indent(t *testing.T) {
+	f := func(indentValue, expectedIndentValue ctypes.Indent) {
+		t.Helper()
+
+		p := &Paragraph{}
+
+		p.Indent(&indentValue)
+
+		assert.NotNil(t, p.ct.Property, "Expected ct.Property to be non-nil")
+		assert.NotNil(t, p.ct.Property.Indent, "Expected ct.Property.Indent to be non-nil")
+		assert.Equal(t, p.ct.Property.Indent, &expectedIndentValue, "Paragraph.Indent() value mismatch")
+	}
+
+	var size6 int = 6
+	var size360 int = 360
+	var sizeu420 uint64 = 420
+
+	indentLeft := ctypes.Indent{Left: &size360, Hanging: &sizeu420}
+	indentRight := ctypes.Indent{Right: &size360, Hanging: &sizeu420}
+	indentFirst := ctypes.Indent{FirstLine: &sizeu420}
+	indentLeftChars := ctypes.Indent{LeftChars: &size6}
+	indentRightChars := ctypes.Indent{RightChars: &size6}
+	indentFirstChars := ctypes.Indent{FirstLineChars: &size6}
+
+	f(indentLeft, indentLeft)
+	f(indentRight, indentRight)
+	f(indentFirst, indentFirst)
+	f(indentLeftChars, indentLeftChars)
+	f(indentRightChars, indentRightChars)
+	f(indentFirstChars, indentFirstChars)
+}
+
 func TestParagraph_AddText(t *testing.T) {
 	f := func(text string, expectedText string) {
 		t.Helper()
