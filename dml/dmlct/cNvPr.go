@@ -2,7 +2,6 @@ package dmlct
 
 import (
 	"encoding/xml"
-	"fmt"
 	"strconv"
 )
 
@@ -32,9 +31,11 @@ func NewNonVisProp(id uint, name string) *CNvPr {
 }
 
 func (c CNvPr) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	if c.Name == "" {
-		return fmt.Errorf("invalid Name for Non-Visual Drawing Properties when marshaling")
-	}
+	// ! NOTE: Disabling the empty name check for the Picture
+	//  since popular docx tools allow them
+	// if c.Name == "" {
+	// 	return fmt.Errorf("invalid Name for Non-Visual Drawing Properties when marshaling")
+	// }
 
 	start.Attr = []xml.Attr{
 		{Name: xml.Name{Local: "id"}, Value: strconv.FormatUint(uint64(c.ID), 10)},
