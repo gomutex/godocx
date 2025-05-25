@@ -60,6 +60,11 @@ func (t *Table) Layout(layout stypes.TableLayout) *Table {
 	return t
 }
 
+// GetCT returns a pointer to the underlying Table Complex Type.
+func (t *Table) GetCT() *ctypes.Table {
+	return &t.ct
+}
+
 func NewTable(root *RootDoc) *Table {
 	return &Table{
 		root: root,
