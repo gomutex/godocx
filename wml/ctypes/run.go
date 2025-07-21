@@ -2,7 +2,6 @@ package ctypes
 
 import (
 	"encoding/xml"
-
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -91,9 +90,11 @@ type RunChild struct {
 	//Tab Character
 	Tab *Empty `xml:"tab,omitempty"`
 
+	// Picture reference
+	Pict *Pict `xml:"pict,omitempty"`
+
 	//TODO:
 	// 	w:object    Inline Embedded Object
-	// w:pict    VML Object
 	// w:fldChar    Complex Field Character
 	// w:ruby    Phonetic Guide
 	// w:footnoteReference    Footnote Reference
@@ -213,6 +214,15 @@ loop:
 				r.Children = append(r.Children, RunChild{
 					Drawing: drawingElem,
 				})
+			case "pict":
+				pictElem := &Pict{}
+				if err = d.DecodeElement(pictElem, &elem); err != nil {
+					return err
+				}
+
+				r.Children = append(r.Children, RunChild{
+					Pict: pictElem,
+				})
 			default:
 				if err = d.Skip(); err != nil {
 					return err
@@ -301,6 +311,8 @@ func (r *Run) MarshalChild(e *xml.Encoder) error {
 			err = child.Tab.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:tab"}})
 		case child.Drawing != nil:
 			err = child.Drawing.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:drawing"}})
+		case child.Pict != nil:
+			err = child.Pict.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:pict"}})
 		case child.LastRenPgBrk != nil:
 			err = child.LastRenPgBrk.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:lastRenderedPageBreak"}})
 		case child.PTab != nil:
