@@ -16,8 +16,9 @@ type Body struct {
 
 // DocumentChild represents a child element within a Word document, which can be a Paragraph or a Table.
 type DocumentChild struct {
-	Para  *Paragraph
-	Table *Table
+	Para     *Paragraph
+	Table    *Table
+	Bookmark *ctypes.Bookmark
 }
 
 // Use this function to initialize a new Body before adding content to it.
@@ -47,6 +48,12 @@ func (b Body) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 
 			if child.Table != nil {
 				if err = child.Table.ct.MarshalXML(e, xml.StartElement{}); err != nil {
+					return err
+				}
+			}
+
+			if child.Bookmark != nil {
+				if err = child.Bookmark.MarshalXML(e, xml.StartElement{}); err != nil {
 					return err
 				}
 			}
@@ -92,6 +99,23 @@ func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 				if err := d.DecodeElement(body.SectPr, &elem); err != nil {
 					return err
 				}
+			case "bookmarkStart":
+				bookmarkStart := ctypes.BookmarkStart{}
+				if err := d.DecodeElement(&bookmarkStart, &elem); err != nil {
+					return err
+				}
+				body.Children = append(body.Children, DocumentChild{Bookmark: &ctypes.Bookmark{
+					Start: &bookmarkStart,
+				}})
+			case "bookmarkEnd":
+				bookmarkEnd := ctypes.BookmarkEnd{}
+				if err := d.DecodeElement(&bookmarkEnd, &elem); err != nil {
+					return err
+				}
+				body.Children = append(body.Children, DocumentChild{Bookmark: &ctypes.Bookmark{
+					End: &bookmarkEnd,
+				}})
+
 			default:
 				if err = d.Skip(); err != nil {
 					return err
@@ -99,6 +123,25 @@ func (body *Body) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 			}
 		case xml.EndElement:
 			return nil
+		}
+	}
+}
+
+func (body *Body) ScanBookmarkIds() {
+	for _, child := range body.Children {
+		if child.Bookmark != nil {
+			if child.Bookmark.Start != nil {
+				body.root.Document.UpdateBookmarkID(child.Bookmark.Start.ID)
+			}
+			if child.Bookmark.End != nil {
+				body.root.Document.UpdateBookmarkID(child.Bookmark.End.ID)
+			}
+		}
+		if child.Para != nil {
+			child.Para.scanBookmarkIds()
+		}
+		if child.Table != nil {
+			child.Table.scanBookmarkIds()
 		}
 	}
 }

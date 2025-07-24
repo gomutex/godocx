@@ -83,6 +83,28 @@ loop:
 				c.Contents = append(c.Contents, TCBlockContent{
 					Table: &tbl,
 				})
+			case "bookmarkStart":
+				bookmarkStart := BookmarkStart{}
+				if err = d.DecodeElement(&bookmarkStart, &elem); err != nil {
+					return err
+				}
+
+				c.Contents = append(c.Contents, TCBlockContent{
+					Bookmark: &Bookmark{
+						Start: &bookmarkStart,
+					},
+				})
+			case "bookmarkEnd":
+				bookmarkEnd := BookmarkEnd{}
+				if err = d.DecodeElement(&bookmarkEnd, &elem); err != nil {
+					return err
+				}
+
+				c.Contents = append(c.Contents, TCBlockContent{
+					Bookmark: &Bookmark{
+						End: &bookmarkEnd,
+					},
+				})
 			default:
 				if err = d.Skip(); err != nil {
 					return err
@@ -104,6 +126,9 @@ type TCBlockContent struct {
 	//Table
 	//	- ZeroOrMore: Any number of times Table can repeat within cell
 	Table *Table
+	//Bookmark
+	//  - ZeroOrMore: Any number of times Bookmark can repeat within cell
+	Bookmark *Bookmark
 }
 
 func (t TCBlockContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
@@ -113,6 +138,10 @@ func (t TCBlockContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error
 
 	if t.Table != nil {
 		return t.Table.MarshalXML(e, xml.StartElement{})
+	}
+
+	if t.Bookmark != nil {
+		return t.Bookmark.MarshalXML(e, xml.StartElement{})
 	}
 
 	return nil

@@ -31,7 +31,11 @@ var (
 )
 
 const (
-	XMLNS          = `http://schemas.openxmlformats.org/package/2006/relationships`
+	XMLNS = `http://schemas.openxmlformats.org/package/2006/relationships`
+)
+
+const (
+	// HyperLinkStyle is the style name for hyperlinks in Word documents.
 	HyperLinkStyle = "Hyperlink"
 )
 

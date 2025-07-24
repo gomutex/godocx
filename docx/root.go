@@ -18,7 +18,6 @@ type RootDoc struct {
 	Document    *Document      // Document is the main document structure.
 	DocStyles   *ctypes.Styles // Document styles
 
-	rID        int // rId is used to generate unique relationship IDs.
 	ImageCount uint
 }
 

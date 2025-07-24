@@ -25,15 +25,9 @@ type Paragraph struct {
 }
 
 type ParagraphChild struct {
-	Link *Hyperlink // w:hyperlink
-	Run  *Run       // i.e w:r
-}
-
-type Hyperlink struct {
-	XMLName  xml.Name `xml:"http://schemas.openxmlformats.org/wordprocessingml/2006/main hyperlink,omitempty"`
-	ID       string   `xml:"http://schemas.openxmlformats.org/officeDocument/2006/relationships id,attr"`
-	Run      *Run
-	Children []ParagraphChild
+	Link     *Hyperlink // w:hyperlink
+	Run      *Run       // i.e w:r
+	Bookmark *Bookmark  // i.e w:bookmarkStart, w:bookmarkEnd
 }
 
 func (p Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
@@ -78,9 +72,15 @@ func (p Paragraph) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error
 		}
 
 		if cElem.Link != nil {
-			if err = e.EncodeElement(cElem.Link, xml.StartElement{
+			if err = cElem.Link.MarshalXML(e, xml.StartElement{
 				Name: xml.Name{Local: "w:hyperlink"},
 			}); err != nil {
+				return err
+			}
+		}
+
+		if cElem.Bookmark != nil {
+			if err = cElem.Bookmark.MarshalXML(e, xml.StartElement{}); err != nil {
 				return err
 			}
 		}
@@ -122,13 +122,38 @@ loop:
 				if err = d.DecodeElement(r, &elem); err != nil {
 					return err
 				}
-
 				p.Children = append(p.Children, ParagraphChild{Run: r})
 			case "pPr":
 				p.Property = &ParagraphProp{}
 				if err = d.DecodeElement(p.Property, &elem); err != nil {
 					return err
 				}
+			case "hyperlink":
+				link := NewHyperlink()
+				if err = d.DecodeElement(link, &elem); err != nil {
+					return err
+				}
+				p.Children = append(p.Children, ParagraphChild{Link: link})
+			case "bookmarkStart":
+				bookmarkStart := &BookmarkStart{}
+				if err = d.DecodeElement(bookmarkStart, &elem); err != nil {
+					return err
+				}
+				p.Children = append(p.Children, ParagraphChild{
+					Bookmark: &Bookmark{
+						Start: bookmarkStart,
+					},
+				})
+			case "bookmarkEnd":
+				bookmarkEnd := &BookmarkEnd{}
+				if err = d.DecodeElement(bookmarkEnd, &elem); err != nil {
+					return err
+				}
+				p.Children = append(p.Children, ParagraphChild{
+					Bookmark: &Bookmark{
+						End: bookmarkEnd,
+					},
+				})
 			default:
 				if err = d.Skip(); err != nil {
 					return err

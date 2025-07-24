@@ -129,8 +129,12 @@ func Unpack(content *[]byte) (*docx.RootDoc, error) {
 			rd.DocStyles = stylesObj
 		}
 	}
-
 	rd.Document.RID = rID
+
+	// Update Bookmark IDs
+	if rd.Document.Body != nil {
+		rd.Document.Body.ScanBookmarkIds()
+	}
 
 	for fileName, fileContent := range fileIndex {
 		if strings.HasPrefix(fileName, constants.MediaPath) {
