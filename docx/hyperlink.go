@@ -22,6 +22,11 @@ func (r *Hyperlink) getProp() *ctypes.RunProperty {
 	return r.ct.Run.Property
 }
 
+// GetCT returns a pointer to the underlying Hyperlink complex type (ctypes.Hyperlink).
+func (r *Hyperlink) GetCT() *ctypes.Hyperlink {
+	return r.ct
+}
+
 // Sets the color of the Hyperlink.
 //
 // Example:
