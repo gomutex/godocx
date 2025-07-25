@@ -76,8 +76,20 @@ func (p *Paragraph) GetCT() *ctypes.Paragraph {
 // Returns:
 //   - p: The created Paragraph instance.
 func (rd *RootDoc) AddParagraph(text string) *Paragraph {
-	p := newParagraph(rd)
+	p := rd.AddEmptyParagraph()
 	p.AddText(text)
+
+	return p
+}
+
+// AddEmptyParagraph adds a new empty paragraph to the document.
+// It returns the created Paragraph instance.
+//
+// Returns:
+//   - p: The created Paragraph instance.
+func (rd *RootDoc) AddEmptyParagraph() *Paragraph {
+	p := newParagraph(rd)
+
 	bodyElem := DocumentChild{
 		Para: p,
 	}
@@ -202,22 +214,6 @@ func (p *Paragraph) AddText(text string) *Run {
 	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Run: run})
 
 	return newRun(p.root, run)
-}
-
-// AddEmptyParagraph adds a new empty paragraph to the document.
-// It returns the created Paragraph instance.
-//
-// Returns:
-//   - p: The created Paragraph instance.
-func (rd *RootDoc) AddEmptyParagraph() *Paragraph {
-	p := newParagraph(rd)
-
-	bodyElem := DocumentChild{
-		Para: p,
-	}
-	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
-
-	return p
 }
 
 func (p *Paragraph) AddRun() *Run {
