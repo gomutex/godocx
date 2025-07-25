@@ -449,5 +449,12 @@ func (p *Paragraph) scanBookmarkIds() {
 				p.root.Document.UpdateBookmarkID(child.Bookmark.End.ID)
 			}
 		}
+		if child.Link != nil {
+			l := Hyperlink{
+				root: p.root,
+				ct:   child.Link,
+			}
+			l.scanBookmarkIds()
+		}
 	}
 }

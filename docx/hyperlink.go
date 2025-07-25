@@ -187,3 +187,67 @@ func (r *Hyperlink) VerticalAlign(value stypes.VerticalAlignRun) *Hyperlink {
 	r.getProp().VertAlign = ctypes.NewGenSingleStrVal(value)
 	return r
 }
+
+// AddBookmarkStart adds a bookmark start to the Hyperlink.
+//
+// Parameters:
+//   - name: The name of the bookmark.
+//
+// Returns:
+//   - int: The ID of the bookmark start. This ID is used to uniquely
+//     identify the bookmark within the document.
+func (r *Hyperlink) AddBookmarkStart(name string) int {
+	id := r.root.Document.IncBookmarkID()
+
+	bookmarkStart := &ctypes.BookmarkStart{
+		ID:   id, // ID is not used in the current implementation
+		Name: name,
+	}
+
+	r.ct.Children = append(r.ct.Children, ctypes.ParagraphChild{
+		Bookmark: &ctypes.Bookmark{
+			Start: bookmarkStart,
+		},
+	})
+
+	return id
+}
+
+// AddBookmarkEnd adds a bookmark end to the Hyperlink.
+// Parameters:
+//   - id: The ID of the bookmark end. This ID should match the ID of
+//     the corresponding bookmark start.
+//
+// Returns:
+//   - *Hyperlink: The modified Hyperlink instance with the added bookmark end.
+func (r *Hyperlink) AddBookmarkEnd(id int) {
+	bookmarkEnd := &ctypes.BookmarkEnd{
+		ID: id, // ID is not used in the current implementation
+	}
+
+	r.ct.Children = append(r.ct.Children, ctypes.ParagraphChild{
+		Bookmark: &ctypes.Bookmark{
+			End: bookmarkEnd,
+		},
+	})
+}
+
+func (r *Hyperlink) scanBookmarkIds() {
+	for _, child := range r.ct.Children {
+		if child.Bookmark != nil {
+			if child.Bookmark.Start != nil {
+				r.root.Document.UpdateBookmarkID(child.Bookmark.Start.ID)
+			}
+			if child.Bookmark.End != nil {
+				r.root.Document.UpdateBookmarkID(child.Bookmark.End.ID)
+			}
+		}
+		if child.Link != nil {
+			l := Hyperlink{
+				root: r.root,
+				ct:   child.Link,
+			}
+			l.scanBookmarkIds()
+		}
+	}
+}
