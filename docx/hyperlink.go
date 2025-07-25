@@ -27,6 +27,31 @@ func (r *Hyperlink) GetCT() *ctypes.Hyperlink {
 	return r.ct
 }
 
+// AddText adds a text run to the Hyperlink.
+//
+// Parameters:
+//   - text: The text to be added to the hyperlink.
+//
+// Returns:
+//   - *Hyperlink: The modified Hyperlink instance with the new text run added.
+func (r *Hyperlink) AddText(text string) *Run {
+	t := ctypes.TextFromString(text)
+
+	runChildren := []ctypes.RunChild{}
+	runChildren = append(runChildren, ctypes.RunChild{
+		Text: t,
+	})
+	run := &ctypes.Run{
+		Children: runChildren,
+	}
+
+	r.ct.Children = append(r.ct.Children, ctypes.ParagraphChild{
+		Run: run,
+	})
+
+	return newRun(r.root, run)
+}
+
 // Sets the color of the Hyperlink.
 //
 // Example:
