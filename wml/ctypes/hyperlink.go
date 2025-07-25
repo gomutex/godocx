@@ -77,7 +77,13 @@ loop:
 				if err = d.DecodeElement(run, &elem); err != nil {
 					return err
 				}
-				h.Run = run
+				if h.Run == nil {
+					h.Run = run
+				} else {
+					h.Children = append(h.Children, ParagraphChild{
+						Run: run,
+					})
+				}
 			case "bookmarkStart":
 				bookmarkStart := &BookmarkStart{}
 				if err = d.DecodeElement(bookmarkStart, &elem); err != nil {
