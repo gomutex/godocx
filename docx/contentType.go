@@ -56,6 +56,8 @@ func MIMEFromExt(extension string) (string, error) {
 		return "image/jpeg", nil
 	case "png":
 		return "image/png", nil
+	case "svg":
+		return "image/svg+xml", nil
 	case "gif":
 		return "image/gif", nil
 	case "bmp":
