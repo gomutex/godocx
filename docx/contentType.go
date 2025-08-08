@@ -3,6 +3,7 @@ package docx
 import (
 	"encoding/xml"
 	"errors"
+	"slices"
 	"strings"
 )
 
@@ -26,15 +27,26 @@ type Override struct {
 }
 
 func (c *ContentTypes) AddExtension(extension, contentType string) error {
+	if slices.ContainsFunc(c.Default, func(d Default) bool {
+		return d.Extension == extension
+	}) {
+		return nil
+	}
+
 	c.Default = append(c.Default, Default{
 		Extension:   extension,
 		ContentType: contentType,
 	})
-
 	return nil
 }
 
 func (c *ContentTypes) AddOverride(partName, contentType string) error {
+	if slices.ContainsFunc(c.Override, func(o Override) bool {
+		return o.PartName == partName
+	}) {
+		return nil
+	}
+
 	c.Override = append(c.Override, Override{
 		PartName:    partName,
 		ContentType: contentType,
@@ -43,9 +55,7 @@ func (c *ContentTypes) AddOverride(partName, contentType string) error {
 }
 
 func MIMEFromExt(extension string) (string, error) {
-	if strings.HasPrefix(extension, ".") {
-		extension = strings.TrimPrefix(extension, ".")
-	}
+	extension = strings.TrimPrefix(extension, ".")
 
 	switch extension {
 	case "rels":
