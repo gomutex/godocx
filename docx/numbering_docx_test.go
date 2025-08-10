@@ -148,11 +148,12 @@ func TestGenerateNumberingDocxSample(t *testing.T) {
 		t.Fatalf("ordered abstract 201 missing expected numFmt per level")
 	}
 
-	// Verify bullet glyphs/fonts for abstract 202 (levels 0,1,2)
+	// Verify bullet glyphs/fonts for abstract 202 (levels 0..3)
 	if !strings.Contains(numberingXML, `<w:abstractNum w:abstractNumId="202"`) ||
 		!strings.Contains(numberingXML, `<w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val=""/>`) ||
-		!strings.Contains(numberingXML, `<w:lvl w:ilvl="1"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="o"/>`) ||
-		!strings.Contains(numberingXML, `<w:lvl w:ilvl="2"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val=""/>`) {
+		!strings.Contains(numberingXML, `<w:lvl w:ilvl="1"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="○"/>`) ||
+		!strings.Contains(numberingXML, `<w:lvl w:ilvl="2"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="■"/>`) ||
+		!strings.Contains(numberingXML, `<w:lvl w:ilvl="3"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="♦"/>`) {
 		t.Fatalf("bullet abstract 202 missing expected glyphs per level")
 	}
 

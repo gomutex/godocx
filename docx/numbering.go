@@ -246,13 +246,15 @@ func (nm *NumberingManager) multilevelAbstractsXML() string {
 // orderedNumFmtForLevel returns the WordprocessingML numFmt for a given level,
 // cycling through decimal, lowerLetter, and lowerRoman.
 func orderedNumFmtForLevel(level int) string {
-	switch level % 3 {
+	switch level % 4 {
 	case 0:
 		return "decimal"
 	case 1:
 		return "lowerLetter"
-	default:
+	case 2:
 		return "lowerRoman"
+	default:
+		return "upperLetter"
 	}
 }
 
@@ -262,12 +264,14 @@ func orderedNumFmtForLevel(level int) string {
 // - 2: ■ (Wingdings "")
 // Then repeats.
 func bulletGlyphForLevel(level int) (glyph string, font string) {
-	switch level % 3 {
+	switch level % 4 {
 	case 0:
-		return "", "Symbol"
+		return "", "Symbol" // disc
 	case 1:
-		return "o", "Symbol"
+		return "○", "Symbol" // hollow circle
+	case 2:
+		return "■", "Wingdings" // square
 	default:
-		return "", "Wingdings"
+		return "♦", "Symbol" // diamond
 	}
 }
