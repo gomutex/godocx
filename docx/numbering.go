@@ -131,9 +131,28 @@ func (nm *NumberingManager) applyToFileMap() error {
 		return nil
 	}
 
-	// Build the XML snippet for instances
+	// Determine which instances are already present to avoid duplicates
+	// Collect existing numIds from current numbering.xml content if present
+	existingIDs := make(map[int]struct{})
+	const numberingPath = "word/numbering.xml"
+	if existing, ok := nm.rootDoc.FileMap.Load(numberingPath); ok {
+		content := string(existing.([]byte))
+		idRe := regexp.MustCompile(`w:numId=\"(\d+)\"`)
+		for _, m := range idRe.FindAllStringSubmatch(content, -1) {
+			if len(m) == 2 {
+				if v, err := strconv.Atoi(m[1]); err == nil {
+					existingIDs[v] = struct{}{}
+				}
+			}
+		}
+	}
+
+	// Build the XML snippet only for missing instances to keep operation idempotent
 	var sb strings.Builder
 	for _, inst := range nm.numbering.Instances {
+		if _, found := existingIDs[inst.NumId]; found {
+			continue
+		}
 		// <w:num w:numId="X"><w:abstractNumId w:val="Y"/><w:lvlOverride w:ilvl="0"><w:startOverride w:val="1"/></w:lvlOverride></w:num>
 		sb.WriteString("<w:num w:numId=\"")
 		sb.WriteString(fmt.Sprintf("%d", inst.NumId))
@@ -145,12 +164,16 @@ func (nm *NumberingManager) applyToFileMap() error {
 	}
 	instancesXML := sb.String()
 
-	const numberingPath = "word/numbering.xml"
 	if existing, ok := nm.rootDoc.FileMap.Load(numberingPath); ok {
 		// Insert before closing tag of w:numbering
 		content := string(existing.([]byte))
 		// Ensure our multilevel abstract definitions exist
 		content = nm.ensureMultilevelAbstracts(content)
+		if instancesXML == "" {
+			// Nothing new to add
+			nm.rootDoc.FileMap.Store(numberingPath, []byte(content))
+			return nil
+		}
 		if strings.Contains(content, "</w:numbering>") {
 			updated := strings.Replace(content, "</w:numbering>", instancesXML+"</w:numbering>", 1)
 			nm.rootDoc.FileMap.Store(numberingPath, []byte(updated))
