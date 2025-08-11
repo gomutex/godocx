@@ -78,7 +78,7 @@ func (s SectionProp) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 		}
 	}
 
-	if s.TitlePg != nil {
+	if s.TitlePg != nil && s.TitlePg.Val != "" {
 		if err = s.TitlePg.MarshalXML(e, xml.StartElement{
 			Name: xml.Name{Local: "w:titlePg"},
 		}); err != nil {
