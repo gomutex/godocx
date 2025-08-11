@@ -81,6 +81,13 @@ func (rd *RootDoc) writeToZip(zw *zip.Writer) error {
 	}
 	rd.FileMap.Store(rd.DocStyles.RelativePath, docStyleBytes)
 
+	// Persist numbering instances into numbering.xml if any
+	if rd.Numbering != nil {
+		if err := rd.Numbering.applyToFileMap(); err != nil {
+			return err
+		}
+	}
+
 	rd.FileMap.Range(func(path, content any) bool {
 		files = append(files, path.(string))
 		return true

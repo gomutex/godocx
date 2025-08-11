@@ -17,6 +17,7 @@ type RootDoc struct {
 	ContentType ContentTypes
 	Document    *Document      // Document is the main document structure.
 	DocStyles   *ctypes.Styles // Document styles
+	Numbering   *NumberingManager // Numbering manager for list instances
 
 	rID        int // rId is used to generate unique relationship IDs.
 	ImageCount uint
@@ -24,7 +25,9 @@ type RootDoc struct {
 
 // NewRootDoc creates a new instance of the RootDoc structure.
 func NewRootDoc() *RootDoc {
-	return &RootDoc{}
+	root := &RootDoc{}
+	root.Numbering = NewNumberingManager(root)
+	return root
 }
 
 // LoadDocXml decodes the provided XML data and returns a Document instance.
@@ -60,4 +63,21 @@ func LoadStyles(fileName string, fileBytes []byte) (*ctypes.Styles, error) {
 
 	styles.RelativePath = fileName
 	return &styles, nil
+}
+
+// NewListInstance creates a new numbering instance for the given abstract numbering ID.
+// Returns the numId that can be used with paragraph.Numbering().
+//
+// Parameters:
+//   - abstractNumId: An integer representing the abstract numbering definition ID (1-8 or custom).
+//
+// Returns:
+//   - numId: An integer that can be used with paragraph.Numbering(numId, level).
+//
+// Example:
+//
+//	numId := doc.NewListInstance(1)
+//	p.Numbering(numId, 0)
+func (root *RootDoc) NewListInstance(abstractNumId int) int {
+	return root.Numbering.NewListInstance(abstractNumId)
 }
