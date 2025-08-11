@@ -8,11 +8,11 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
-var defaultStyleNSAttrs = map[string]string{
-	"xmlns:w":      "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-	"xmlns:mc":     "http://schemas.openxmlformats.org/markup-compatibility/2006",
-	"xmlns:w14":    "http://schemas.microsoft.com/office/word/2010/wordml",
-	"mc:Ignorable": "w14",
+var defaultStyleNSAttrs = []xml.Attr{
+	{Name: xml.Name{Local: "xmlns:w"}, Value: "http://schemas.openxmlformats.org/wordprocessingml/2006/main"},
+	{Name: xml.Name{Local: "xmlns:mc"}, Value: "http://schemas.openxmlformats.org/markup-compatibility/2006"},
+	{Name: xml.Name{Local: "xmlns:w14"}, Value: "http://schemas.microsoft.com/office/word/2010/wordml"},
+	{Name: xml.Name{Local: "mc:Ignorable"}, Value: "w14"},
 }
 
 // Style Definitions
@@ -36,10 +36,7 @@ func (s *Styles) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = "w:styles"
 
 	if len(s.Attr) == 0 {
-		for key, value := range defaultStyleNSAttrs {
-			attr := xml.Attr{Name: xml.Name{Local: key}, Value: value}
-			start.Attr = append(start.Attr, attr)
-		}
+		start.Attr = append(start.Attr, defaultStyleNSAttrs...)
 	} else {
 		start.Attr = s.Attr
 	}

@@ -7,20 +7,20 @@ import (
 	"github.com/gomutex/godocx/wml/stypes"
 )
 
-var docAttrs = map[string]string{
-	"xmlns:w":      "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-	"xmlns:o":      "urn:schemas-microsoft-com:office:office",
-	"xmlns:r":      "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-	"xmlns:v":      "urn:schemas-microsoft-com:vml",
-	"xmlns:w10":    "urn:schemas-microsoft-com:office:word",
-	"xmlns:wp":     "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing",
-	"xmlns:wps":    "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
-	"xmlns:wpg":    "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup",
-	"xmlns:mc":     "http://schemas.openxmlformats.org/markup-compatibility/2006",
-	"xmlns:wp14":   "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing",
-	"xmlns:w14":    "http://schemas.microsoft.com/office/word/2010/wordml",
-	"xmlns:w15":    "http://schemas.microsoft.com/office/word/2012/wordml",
-	"mc:Ignorable": "w14 wp14 w15",
+var docAttrs = []xml.Attr{
+	{Name: xml.Name{Local: "xmlns:w"}, Value: "http://schemas.openxmlformats.org/wordprocessingml/2006/main"},
+	{Name: xml.Name{Local: "xmlns:o"}, Value: "urn:schemas-microsoft-com:office:office"},
+	{Name: xml.Name{Local: "xmlns:r"}, Value: "http://schemas.openxmlformats.org/officeDocument/2006/relationships"},
+	{Name: xml.Name{Local: "xmlns:v"}, Value: "urn:schemas-microsoft-com:vml"},
+	{Name: xml.Name{Local: "xmlns:w10"}, Value: "urn:schemas-microsoft-com:office:word"},
+	{Name: xml.Name{Local: "xmlns:wp"}, Value: "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"},
+	{Name: xml.Name{Local: "xmlns:wps"}, Value: "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"},
+	{Name: xml.Name{Local: "xmlns:wpg"}, Value: "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"},
+	{Name: xml.Name{Local: "xmlns:mc"}, Value: "http://schemas.openxmlformats.org/markup-compatibility/2006"},
+	{Name: xml.Name{Local: "xmlns:wp14"}, Value: "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"},
+	{Name: xml.Name{Local: "xmlns:w14"}, Value: "http://schemas.microsoft.com/office/word/2010/wordml"},
+	{Name: xml.Name{Local: "xmlns:w15"}, Value: "http://schemas.microsoft.com/office/word/2012/wordml"},
+	{Name: xml.Name{Local: "mc:Ignorable"}, Value: "w14 wp14 w15"},
 }
 
 // This element specifies the contents of a main document part in a WordprocessingML document.
@@ -49,10 +49,7 @@ func (doc *Document) IncRelationID() int {
 func (doc Document) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error) {
 	start.Name.Local = "w:document"
 
-	for key, value := range docAttrs {
-		attr := xml.Attr{Name: xml.Name{Local: key}, Value: value}
-		start.Attr = append(start.Attr, attr)
-	}
+	start.Attr = append(start.Attr, docAttrs...)
 
 	err = e.EncodeToken(start)
 	if err != nil {
