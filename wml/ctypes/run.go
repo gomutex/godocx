@@ -229,7 +229,9 @@ loop:
 				}
 			}
 		case xml.EndElement:
-			break loop
+			if elem.Name.Local == start.Name.Local {
+				break loop
+			}
 		}
 	}
 
