@@ -7,14 +7,41 @@ import (
 	"github.com/gomutex/godocx/wml/ctypes"
 )
 
-// Return a heading paragraph newly added to the end of the document.
-// The heading paragraph will contain text and have its paragraph style determined by level.
-// If level is 0, the style is set to Title.
-// The style is set to Heading {level}.
-// if level is outside the range 0-9, error will be returned
+// AddHeading adds a new heading paragraph with the specified text and level
+// to the end of the document.
+//
+// Parameters:
+//   - text: The text to be added to the heading.
+//   - level: The heading level (0-9). If level is 0, the style is
+//     set to Title. Otherwise, the style is set to Heading {level}.
+//     If level is outside the range 0-9, an error will be returned.
+//
+// Returns:
+//   - *Paragraph: The newly created Paragraph instance.
+//   - error: An error if the level is outside the supported range.
 func (rd *RootDoc) AddHeading(text string, level uint) (*Paragraph, error) {
+	p, err := rd.AddEmptyHeading(level)
+	if err != nil {
+		return nil, err
+	}
+
+	p.AddText(text)
+	return p, nil
+}
+
+// AddEmptyHeading adds an empty heading paragraph to the end of the document.
+//
+// Parameters:
+//   - level: The heading level (0-9). If level is 0, the style is
+//     set to Title. Otherwise, the style is set to Heading {level}.
+//     If level is outside the range 0-9, an error will be returned.
+//
+// Returns:
+//   - *Paragraph: The newly created Paragraph instance.
+//   - error: An error if the level is outside the supported range.
+func (rd *RootDoc) AddEmptyHeading(level uint) (*Paragraph, error) {
 	if level < 0 || level > 9 {
-		return nil, errors.New("Heading level not supported")
+		return nil, errors.New("heading level not supported")
 	}
 
 	p := newParagraph(rd)
@@ -32,6 +59,5 @@ func (rd *RootDoc) AddHeading(text string, level uint) (*Paragraph, error) {
 	}
 	rd.Document.Body.Children = append(rd.Document.Body.Children, bodyElem)
 
-	p.AddText(text)
 	return p, nil
 }
