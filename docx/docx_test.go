@@ -18,7 +18,6 @@ func setupRootDoc(t *testing.T) *RootDoc {
 			Body: &Body{},
 		},
 		DocStyles:  &ctypes.Styles{},
-		rID:        1,
 		ImageCount: 1,
 	}
 }

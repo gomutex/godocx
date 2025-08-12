@@ -247,6 +247,14 @@ func (p *Paragraph) GetStyle() (*ctypes.Style, error) {
 	return style, nil
 }
 
+// AddLink adds a external hyperlink to the Paragraph.
+//
+// Parameters:
+//   - text: The text to be displayed for the hyperlink.
+//   - link: The URL or location of the hyperlink.
+//
+// Returns:
+//   - *Hyperlink: The created Hyperlink instance representing the added link.
 func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
 	rId := p.root.Document.addLinkRelation(link)
 
@@ -266,6 +274,40 @@ func (p *Paragraph) AddLink(text string, link string) *Hyperlink {
 	hyperLink := &ctypes.Hyperlink{
 		ID:  rId,
 		Run: run,
+	}
+
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Link: hyperLink})
+
+	return newHyperlink(p.root, hyperLink)
+}
+
+// AddInternalLink adds a hyperlink to an internal anchor within the document.
+//
+// Parameters:
+//   - text: The text to be displayed for the hyperlink.
+//   - anchor: Specifies the name of a bookmark within the document. If it is not a
+//     valid bookmark, the default behavior is to navigate to the start of
+//     the document. Example bookmark: <w:bookmarkStart w:id="0" w:name="exampleAnchorName"/>
+//
+// Returns:
+//   - *Hyperlink: The created Hyperlink instance representing the internal link.
+func (p *Paragraph) AddInternalLink(text string, anchor string) *Hyperlink {
+	runChildren := []ctypes.RunChild{}
+	runChildren = append(runChildren, ctypes.RunChild{
+		Text: ctypes.TextFromString(text),
+	})
+	run := &ctypes.Run{
+		Children: runChildren,
+		Property: &ctypes.RunProperty{
+			Style: &ctypes.CTString{
+				Val: constants.HyperLinkStyle,
+			},
+		},
+	}
+
+	hyperLink := &ctypes.Hyperlink{
+		Anchor: anchor,
+		Run:    run,
 	}
 
 	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{Link: hyperLink})
@@ -315,7 +357,6 @@ func (p *Paragraph) addDrawing(rID string, imgCount uint, width units.Inch, heig
 }
 
 func (p *Paragraph) AddPicture(path string, width units.Inch, height units.Inch) (*PicMeta, error) {
-
 	imgBytes, err := internal.FileToByte(path)
 	if err != nil {
 		return nil, err
@@ -355,4 +396,65 @@ func (p *Paragraph) AddPicture(path string, width units.Inch, height units.Inch)
 		Para:   p,
 		Inline: inline,
 	}, nil
+}
+
+// AddBookmarkStart adds a bookmark start to the Paragraph.
+//
+// Parameters:
+//   - name: The name of the bookmark.
+//
+// Returns:
+//   - int: The ID of the bookmark start.
+//     This ID is used to uniquely identify the bookmark within the document.
+func (p *Paragraph) AddBookmarkStart(name string) int {
+	id := p.root.Document.IncBookmarkID()
+
+	bookmarkStart := &ctypes.BookmarkStart{
+		ID:   id, // ID is not used in the current implementation
+		Name: name,
+	}
+
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{
+		Bookmark: &ctypes.Bookmark{
+			Start: bookmarkStart,
+		},
+	})
+
+	return id
+}
+
+// AddBookmarkEnd adds a bookmark end to the Paragraph.
+//
+// Parameters:
+//   - id: The ID of the bookmark to end.
+func (p *Paragraph) AddBookmarkEnd(id int) {
+	bookmarkEnd := &ctypes.BookmarkEnd{
+		ID: id, // ID is not used in the current implementation
+	}
+
+	p.ct.Children = append(p.ct.Children, ctypes.ParagraphChild{
+		Bookmark: &ctypes.Bookmark{
+			End: bookmarkEnd,
+		},
+	})
+}
+
+func (p *Paragraph) scanBookmarkIds() {
+	for _, child := range p.ct.Children {
+		if child.Bookmark != nil {
+			if child.Bookmark.Start != nil {
+				p.root.Document.UpdateBookmarkID(child.Bookmark.Start.ID)
+			}
+			if child.Bookmark.End != nil {
+				p.root.Document.UpdateBookmarkID(child.Bookmark.End.ID)
+			}
+		}
+		if child.Link != nil {
+			l := Hyperlink{
+				root: p.root,
+				ct:   child.Link,
+			}
+			l.scanBookmarkIds()
+		}
+	}
 }

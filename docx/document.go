@@ -34,7 +34,8 @@ type Document struct {
 
 	// Non elements - helper fields
 	DocRels      Relationships // DocRels represents relationships specific to the document.
-	RID          int
+	RID          int           // RID is used to generate unique IDs for relationships.
+	BID          int           // BID is used to generate unique IDs for bookmarks.
 	relativePath string
 }
 
@@ -43,6 +44,20 @@ type Document struct {
 func (doc *Document) IncRelationID() int {
 	doc.RID += 1
 	return doc.RID
+}
+
+// IncBookmarkID increments the bookmark ID of the document and returns the new ID.
+// This method is used to generate unique IDs for bookmarks within the document.
+func (doc *Document) IncBookmarkID() int {
+	doc.BID += 1
+	return doc.BID
+}
+
+// UpdateBookmarkID updates the bookmark ID in the document if the provided ID is greater than the current one.
+func (doc *Document) UpdateBookmarkID(id int) {
+	if id > doc.BID {
+		doc.BID = id
+	}
 }
 
 // MarshalXML implements the xml.Marshaler interface for the Document type.

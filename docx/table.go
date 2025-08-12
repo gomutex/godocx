@@ -301,3 +301,50 @@ func (c *Cell) Borders(top *ctypes.Border, left *ctypes.Border, bottom *ctypes.B
 	}
 	return c
 }
+
+func (t *Table) scanBookmarkIds() {
+	for _, row := range t.ct.RowContents {
+		if row.Row != nil {
+			for _, cells := range row.Row.Contents {
+				if cells.Cell != nil {
+					for _, content := range cells.Cell.Contents {
+						if content.Table != nil {
+							table := Table{
+								root: t.root,
+								ct:   *content.Table,
+							}
+							table.scanBookmarkIds()
+						}
+
+						if content.Bookmark != nil {
+							if content.Bookmark.Start != nil {
+								t.root.Document.UpdateBookmarkID(content.Bookmark.Start.ID)
+							}
+							if content.Bookmark.End != nil {
+								t.root.Document.UpdateBookmarkID(content.Bookmark.End.ID)
+							}
+						}
+					}
+				}
+
+				if cells.Bookmark != nil {
+					if cells.Bookmark.Start != nil {
+						t.root.Document.UpdateBookmarkID(cells.Bookmark.Start.ID)
+					}
+					if cells.Bookmark.End != nil {
+						t.root.Document.UpdateBookmarkID(cells.Bookmark.End.ID)
+					}
+				}
+			}
+		}
+
+		if row.Bookmark != nil {
+			if row.Bookmark.Start != nil {
+				t.root.Document.UpdateBookmarkID(row.Bookmark.Start.ID)
+			}
+			if row.Bookmark.End != nil {
+				t.root.Document.UpdateBookmarkID(row.Bookmark.End.ID)
+			}
+		}
+	}
+}

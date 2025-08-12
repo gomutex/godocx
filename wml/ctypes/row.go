@@ -89,6 +89,28 @@ loop:
 				r.Contents = append(r.Contents, TRCellContent{
 					Cell: &cell,
 				})
+			case "bookmarkStart":
+				bookmarkStart := BookmarkStart{}
+				if err = d.DecodeElement(&bookmarkStart, &elem); err != nil {
+					return err
+				}
+
+				r.Contents = append(r.Contents, TRCellContent{
+					Bookmark: &Bookmark{
+						Start: &bookmarkStart,
+					},
+				})
+			case "bookmarkEnd":
+				bookmarkEnd := BookmarkEnd{}
+				if err = d.DecodeElement(&bookmarkEnd, &elem); err != nil {
+					return err
+				}
+
+				r.Contents = append(r.Contents, TRCellContent{
+					Bookmark: &Bookmark{
+						End: &bookmarkEnd,
+					},
+				})
 
 			default:
 				if err = d.Skip(); err != nil {
@@ -104,23 +126,39 @@ loop:
 }
 
 type TRCellContent struct {
-	Cell *Cell `xml:"tc,omitempty"`
+	Cell *Cell
+	//Bookmark
+	//  - ZeroOrMore: Any number of times Bookmark can repeat within row
+	Bookmark *Bookmark
 }
 
-func (c TRCellContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (c *TRCellContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if c.Cell != nil {
 		return c.Cell.MarshalXML(e, xml.StartElement{})
 	}
+
+	if c.Bookmark != nil {
+		return c.Bookmark.MarshalXML(e, xml.StartElement{})
+	}
+
 	return nil
 }
 
 type RowContent struct {
-	Row *Row `xml:"tr,omitempty"`
+	Row *Row
+	//Bookmark
+	//  - ZeroOrMore: Any number of times Bookmark can repeat within table
+	Bookmark *Bookmark
 }
 
 func (r RowContent) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if r.Row != nil {
 		return r.Row.MarshalXML(e, xml.StartElement{})
 	}
+
+	if r.Bookmark != nil {
+		return r.Bookmark.MarshalXML(e, xml.StartElement{})
+	}
+
 	return nil
 }

@@ -96,6 +96,26 @@ loop:
 				t.RowContents = append(t.RowContents, RowContent{
 					Row: &row,
 				})
+			case "bookmarkStart":
+				bookmarkStart := BookmarkStart{}
+				if err = d.DecodeElement(&bookmarkStart, &elem); err != nil {
+					return err
+				}
+				t.RowContents = append(t.RowContents, RowContent{
+					Bookmark: &Bookmark{
+						Start: &bookmarkStart,
+					},
+				})
+			case "bookmarkEnd":
+				bookmarkEnd := BookmarkEnd{}
+				if err = d.DecodeElement(&bookmarkEnd, &elem); err != nil {
+					return err
+				}
+				t.RowContents = append(t.RowContents, RowContent{
+					Bookmark: &Bookmark{
+						End: &bookmarkEnd,
+					},
+				})
 
 			default:
 				if err = d.Skip(); err != nil {

@@ -19,7 +19,6 @@ type RootDoc struct {
 	DocStyles   *ctypes.Styles // Document styles
 	Numbering   *NumberingManager // Numbering manager for list instances
 
-	rID        int // rId is used to generate unique relationship IDs.
 	ImageCount uint
 }
 
