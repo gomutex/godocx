@@ -196,6 +196,11 @@ type Row struct {
 	ct ctypes.Row
 }
 
+// getCt returns a pointer to the underlying Row Complex Type.
+func (r *Row) GetCt() *ctypes.Row {
+	return &r.ct
+}
+
 // Add Cell to row and returns Cell
 func (r *Row) AddCell() *Cell {
 	cell := Cell{
@@ -217,6 +222,11 @@ type Cell struct {
 
 	// Cell Complex Type
 	ct ctypes.Cell
+}
+
+// getCt returns a pointer to the underlying Cell Complex Type.
+func (c *Cell) GetCt() *ctypes.Cell {
+	return &c.ct
 }
 
 // Adds paragraph with text and returns Paragraph
