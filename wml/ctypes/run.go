@@ -2,6 +2,7 @@ package ctypes
 
 import (
 	"encoding/xml"
+
 	"github.com/gomutex/godocx/dml"
 	"github.com/gomutex/godocx/internal"
 	"github.com/gomutex/godocx/wml/stypes"
@@ -182,6 +183,13 @@ loop:
 				}
 
 				r.Children = append(r.Children, RunChild{Text: txt})
+			case "instrText":
+				instrTxt := NewText()
+				if err = d.DecodeElement(instrTxt, &elem); err != nil {
+					return err
+				}
+
+				r.Children = append(r.Children, RunChild{InstrText: instrTxt})
 			case "rPr":
 				r.Property = &RunProperty{}
 				if err = d.DecodeElement(r.Property, &elem); err != nil {
@@ -205,6 +213,60 @@ loop:
 				r.Children = append(r.Children, RunChild{
 					Break: &br,
 				})
+			case "delText":
+				txt := NewText()
+				if err = d.DecodeElement(txt, &elem); err != nil {
+					return err
+				}
+				r.Children = append(r.Children, RunChild{DelText: txt})
+			case "delInstrText":
+				txt := NewText()
+				if err = d.DecodeElement(txt, &elem); err != nil {
+					return err
+				}
+				r.Children = append(r.Children, RunChild{DelInstrText: txt})
+			case "noBreakHyphen":
+				r.Children = append(r.Children, RunChild{NoBreakHyphen: &Empty{}})
+			case "softHyphen":
+				r.Children = append(r.Children, RunChild{SoftHyphen: &Empty{}})
+			case "dayShort":
+				r.Children = append(r.Children, RunChild{DayShort: &Empty{}})
+			case "monthShort":
+				r.Children = append(r.Children, RunChild{MonthShort: &Empty{}})
+			case "yearShort":
+				r.Children = append(r.Children, RunChild{YearShort: &Empty{}})
+			case "dayLong":
+				r.Children = append(r.Children, RunChild{DayLong: &Empty{}})
+			case "monthLong":
+				r.Children = append(r.Children, RunChild{MonthLong: &Empty{}})
+			case "yearLong":
+				r.Children = append(r.Children, RunChild{YearLong: &Empty{}})
+			case "annotationRef":
+				r.Children = append(r.Children, RunChild{AnnotationRef: &Empty{}})
+			case "footnoteRef":
+				r.Children = append(r.Children, RunChild{FootnoteRef: &Empty{}})
+			case "endnoteRef":
+				r.Children = append(r.Children, RunChild{EndnoteRef: &Empty{}})
+			case "separator":
+				r.Children = append(r.Children, RunChild{Separator: &Empty{}})
+			case "continuationSeparator":
+				r.Children = append(r.Children, RunChild{ContSeparator: &Empty{}})
+			case "sym":
+				sym := &Sym{}
+				if err = d.DecodeElement(sym, &elem); err != nil {
+					return err
+				}
+				r.Children = append(r.Children, RunChild{Sym: sym})
+			case "pgNum":
+				r.Children = append(r.Children, RunChild{PgNumBlock: &Empty{}})
+			case "cr":
+				r.Children = append(r.Children, RunChild{CarrRtn: &Empty{}})
+			case "ptab":
+				ptab := &PTab{}
+				if err = d.DecodeElement(ptab, &elem); err != nil {
+					return err
+				}
+				r.Children = append(r.Children, RunChild{PTab: ptab})
 			case "drawing":
 				drawingElem := &dml.Drawing{}
 				if err = d.DecodeElement(drawingElem, &elem); err != nil {
@@ -223,6 +285,14 @@ loop:
 				r.Children = append(r.Children, RunChild{
 					Pict: pictElem,
 				})
+			case "lastRenderedPageBreak":
+				r.Children = append(r.Children, RunChild{LastRenPgBrk: &Empty{}})
+			case "commentReference":
+				ref := &Markup{}
+				if err = d.DecodeElement(ref, &elem); err != nil {
+					return err
+				}
+				r.Children = append(r.Children, RunChild{CmntRef: ref})
 			default:
 				if err = d.Skip(); err != nil {
 					return err
@@ -319,7 +389,6 @@ func (r *Run) MarshalChild(e *xml.Encoder) error {
 			err = child.PTab.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:ptab"}})
 		case child.CmntRef != nil:
 			err = child.CmntRef.MarshalXML(e, xml.StartElement{Name: xml.Name{Local: "w:commentReference"}})
-
 		}
 
 		if err != nil {
