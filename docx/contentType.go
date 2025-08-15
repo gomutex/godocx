@@ -43,9 +43,7 @@ func (c *ContentTypes) AddOverride(partName, contentType string) error {
 }
 
 func MIMEFromExt(extension string) (string, error) {
-	if strings.HasPrefix(extension, ".") {
-		extension = strings.TrimPrefix(extension, ".")
-	}
+	extension = strings.TrimPrefix(extension, ".")
 
 	switch extension {
 	case "rels":
@@ -58,6 +56,8 @@ func MIMEFromExt(extension string) (string, error) {
 		return "image/png", nil
 	case "svg":
 		return "image/svg+xml", nil
+	case "webp":
+		return "image/webp", nil
 	case "gif":
 		return "image/gif", nil
 	case "bmp":
