@@ -3,7 +3,6 @@ package docx
 import (
 	"encoding/xml"
 	"errors"
-	"slices"
 	"strings"
 )
 
@@ -27,10 +26,11 @@ type Override struct {
 }
 
 func (c *ContentTypes) AddExtension(extension, contentType string) error {
-	if slices.ContainsFunc(c.Default, func(d Default) bool {
-		return d.Extension == extension
-	}) {
-		return nil
+	for _, d := range c.Default {
+		if d.Extension == extension {
+			// If the extension already exists, skip adding it again
+			return nil
+		}
 	}
 
 	c.Default = append(c.Default, Default{
@@ -41,10 +41,11 @@ func (c *ContentTypes) AddExtension(extension, contentType string) error {
 }
 
 func (c *ContentTypes) AddOverride(partName, contentType string) error {
-	if slices.ContainsFunc(c.Override, func(o Override) bool {
-		return o.PartName == partName
-	}) {
-		return nil
+	for _, o := range c.Override {
+		if o.PartName == partName {
+			// If the part already exists, skip adding it again
+			return nil
+		}
 	}
 
 	c.Override = append(c.Override, Override{
