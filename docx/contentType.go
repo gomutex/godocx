@@ -26,15 +26,28 @@ type Override struct {
 }
 
 func (c *ContentTypes) AddExtension(extension, contentType string) error {
+	for _, d := range c.Default {
+		if d.Extension == extension {
+			// If the extension already exists, skip adding it again
+			return nil
+		}
+	}
+
 	c.Default = append(c.Default, Default{
 		Extension:   extension,
 		ContentType: contentType,
 	})
-
 	return nil
 }
 
 func (c *ContentTypes) AddOverride(partName, contentType string) error {
+	for _, o := range c.Override {
+		if o.PartName == partName {
+			// If the part already exists, skip adding it again
+			return nil
+		}
+	}
+
 	c.Override = append(c.Override, Override{
 		PartName:    partName,
 		ContentType: contentType,
@@ -43,9 +56,7 @@ func (c *ContentTypes) AddOverride(partName, contentType string) error {
 }
 
 func MIMEFromExt(extension string) (string, error) {
-	if strings.HasPrefix(extension, ".") {
-		extension = strings.TrimPrefix(extension, ".")
-	}
+	extension = strings.TrimPrefix(extension, ".")
 
 	switch extension {
 	case "rels":
