@@ -14,6 +14,11 @@ func newRun(root *RootDoc, ct *ctypes.Run) *Run {
 	return &Run{root: root, ct: ct}
 }
 
+// GetCT returns the underlying run element (ctypes.Run) of the Run instance.
+func (r *Run) GetCT() *ctypes.Run {
+	return r.ct
+}
+
 // getProp returns the run properties. If not initialized, it creates and returns a new instance.
 func (r *Run) getProp() *ctypes.RunProperty {
 	if r.ct.Property == nil {
